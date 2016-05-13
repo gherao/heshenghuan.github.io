@@ -1,0 +1,1546 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="中文分词," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="因为本科毕业设计的课题是中文分词，与此结缘，研究生入学后也就继续在这个方向上学习与实践。这篇文章是以我现有的已实现分词算法为基础而编写的，介绍基于感知器实现一个中文分词算法的基本原理。
+
+基于字标注的分词方法基于字标注的方法的实际上是构词方法，即把分词过程视为字在一串字的序列中的标注问题。由于每个字在构造成词的时候，都有一个确定的位置。也即对于词中的一个字来说，它只能是词首字、词中字、词尾字或单">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于感知器的中文分词算法">
+<meta property="og:url" content="http://yoursite.com/2015/12/21/基于感知器的中文分词算法/index.html">
+<meta property="og:site_name" content="何声欢的博客">
+<meta property="og:description" content="因为本科毕业设计的课题是中文分词，与此结缘，研究生入学后也就继续在这个方向上学习与实践。这篇文章是以我现有的已实现分词算法为基础而编写的，介绍基于感知器实现一个中文分词算法的基本原理。
+
+基于字标注的分词方法基于字标注的方法的实际上是构词方法，即把分词过程视为字在一串字的序列中的标注问题。由于每个字在构造成词的时候，都有一个确定的位置。也即对于词中的一个字来说，它只能是词首字、词中字、词尾字或单">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/multiclassperceptron.gif">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/multiP-uprile.gif">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/cwsp_example_new.jpg">
+<meta property="og:updated_time" content="2016-05-13T05:41:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于感知器的中文分词算法">
+<meta name="twitter:description" content="因为本科毕业设计的课题是中文分词，与此结缘，研究生入学后也就继续在这个方向上学习与实践。这篇文章是以我现有的已实现分词算法为基础而编写的，介绍基于感知器实现一个中文分词算法的基本原理。
+
+基于字标注的分词方法基于字标注的方法的实际上是构词方法，即把分词过程视为字在一串字的序列中的标注问题。由于每个字在构造成词的时候，都有一个确定的位置。也即对于词中的一个字来说，它只能是词首字、词中字、词尾字或单">
+<meta name="twitter:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/multiclassperceptron.gif">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> 基于感知器的中文分词算法 | 何声欢的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">何声欢的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">这是一个博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                基于感知器的中文分词算法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2015-12-21T16:17:41+08:00" content="2015-12-21">
+              2015-12-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; In
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/21/基于感知器的中文分词算法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/21/基于感知器的中文分词算法/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><blockquote>
+<p>因为本科毕业设计的课题是中文分词，与此结缘，研究生入学后也就继续在这个方向上学习与实践。<br><br>这篇文章是以我现有的已实现分词算法为基础而编写的，介绍基于感知器实现一个中文分词算法的基本原理。</p>
+</blockquote>
+<h2 id="基于字标注的分词方法"><a href="#基于字标注的分词方法" class="headerlink" title="基于字标注的分词方法"></a>基于字标注的分词方法</h2><p>基于字标注的方法的实际上是构词方法，即把分词过程视为字在一串字的序列中的标注问题。由于每个字在构造成词的时候，都有一个确定的位置。也即对于词中的一个字来说，它只能是词首字、词中字、词尾字或单字词一个身份。</p>
+<p>以常用的<em>4-tag</em>标注系统为例，假如规定每个字最多有四个构词位置，即：</p>
+<ul>
+<li>B（词首）</li>
+<li>M（词中）</li>
+<li>E（词尾）</li>
+<li>S（单独成词）</li>
+</ul>
+<p>这里的$\lbrace B, M, E, S\rbrace$就是<em>4-tag</em>标注系统中的四个位置标注。</p>
+<p>那么对于任意一个已经过分词的句子，我们都可以用这4个标注组成的序列，表示原来的分词结果。例如：</p>
+<pre><code>分词结果：我/爱/北京/天安门/。/
+字标注形式：我/S 爱/S 北/B 京/E 天/B 安/M 门/E 。/S
+</code></pre><p>需要指出的是，这里的”字”不只限于汉字，它可以是文本中出现的任何一个字符。因为在真实中文语料中，不可避免地会包含一些数量的非汉字字符，这里所说的”字”也包括外文字母、阿拉伯数字和标点符号等字符。所有这些字符都是构词的基本单元。</p>
+<p>基于字标注的方法，把分词从原本的切分问题转化成一个序列标注问题。对于一个含有n个字符的句子$c_1^n=c_1 c_2 … c_n$，可以用下面的公式表示分词原理：</p>
+<p>$$P(t_1^n|c_1^n) = \prod_{k=1}^n P(t_k|t_1^{k-1},c_1^n) \approx \prod_{k=1}^n P(t_k|t_{k-1},c_{k-2}^{k+2})$$</p>
+<p>其中，$t_k$表示第k个字的标注，即$t_k \in \lbrace B,M,E,S \rbrace$。而$c_{k-2}^{k+2}$表示取词窗口的大小为5。</p>
+<p>而把分词过程视为字的标注问题的一个<strong>重要优势</strong>就是，它能够平等的对待词表词（In-Vocabulary）和未登录词（Out-of-Vocabulary）。</p>
+<p>这样，文本中的词表词和未登录词都是用统一的字标注过程来实现的。在学习架构上，既可以不必要专门强调词表词信息，也不用专门设计特定的未登录词识别模块。</p>
+<p>机器学习的模型算法可以专注地从文本语料中学习规律，仔细想想这其实更类似于人类早期学习语言的过程。基于字标注的方法也是目前最主流的中文分词方法。</p>
+<h2 id="感知器算法"><a href="#感知器算法" class="headerlink" title="感知器算法"></a>感知器算法</h2><p>感知器算法是一个可以解决二分类问题的线性分类模型，其模型对于我这样一个初学者来说都是很容易就可以理解的。基础的二分类感知器这里不再多做介绍，我们把目光转向分词算法所需的<strong>多类感知器</strong>算法身上。</p>
+<p>多类感知器是感知器算法用于解决多类分类问题时的一个扩展，它的主要思想是：用多个感知器去进行多类分类，但每个感知器只将一类目标视为正例，而其他的目标均视为负例。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/multiclassperceptron.gif" alt="multi-perceptron"></p>
+<p>如上图，假设现有一个c类感知器，可用于c个类别的分类。$X^i$（i=1,2,…,N）是一个样本，感知器有4个权重向量$\theta_j$（j=1,2,…,c），则样本$X^i$的类别决策可由如下公式得到：</p>
+<p>$$C^i=arg \max_{j=1,2,…,c}{\theta_j^TX^i}$$</p>
+<p>而多类感知器的更新规则也与原始感知器稍有不同。首先给出多类感知器的代价函数（Cost function）：</p>
+<p>$$J_p(\theta)=\sum_{k=1}^N( \max_{j=1,…,c} \theta_j^T x^{(k)}-\theta_{y^{(k)}}^T x^{(k)} )$$</p>
+<p>参数的更新规则（Parameter update rule）：</p>
+<p>$$\theta_j:=\theta_j-\alpha ( 1\lbrace j=C^{(k)}\rbrace - 1\lbrace j=y^{(k)}\rbrace )x^{(k)}$$</p>
+<p>这里的$$C^{(k)}=arg \max_{j=1,…,c} {\theta_j^Tx^{(k)}}$$</p>
+<p>而根据$C^{(k)}$和$y^{(k)}$的关系，又可以细化为：</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/multiP-uprile.gif" alt="multiP-uprule"></p>
+<p>用简单一句话来说就是，对于错分类样本，让错的感知器权重缩小一点，让应该对的感知器权重增大一点。这样<strong>“此消彼长”</strong>，经过几次迭代后就可以正确分类这一个样本了。</p>
+<h2 id="基于感知器的中文分词算法"><a href="#基于感知器的中文分词算法" class="headerlink" title="基于感知器的中文分词算法"></a>基于感知器的中文分词算法</h2><h3 id="将感知器用于分词"><a href="#将感知器用于分词" class="headerlink" title="将感知器用于分词"></a>将感知器用于分词</h3><p>多类感知器已经可以应付多类分类的问题了，那么它和中文分词有什么联系呢？连接中文分词与多类感知器的桥梁，就是基于字标注的分词方法。</p>
+<p>应用基于字标注的分词方法，分词由切分问题转化为序列标注问题。每个字都有一个标注，也就是说每个字属于一个类别，那么给出一个字的标注的过程其实是一个分类过程。所以，利用多类感知器我们可以解决这样一个问题。</p>
+<p>接下来，将要解决的问题就是如何进行特征表示，将文本语料转化成可用于感知器训练的特征向量。</p>
+<h3 id="特征模板"><a href="#特征模板" class="headerlink" title="特征模板"></a>特征模板</h3><p>特征模板是<strong>抽取语料特征的模式</strong>，是词特征学习的基础。（The feature template is the pattern of feature extraction from corpus, and the basis of corpus lexical feature learning.）</p>
+<p>句子中的每一个字都会根据特征模板生成特定的特征，我对这些出现的特征进行统计记录，并生成了特征空间。</p>
+<p>我的算法所使用的特征模板如下：</p>
+<p>(1)$C_n (n=-2,-1,0,1,2)$<br>(2)$C_n C_{n+1} (n=-2,-1,0,1)$<br>(3)$C_{-1} C_1$</p>
+<p>其中，$C_n$表示处于第n个位置的字。当n=0时，表示当前字。</p>
+<p>仍旧以句子『我爱北京天安门。』为例。假设$C_0$为北，则按照模板将产生以下特征：</p>
+<ul>
+<li>我，爱，北，京，天</li>
+<li>我爱，爱北，北京，京天</li>
+<li>爱京</li>
+</ul>
+<p>以上三组分别对应特征模板中的(1),(2)和(3)，可以看到特征模板(1)抽取出了一元特征（unigram）,（2)和(3)抽取出了二元特征（bigram）。这些字以及字和字的二元组合就构成了不同的特征，之后采取一定的特征表示方法，将这些字符信息转化成数字信息构建特征向量就可以制作可供感知器训练使用的数据了。</p>
+<p>在这里，我采用的方法简单粗暴，就是按照unigram和bigram分类，分别统计出现过的不同特征，并给每个特征一个序号，这个序号就是特征向量的维度信息。当然，特征表示的方法不唯一。</p>
+<h3 id="Viterbi算法求解最优标注结果"><a href="#Viterbi算法求解最优标注结果" class="headerlink" title="Viterbi算法求解最优标注结果"></a>Viterbi算法求解最优标注结果</h3><p><a href="https://zh.wikipedia.org/wiki/%E7%BB%B4%E7%89%B9%E6%AF%94%E7%AE%97%E6%B3%95" target="_blank" rel="external">维特比算法(Viterbi algorithm)</a>是一种动态规划算法。它用于寻找最有可能产生观测事件序列的-<strong>维特比路径</strong>-隐含状态序列。这本是常出现于<a href="https://zh.wikipedia.org/wiki/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B" target="_blank" rel="external">隐马尔可夫模型(Hiden Markov Model)</a>中的术语，不过Viterbi算法也常被用于寻找观察结果最有可能解释相关的动态规划算法。</p>
+<p>在基于字标注的中文分词中，每个字常常以某个概率被标注为标注集中的某个tag。若以每个字最大概率的标注的序列作为一句话的标注结果时，其结果的准确率和分词的效果往往不好，有时可能还会出现不符合分词规则的结果，比如标注”B”后一个标注为”S”。所以，就需要在以句子为整体，在序列上求得最优的标注结果。为此，我想到了利用Viterbi算法求解这个标注结果。</p>
+<p>为了应用Viterbi算法，我们需要一些定义一些模型参数，这里借鉴了隐马尔可夫模型。我们将<em>4-tag</em>标注系统中的标注集$S=\lbrace B, M, E, S\rbrace$当作隐含状态集，而可观察状态的序列就是未分词的句子。</p>
+<p>假定从语料中统计得到，初始状态i的概率为$\pi_i$，从状态i转移转移到状态j的转移概率为$\alpha_{i,j}$（这两部分的概率矩阵是通过对训练语料的标注统计得到的。）。</p>
+<p>现有一句中文语句$C^{1:N}=c_1 c_2 … c_N$作为观察状态序列，产生此观察状态序列的最有可能的隐含状态序列（标注序列）$T^{1:N}=t_1 t_2 … t_N$可由以下递推关系给出：</p>
+<p>定义$\delta_i(n)$为部分最大似然概率，即序号从1~n的字符子串的最大似然值，目表是求解出$T^{1:N} = arg \max_{T^{1:N}}P(C^{1:N}|T^{1:N})$，$\delta_i(t)$满足：</p>
+<p>(1)$\delta_i(1)=P(c_1|t_1=i) \cdot \pi_i$<br>(2)$\delta_i(n)=P(c_n|t_n=i) \cdot \max_{j\in S}( \delta_j(n-1) \alpha_{j,i})$</p>
+<p>其中$n\le N$，$\delta_i(n)$是以i状态为结尾的前t个观测结果最有可能对应的隐含状态的序列的概率。通过保存向后指针记录上面(2)式中用到的状态j可以获得维特比路径。令$Ptr(n,i) = arg \max_{j\in S}( \delta_j(n-1) \alpha_{j,i})$，表示n时刻的状态i是由n-1时刻哪个状态转移而来的，可得到：</p>
+<p>$t_N = arg \max_{j\in S}( \delta_j(n-1) \alpha_{j,i})$<br>$t_{n-1} = Ptr(n,t_n)$</p>
+<p>这里我们使用arg max的标准定义。算法的时间复杂度为$O(N\times \left|{S}\right|^{2})$。</p>
+<p>由上面的这些公式可以看到，目前不能从语料中通过统计得到的就是$P(c_n|t_n=i)$，这其实是HMM中的发射概率。在我的算法中，这部分概率是由多类感知器给出的：多类感知器对当前字进行分类，输出它分别属于四个类别的概率。利用这个概率完成上述的计算。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/cwsp_example_new.jpg" alt="viterbi_solve"></p>
+<p>如上图中，图中箭头所示路径代表的序列”S\S\B\E\B\M\E\S”为该句最优的标注结果。</p>
+<p>例句『我爱北京天安门。』对应的可能标注序列为$4^{\left|C\right|}=4^8$个，其中还包括不符合分词规范的可能序列。使用暴力方法去求得最优标注序列实在是难为计算机了，为了求解出该序列，就需要使用维特比算法了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>至此，一个基于感知器算法的中文分词算法的基本原理和关键算法已经讲述完毕。整个分词算法的基本思路与基于HMM或CRF的分词算法大体类似，只是在发射概率的计算上使用了多类感知器的分类结果的概率输出，而不是HMM给出。</p>
+<p>在模型复杂度上，多类感知器比HMM或CRF简单不少，实现难度也低了不少。最后，我们使用SIGHAN2005(icwb2-data)的语料数据进行了分词实验。作为对比，我们使用同样的特征模板和语料，用<a href="http://sourceforge.net/projects/crfpp/" target="_blank" rel="external">CRF++</a>工具训练了基于CRF的中文分词器（这部分的具体操作方法请看：<a href="http://www.52nlp.cn/%E4%B8%AD%E6%96%87%E5%88%86%E8%AF%8D%E5%85%A5%E9%97%A8%E4%B9%8B%E5%AD%97%E6%A0%87%E6%B3%A8%E6%B3%954" target="_blank" rel="external">中文分词入门之字标注法4</a>）。以下是两个分词器的效果对比：</p>
+<p><strong>表1 PKU语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">PKU</th>
+<th style="text-align:center">CWSP</th>
+<th style="text-align:center">CRF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.923</td>
+<td style="text-align:center">0.924</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.938</td>
+<td style="text-align:center">0.939</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.930</td>
+<td style="text-align:center">0.931</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.578</td>
+<td style="text-align:center">0.595</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.944</td>
+<td style="text-align:center">0.944</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表2 CITYU语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">CITYU</th>
+<th style="text-align:center">CWSP</th>
+<th style="text-align:center">CRF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.937</td>
+<td style="text-align:center">0.941</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.933</td>
+<td style="text-align:center">0.945</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.935</td>
+<td style="text-align:center">0.943</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.648</td>
+<td style="text-align:center">0.685</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.960</td>
+<td style="text-align:center">0.961</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表3 MSR语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">MSR</th>
+<th style="text-align:center">CWSP</th>
+<th style="text-align:center">CRF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.954</td>
+<td style="text-align:center">0.963</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.965</td>
+<td style="text-align:center">0.966</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.960</td>
+<td style="text-align:center">0.965</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.687</td>
+<td style="text-align:center">0.698</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.961</td>
+<td style="text-align:center">0.970</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表4 AS语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">AS</th>
+<th style="text-align:center">CWSP</th>
+<th style="text-align:center">CRF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.950</td>
+<td style="text-align:center">0.956</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.934</td>
+<td style="text-align:center">0.944</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.942</td>
+<td style="text-align:center">0.950</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.634</td>
+<td style="text-align:center">0.680</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.964</td>
+<td style="text-align:center">0.968</td>
+</tr>
+</tbody>
+</table>
+<p>表格中，<strong>CWSP</strong>表示基于感知器的中文分词算法，<strong>CRF</strong>表示使用CRF++工具训练的分词算法。可以看到，基于感知器的中文分词算法的performance与基于更复杂模型CRF的分词算法相比相差不到1个百分点，是可以接受的结果。</p>
+<h2 id="感知器分词算法新进展"><a href="#感知器分词算法新进展" class="headerlink" title="感知器分词算法新进展"></a>感知器分词算法新进展</h2><h3 id="改进的特征模板"><a href="#改进的特征模板" class="headerlink" title="改进的特征模板"></a>改进的特征模板</h3><p>上面讲到，使用基本的特征模板我们可以得到与基于CRF++工具训练的分词模型差距不大的分词效果。所使用的特征模板为：</p>
+<p>(1)$C_n (n=-2,-1,0,1,2)$<br>(2)$C_n C_{n+1} (n=-2,-1,0,1)$<br>(3)$C_{-1} C_1$</p>
+<p>我称这个特征模板为10-feat，在此基础上添加字典信息和字符类别信息特征：</p>
+<p>(1)$C_n (n=-2,-1,0,1,2)$<br>(2)$C_n C_{n+1} (n=-2,-1,0,1)$<br>(3)$C_{-1} C_1$<br>(4)$MWL_0,t_0$<br>(5)$C_nt_0 (n=-1,0,1)$<br>(6)$T(C_{-2})T(C_{-1})T(C_0)T(C_{1})T(C_{2})$</p>
+<p>其中(4)、(5)是字典信息特征，$MWL_0$指当前字在字典中匹配的最长词的长度,$t_0$表示当前字在字典最长词中对应的标注；(6)是字符类别信息，$T(C_n)$得到当前字符的类别，一共有五个类别，“1”类为中文数字类，“2”类为日期类（“日”，“月”，“年”），“3”类为英文字母类，“4”类为中国人名常用姓类，“5”类为其他字符。</p>
+<p>使用此特征模板得到的最新分词结果如下：</p>
+<p><strong>表5 PKU语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">PKU</th>
+<th style="text-align:center">+both</th>
+<th style="text-align:center">+type</th>
+<th style="text-align:center">+dict</th>
+<th style="text-align:center">10-feat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.915</td>
+<td style="text-align:center">0.917</td>
+<td style="text-align:center">0.920</td>
+<td style="text-align:center">0.923</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.942</td>
+<td style="text-align:center">0.944</td>
+<td style="text-align:center">0.937</td>
+<td style="text-align:center">0.938</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.929</td>
+<td style="text-align:center">0.930</td>
+<td style="text-align:center">0.928</td>
+<td style="text-align:center">0.931</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.582</td>
+<td style="text-align:center">0.599</td>
+<td style="text-align:center">0.575</td>
+<td style="text-align:center">0.578</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.936</td>
+<td style="text-align:center">0.936</td>
+<td style="text-align:center">0.941</td>
+<td style="text-align:center">0.944</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表6 CITYU语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">CITYU</th>
+<th style="text-align:center">+both</th>
+<th style="text-align:center">+type</th>
+<th style="text-align:center">+dict</th>
+<th style="text-align:center">10-feat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.947</td>
+<td style="text-align:center">0.947</td>
+<td style="text-align:center">0.938</td>
+<td style="text-align:center">0.937</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.946</td>
+<td style="text-align:center">0.942</td>
+<td style="text-align:center">0.936</td>
+<td style="text-align:center">0.933</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.946</td>
+<td style="text-align:center">0.944</td>
+<td style="text-align:center">0.937</td>
+<td style="text-align:center">0.935</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.695</td>
+<td style="text-align:center">0.686</td>
+<td style="text-align:center">0.664</td>
+<td style="text-align:center">0.648</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.967</td>
+<td style="text-align:center">0.968</td>
+<td style="text-align:center">0.961</td>
+<td style="text-align:center">0.960</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表7 MSR语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">MSR</th>
+<th style="text-align:center">+both</th>
+<th style="text-align:center">+type</th>
+<th style="text-align:center">+dict</th>
+<th style="text-align:center">10-feat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.954</td>
+<td style="text-align:center">0.961</td>
+<td style="text-align:center">0.954</td>
+<td style="text-align:center">0.954</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.963</td>
+<td style="text-align:center">0.962</td>
+<td style="text-align:center">0.966</td>
+<td style="text-align:center">0.965</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.959</td>
+<td style="text-align:center">0.961</td>
+<td style="text-align:center">0.960</td>
+<td style="text-align:center">0.960</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.693</td>
+<td style="text-align:center">0.680</td>
+<td style="text-align:center">0.698</td>
+<td style="text-align:center">0.687</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.961</td>
+<td style="text-align:center">0.968</td>
+<td style="text-align:center">0.961</td>
+<td style="text-align:center">0.961</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表8 AS语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">AS</th>
+<th style="text-align:center">+both</th>
+<th style="text-align:center">+type</th>
+<th style="text-align:center">+dict</th>
+<th style="text-align:center">10-feat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.954</td>
+<td style="text-align:center">0.949</td>
+<td style="text-align:center">0.949</td>
+<td style="text-align:center">0.950</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.944</td>
+<td style="text-align:center">0.931</td>
+<td style="text-align:center">0.935</td>
+<td style="text-align:center">0.934</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.949</td>
+<td style="text-align:center">0.940</td>
+<td style="text-align:center">0.942</td>
+<td style="text-align:center">0.942</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.635</td>
+<td style="text-align:center">0.620</td>
+<td style="text-align:center">0.628</td>
+<td style="text-align:center">0.634</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.968</td>
+<td style="text-align:center">0.963</td>
+<td style="text-align:center">0.964</td>
+<td style="text-align:center">0.964</td>
+</tr>
+</tbody>
+</table>
+<h3 id="改进的特征表示方式"><a href="#改进的特征表示方式" class="headerlink" title="改进的特征表示方式"></a>改进的特征表示方式</h3><p>最新版本的感知器分词算法中，使用了新的记录方式表示特征。但所使用的特征模板不变，仍旧是：</p>
+<p>(1)$C_n (n=-2,-1,0,1,2)$<br>(2)$C_n C_{n+1} (n=-2,-1,0,1)$<br>(3)$C_{-1} C_1$<br>(4)$MWL_0,t_0$<br>(5)$C_nt_0 (n=-1,0,1)$<br>(6)$T(C_{-2})T(C_{-1})T(C_0)T(C_{1})T(C_{2})$</p>
+<p>其中，特征(1)是一元特征(unigram)，特征(2)是二元特征(bigram)，特征(3)是简化表述的三元特征(trigram)。三元特征的信息对于分词的特征表示有着十分重要的作用，然而其特征数目巨大。</p>
+<p>以往的特征表示方式，是将特征(2)(3)记录在一个记录表内，统一分配特征序号。而按照这种方式，结合特征向量的生成方式得到的向量空间十分庞大（unigram*5+bigram*5+dict_feat*4+5^5），而导致特征维度急剧膨胀的原因是trigram的数目巨大且因与bigram数目相加乘以5。</p>
+<p>于是，为了解决这个问题，我将trigram特征独立出来，使用单独的变量存储，使得特征空间的维度大幅缩小。并且，感知器分词算法的性能没有受到很大影响，模型训练速度也有所提升，模型文件大小也缩小了不少。</p>
+<p>如下表，给出了改进前后的特征空间大小对比，其中old表示原有的特征表示方式，new表示上诉新的特征表示方式：</p>
+<p><strong>表9 各语料库上不同特征表示方式特征维度对比</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:right">PKU</th>
+<th style="text-align:right">CITYU</th>
+<th style="text-align:right">MSR</th>
+<th style="text-align:right">AS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">old</td>
+<td style="text-align:right">3040610</td>
+<td style="text-align:right">3978515</td>
+<td style="text-align:right">4565345</td>
+<td style="text-align:right">7165700</td>
+</tr>
+<tr>
+<td style="text-align:center">new</td>
+<td style="text-align:right">1679392</td>
+<td style="text-align:right">2205392</td>
+<td style="text-align:right">2551039</td>
+<td style="text-align:right">4154112</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到，特征空间维度的缩减十分明显(44%左右)。下面给出使用新的特征表示方式后，感知器分词算法在四个语料库上的performance：</p>
+<p><strong>表10 PKU语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">PKU</th>
+<th style="text-align:center">CWSP(tri)</th>
+<th style="text-align:center">CWSP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.907</td>
+<td style="text-align:center">0.915</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.940</td>
+<td style="text-align:center">0.942</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.923</td>
+<td style="text-align:center">0.929</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.552</td>
+<td style="text-align:center">0.582</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.928</td>
+<td style="text-align:center">0.936</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表11 CITYU语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">CITYU</th>
+<th style="text-align:center">CWSP(tri)</th>
+<th style="text-align:center">CWSP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.945</td>
+<td style="text-align:center">0.947</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.941</td>
+<td style="text-align:center">0.946</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.943</td>
+<td style="text-align:center">0.946</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.674</td>
+<td style="text-align:center">0.695</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.967</td>
+<td style="text-align:center">0.967</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表12 MSR语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">MSR</th>
+<th style="text-align:center">CWSP(tri)</th>
+<th style="text-align:center">CWSP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.951</td>
+<td style="text-align:center">0.954</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.962</td>
+<td style="text-align:center">0.963</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.956</td>
+<td style="text-align:center">0.959</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.664</td>
+<td style="text-align:center">0.693</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.959</td>
+<td style="text-align:center">0.961</td>
+</tr>
+</tbody>
+</table>
+<p><strong>表13 AS语料库上性能指标比较</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">AS</th>
+<th style="text-align:center">CWSP(tri)</th>
+<th style="text-align:center">CWSP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:center">0.951</td>
+<td style="text-align:center">0.954</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:center">0.941</td>
+<td style="text-align:center">0.944</td>
+</tr>
+<tr>
+<td style="text-align:left">F1-Measure</td>
+<td style="text-align:center">0.946</td>
+<td style="text-align:center">0.949</td>
+</tr>
+<tr>
+<td style="text-align:left">OOV-Recall</td>
+<td style="text-align:center">0.652</td>
+<td style="text-align:center">0.635</td>
+</tr>
+<tr>
+<td style="text-align:left">IV-Recall</td>
+<td style="text-align:center">0.964</td>
+<td style="text-align:center">0.968</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到在特征空间维度缩减近一半的情况下，F1-Measure平均降低0.4%，在总体上看是可以接受的。但是具体看到OOV-Recall指标和IV-Recall指标，这两项指标的下降有些过于明显。所以该种改进方法是否可取，<strong>需要看具体使用环境而定</strong>。</p>
+<h2 id="使用C-编写的分词器"><a href="#使用C-编写的分词器" class="headerlink" title="使用C++编写的分词器"></a>使用C++编写的分词器</h2><p>在研究这个算法的初始阶段，我使用Python编写了一个基础的算法模型，用于验证和实验。Python版本的感知器分词程序（以下简称CWSP-py）在一定程度上证明了基于感知器的分词算法的可行性，但又有着一些设计和实现上的不足，如速度较慢、句子边界处理不完善，特征表功能不完整等等。</p>
+<p>在意识到使用Python编写的感知器分词程序的不足之后，我着手使用C++编写了一个更快、语料处理规则更完善的感知器分词算法（以下简称CWSP-cpp）。CWSP-cpp与CWSP-py的不同之处主要有以下几个部分：</p>
+<ol>
+<li>特征模板</li>
+<li>语料预处理中有关句子边界的处理</li>
+<li>特征表对于未记录特征的处理</li>
+</ol>
+<p>接下来，我将分别对这三个不同进行详细的解释。</p>
+<h3 id="特征模板-1"><a href="#特征模板-1" class="headerlink" title="特征模板"></a>特征模板</h3><p>在最后一版CWSP-py中，所使用的特征模板为：</p>
+<p>(1)$C_n (n=-2,-1,0,1,2)$<br>(2)$C_n C_{n+1} (n=-2,-1,0,1)$<br>(3)$C_{-1} C_1$<br>(4)$MWL_0,t_0$<br>(5)$C_nt_0 (n=-1,0,1)$<br>(6)$T(C_{-2})T(C_{-1})T(C_0)T(C_{1})T(C_{2})$</p>
+<p>其中，特征(1)~(3)是从语料中直接抽取得到的字特征；特征(4)(5)是结合字典信息产生的特征；特征(6)中的$T(C_n)$是一个将字符映射为类别号的函数，共包含5个类别，分别是：日期（Dates）、汉字数字（Nums）、英文字母（Letters）、中国人名常用字（Names）及其他（Others）。</p>
+<p>而在CWSP-cpp中，我讲以上特征模板扩展为：</p>
+<p>(0)$P(C_0)$<br>(1)$C_n (n=-2,-1,0,1,2)$<br>(2)$C_n C_{n+1} (n=-2,-1,0,1)$<br>(3)$C_{-1} C_1$<br>(4)$MWL_0,t_0$<br>(5)$C_nt_0 (n=-1,0,1)$<br>(6)$T(C_{-1})T(C_0)T(C_{1})$<br>(7)$N(C_{-1})N(C_0)N(C_{1})$<br>(8)$F(C_{-1})F(C_0)F(C_{1})$</p>
+<p>特征(0)是标点特征，特征(1)~(5)与CWSP-py的特征模板中对应项的意义相同，特征(6)是类型特征，特征(7)是中国人名特征，特征(8)是外国人名特征。</p>
+<p><strong>表14 字符类别号</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Code</th>
+<th style="text-align:center">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">ANum</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">CNum1</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">CNum2</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">EngLetter</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">Date</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">Others</td>
+</tr>
+</tbody>
+</table>
+<p>特征(6)中，$T(C_n)$是一个将字映射为类别号的函数，现在共有6个类别，分别是：阿拉伯数字（ANum）、中文数字1（CNum1）、中文数字2（CNum2）、英文字母（EngLetter）、日期（Date）及其他（Others）。</p>
+<p><strong>表15 中国人名用字类别号</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Code</th>
+<th style="text-align:center">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">Frequency Surname</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">Common Surname</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">Given Name</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">both 0+2</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">both 2+3</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">Others</td>
+</tr>
+</tbody>
+</table>
+<p>特征(7)中，$N(C_n)$是一个将字映射为中国人名用字类别的函数，现在共有6个类别，分别是：0.常见姓（Frequency Surname）、1.普通姓（Common Surname）、2.人名用字（Given Name）、3.both 0+2、4.both 2+3 及 5.其他（Others）。</p>
+<p><strong>表16 外国人名用字类别号</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Code</th>
+<th style="text-align:center">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">Noncommmon FNameChar</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">Commmon FNameChar</td>
+</tr>
+</tbody>
+</table>
+<p>特征(8)中，$F(C_n)$是一个将字映射为中国人名用字类别的函数，现在共有2个类别，分别是：非外国人名常用字（Noncommon FNameChar）及外国人名常用字（Common FNameChar）。</p>
+<h3 id="句子边界"><a href="#句子边界" class="headerlink" title="句子边界"></a>句子边界</h3><p>在基于字标注的分词方法中，特征的产生是基于一个滑动窗口的。这个窗口有一个固定的长度，一般为奇数。本算法中使用的窗口长度为5，即对于窗口中心的字来说，取其前二及后二字与其组合形成特征。</p>
+<p>由于窗口的长度是固定的，所以在处理句子边界（句子第一个字或最后一个字）处的字符时，就会有窗口中字符不满的情况发生。为了避免这种情况的发生而导致特征抽取失败，一般的做法是在句子首位处添加特殊字符，之后窗口的起始位置还是在原来句子的第一个字符处。</p>
+<p>例如，对于句子“<strong>我爱北京天安门。</strong>”，窗口中心位于“我”、“爱”、“门”和“。”处时，都会发生窗口不满的情况。这时，我们就在句子的首尾各添加两个特殊符号，如在CWSP-py中是用字符“#”，句子发生变化：</p>
+<p><strong>我爱北京天安门。 ——&gt; #/#/我/爱/北/京/天/安/门/。/#/#</strong></p>
+<p>句中用“/”分隔开的每个字，在算法中都是一个独立的单位。窗口开始的位置仍旧在“我”字处。</p>
+<p>与此不同的是，在CWSP-cpp中，句子首尾添加的特殊符号被扩展成了一个集合$\lbrace B_0, B_1, E_0, E_1 \rbrace$，从而改变了处理过后的句子：</p>
+<p><strong>我爱北京天安门。 ——&gt; $B_1$/$B_0$/我/爱/北/京/天/安/门/。/$E_0$/$E_1$</strong></p>
+<h3 id="未登录特征"><a href="#未登录特征" class="headerlink" title="未登录特征"></a>未登录特征</h3><p>在中文分词领域，有一个问题始终困扰着人们，那就是未登录词（out-of-vocabulary）识别。未登录词之所以难以识别，是因为它从未在训练语料中出现过，自然有关它的特征不会被模型发现收集并用于训练。</p>
+<p>但当其出现在训练语料中时，算法仍会按照规则抽取特征，此时抽取的出的特征模型从未见过，自然在模型的特征表中不会有它的记录。这就会导致严重的错误发生：因为没有特征记录，于是无法生成特征向量，导致模型识别能力的下降。我称这一现象为特征丢失。</p>
+<p>例如，假设现有一个未登录词“天安门”，窗口中心位于“安”，由于特征表中没有关于这些字的特征，所以特征“天安”、“安门”、“天门”都无法找到对应的特征号，从而丢失了这一部分的数据，抽取出的特征可能只包含了一元特征和一些类别信息特征。</p>
+<p>对于一个训练好的模型，并不能随意将减到的未登录特征添加至记录表，因为这可能会导致特征空间的变化，从而导致模型的失效。于是为了防止特征丢失，我们在原始的特征表中预留了一个位置给没见过的特征通用，记为“Unknow”特征。注意，这并不是解决OOV的方案，只是一个小技巧，防止了特征丢失，保证了特征向量的内容数量。</p>
+<p>这一个小技巧在CWSP-py中是没有使用的，所以我见过一个未登录词中某个字的特征只剩下了类别特征而其余都丢失了。在CWSP-cpp中，我使用自定义的特征表结构，实现了对于“Unknow”特征的支持。</p>
+<h3 id="CWSP-cpp实验结果"><a href="#CWSP-cpp实验结果" class="headerlink" title="CWSP-cpp实验结果"></a>CWSP-cpp实验结果</h3><h4 id="实验结果对比"><a href="#实验结果对比" class="headerlink" title="实验结果对比"></a>实验结果对比</h4><p>在完成了CWSP-cpp的编写之后，我对其在Bakeoff-05标准数据集上进行了封闭分词实验，并将结果与目前state-of-the-art的算法进行了对比，结果如下：</p>
+<p><strong>表17 CWSP-cpp与state-of-the-art算法结果对比</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Models</th>
+<th style="text-align:center">PKU</th>
+<th style="text-align:center">MSR</th>
+<th style="text-align:center">CITYU</th>
+<th style="text-align:center">AS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">(Tseng et al., 2005)</td>
+<td style="text-align:center">95.0</td>
+<td style="text-align:center">96.4</td>
+<td style="text-align:center">94.3</td>
+<td style="text-align:center">94.7</td>
+</tr>
+<tr>
+<td style="text-align:left">(Zhao et al., 2006)</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">96.1</td>
+<td style="text-align:center">97.7</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td style="text-align:left">(Zhang and Clark, 2007)</td>
+<td style="text-align:center">95.1</td>
+<td style="text-align:center">97.2</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td style="text-align:left">(Zhang et al., 2013)</td>
+<td style="text-align:center">96.1</td>
+<td style="text-align:center">97.4</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td style="text-align:left">(Chen et al., 2015)</td>
+<td style="text-align:center">96.5</td>
+<td style="text-align:center">97.4</td>
+<td style="text-align:center">—</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td style="text-align:left">(Li et al., 2015)</td>
+<td style="text-align:center">97.7</td>
+<td style="text-align:center">98.1</td>
+<td style="text-align:center">96.9</td>
+<td style="text-align:center">96.2</td>
+</tr>
+<tr>
+<td style="text-align:left">(Wang et al., 2009)</td>
+<td style="text-align:center">95.2</td>
+<td style="text-align:center">97.1</td>
+<td style="text-align:center">94.4</td>
+<td style="text-align:center">95.1</td>
+</tr>
+<tr>
+<td style="text-align:left">(Wang et al., 2010)</td>
+<td style="text-align:center">94.2</td>
+<td style="text-align:center">97.2</td>
+<td style="text-align:center">95.6</td>
+<td style="text-align:center">—</td>
+</tr>
+<tr>
+<td style="text-align:left">CWSP-py</td>
+<td style="text-align:center">94.4</td>
+<td style="text-align:center">95.6</td>
+<td style="text-align:center">94.3</td>
+<td style="text-align:center">94.6</td>
+</tr>
+<tr>
+<td style="text-align:left">CWSP-cpp</td>
+<td style="text-align:center">94.6</td>
+<td style="text-align:center">96.9</td>
+<td style="text-align:center">95.2</td>
+<td style="text-align:center">95.3</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><ol>
+<li>Huihsin Tseng, Pichuan Chang, Galen Andrew, Daniel Jurafsky, and Christopher Manning. 2005. A conditional random field word segmenter for sighan bake-off 2005. In Proceedings of the fourth SIGHAN workshop on Chinese language Processing, volume 171. </li>
+<li>Hai Zhao, Chang-Ning Huang, and Mu Li. 2006. An improved Chinese Word Segmentation system with conditional random field. In Proceedings of the Fifth SIGHAN workshop on Chinese language Processing, volume 1082117.</li>
+<li>Yue Zhang and Stephen Clark. 2007. Chinese segmentation with a word-based perceptron algorithm. In ACL. </li>
+<li>Longkai Zhang, Houfeng Wang, Xu Sun, and Mairgup Mansur. 2013. Exploring representations from unlabeled data with co-training for Chinese word segmentation. In Proceedings of the 2013 Conference on Empirical Methods in Natural Language Processing.</li>
+<li>Xinchi Chen, Xipeng Qiu, Chenxi Zhu, Pengfei Liu, and Xuanjing Huang. 2015. Long short-term memory neural networks for Chinese word segmentation. In Proceedings of the Conference on Empirical Methods in Natural Language Processing.</li>
+<li>Xiaoqing Li, Chengqing Zong and Keh-Yih Su. A Unified Model for Solving the OOV Problems of Chinese Word Segmentation. ACM Transactions on Asian and Low-Resource Language Information Processing (TALLIP), Vol. 14, No. 3 (June 2015), Article 12, 29 pages</li>
+<li>Kun Wang, Chengqing Zong, and Keh-Yih Su. Which is More Suitable for Chinese Word Segmentation, the Generative Model or the Discriminative One? In Proceedings of the 23rd Pacific Asia Conference on Language, Information and Computation (PACLIC 23). 3-5 December 2009, Hong Kong. Pages 827-834</li>
+<li>Kun Wang, Chengqing Zong and Keh-Yih Su. A Character-Based Joint Model for Chinese Word Segmentation. In Proceedings of the 23rd International Conference on Computational Linguistics (COLING), Beijing, China, August 23-27, 2010. Pages 1173-1181</li>
+</ol>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/中文分词/" rel="tag">#中文分词</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/18/ner调研/" rel="next" title="有关命名实体识别技术的调研">
+                <i class="fa fa-chevron-left"></i> 有关命名实体识别技术的调研
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/06/新年不敏感/" rel="prev" title="新年不敏感">
+                新年不敏感 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2015/12/21/基于感知器的中文分词算法/"
+           data-title="基于感知器的中文分词算法" data-url="http://yoursite.com/2015/12/21/基于感知器的中文分词算法/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/IMG_2258.JPG" alt="Heshenghuan" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Heshenghuan</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">嗯，这是一个博客</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heshenghuan" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/he-sheng-huan" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于字标注的分词方法"><span class="nav-number">1.</span> <span class="nav-text">基于字标注的分词方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#感知器算法"><span class="nav-number">2.</span> <span class="nav-text">感知器算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于感知器的中文分词算法"><span class="nav-number">3.</span> <span class="nav-text">基于感知器的中文分词算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#将感知器用于分词"><span class="nav-number">3.1.</span> <span class="nav-text">将感知器用于分词</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征模板"><span class="nav-number">3.2.</span> <span class="nav-text">特征模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Viterbi算法求解最优标注结果"><span class="nav-number">3.3.</span> <span class="nav-text">Viterbi算法求解最优标注结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#感知器分词算法新进展"><span class="nav-number">5.</span> <span class="nav-text">感知器分词算法新进展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#改进的特征模板"><span class="nav-number">5.1.</span> <span class="nav-text">改进的特征模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改进的特征表示方式"><span class="nav-number">5.2.</span> <span class="nav-text">改进的特征表示方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用C-编写的分词器"><span class="nav-number">6.</span> <span class="nav-text">使用C++编写的分词器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特征模板-1"><span class="nav-number">6.1.</span> <span class="nav-text">特征模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#句子边界"><span class="nav-number">6.2.</span> <span class="nav-text">句子边界</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#未登录特征"><span class="nav-number">6.3.</span> <span class="nav-text">未登录特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CWSP-cpp实验结果"><span class="nav-number">6.4.</span> <span class="nav-text">CWSP-cpp实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果对比"><span class="nav-number">6.4.1.</span> <span class="nav-text">实验结果对比</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Reference"><span class="nav-number">6.4.2.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Heshenghuan</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hshgithubio"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+
+  
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  
+
+</body>
+</html>

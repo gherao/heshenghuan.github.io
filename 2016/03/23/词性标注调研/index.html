@@ -1,0 +1,1016 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="POS tagging, 词性标注," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="定义词性用来描述一个词在上下文中的作用。词性标注（Part-of-Speech或POS tagging）是指对于句子中的每个词都指派一个合适的词性，也即确定每个词是名词、动词、形容词或其他词的过程，又称词类标注或者简称标注。给定一个句子（或词序列）：
+我 中 了 一张 彩票 。
+对其的标注结果可以是：
+我/代词 中/动词 了/助词 一/数词 张/量词 彩票/名词 。/标点
+通常为了简化表达，人们常">
+<meta property="og:type" content="article">
+<meta property="og:title" content="词性标注调研">
+<meta property="og:url" content="http://yoursite.com/2016/03/23/词性标注调研/index.html">
+<meta property="og:site_name" content="何声欢的博客">
+<meta property="og:description" content="定义词性用来描述一个词在上下文中的作用。词性标注（Part-of-Speech或POS tagging）是指对于句子中的每个词都指派一个合适的词性，也即确定每个词是名词、动词、形容词或其他词的过程，又称词类标注或者简称标注。给定一个句子（或词序列）：
+我 中 了 一张 彩票 。
+对其的标注结果可以是：
+我/代词 中/动词 了/助词 一/数词 张/量词 彩票/名词 。/标点
+通常为了简化表达，人们常">
+<meta property="og:updated_time" content="2016-05-13T05:46:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="词性标注调研">
+<meta name="twitter:description" content="定义词性用来描述一个词在上下文中的作用。词性标注（Part-of-Speech或POS tagging）是指对于句子中的每个词都指派一个合适的词性，也即确定每个词是名词、动词、形容词或其他词的过程，又称词类标注或者简称标注。给定一个句子（或词序列）：
+我 中 了 一张 彩票 。
+对其的标注结果可以是：
+我/代词 中/动词 了/助词 一/数词 张/量词 彩票/名词 。/标点
+通常为了简化表达，人们常">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> 词性标注调研 | 何声欢的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">何声欢的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">这是一个博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                词性标注调研
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-03-23T16:42:45+08:00" content="2016-03-23">
+              2016-03-23
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; In
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/23/词性标注调研/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/23/词性标注调研/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>词性用来描述一个词在上下文中的作用。词性标注（Part-of-Speech或POS tagging）是指对于句子中的每个词都指派一个合适的词性，也即确定每个词是名词、动词、形容词或其他词的过程，又称词类标注或者简称标注。给定一个句子（或词序列）：</p>
+<p><strong>我 中 了 一张 彩票 。</strong></p>
+<p>对其的标注结果可以是：</p>
+<p><strong>我/代词 中/动词 了/助词 一/数词 张/量词 彩票/名词 。/标点</strong></p>
+<p>通常为了简化表达，人们常使用一个定义好的标注集去表达上面的标注结果，例如“r”表示代词，“n”表示名词。使用北大计算所词性标注集标注的结果为：</p>
+<p><strong>我/r 中/v 了/u 一/m 张/q 彩票/n 。/w</strong></p>
+<p>在汉语中，词性标注比较简单，因为汉语词汇词性多变的情况比较少见，大多词语只有一个词性，或者出现频次最高的词性远远高于第二位的词性。据说，只需选取最高频词性，即可实现80%准确率的中文词性标注程序。</p>
+<p>而利用一些机器学习算法，可以实现更高准确率的词性标注。</p>
+<h1 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h1><p>词性标注的方法按照是否视其为独立任务可分为两种。</p>
+<h2 id="Individual-Model"><a href="#Individual-Model" class="headerlink" title="Individual Model"></a>Individual Model</h2><p>独立模型是将词性标注作为单独的任务，使用统计学习方法在标注语料上训练模型，并使用该模型对测试语料进行词性标注任务的方法。</p>
+<p>该方法一般<strong>要求输入的句子是经过分词，符合分词标准</strong>的词序列。之后模型在序列基础上给出最优标注结果。常见及state-of-the-art的模型包括但不限于：CRF，ME，HMM等等。</p>
+<h2 id="Joint-Model"><a href="#Joint-Model" class="headerlink" title="Joint Model"></a>Joint Model</h2><p>中文作为一种词语间没有明显分隔符的语言，中文分词往往是作为词性标注任务的前置条件的。不过有研究表明，利用两个任务之间潜在的语言关系，使用联合模型（Joint Model）进行分词和词性标注会在性能上有所提升。</p>
+<p>使用联合模型能够提升性能，那么怎么使不同的任务结合在一起做呢？目前方法课可概括为两种：一种是pipeline方法，另一种则是采用simultaneous方法。</p>
+<h3 id="pipeline方法"><a href="#pipeline方法" class="headerlink" title="pipeline方法"></a>pipeline方法</h3><p>所谓pipeline方法，是最简单的一种将分词模型和词性标注模型组合在一起使用的方法，即：<strong>未切分句子经由分词算法切分，切分结果送入词性标注模型进行词性标注</strong>。</p>
+<p>pipeline方法的思想简单，效果也不错，研究表明使用pipeline方法会使F1值提升在0.2~1%。然而这个方法也有一个很大的缺点，就是会产生错误传播（error propagation），即：分词的错误会导致词性标注的错误。</p>
+<p>这种方法也可成为pipeline架构（pipeline framework）。(Qian and Liu, 2012)提出了一个新型的解码算法，用于判别式分词、词性标注、句法分析联合模型，同时完成分词、词性标注和句法分析任务。他们在训练阶段训练三个独立的模型（分词，POS tagging，parsing），在解码阶段基于一个统一的框架再整合利用这些模型。他们扩展了<a href="https://zh.wikipedia.org/wiki/CYK%E7%AE%97%E6%B3%95" target="_blank" rel="external">CYK算法</a>，使之可以利用分词和词性标注的特征，称为联合解码算法（joint decoding algorithm）。</p>
+<h3 id="simultaneous方法"><a href="#simultaneous方法" class="headerlink" title="simultaneous方法"></a>simultaneous方法</h3><p>为了避免错误传播，研究者们开发了许多不同的方法。虽然这些方法不尽相同，但都有一个共同的特点，平等的对待分词和词性标注，希望分词和词性标注两个模型能够互相改善。例如，(Ng and Low, 2004)，(Zhang and Clark, 2008)，(Hatori et al., 2012)以及(Qian and Liu, 2012)都设计了一个特殊的模型能够同时使用两方的信息，从而避开pipeline架构带来的错误传播。但具体地说，这几篇论文中的方法有各有不同。</p>
+<p>(Ng and Low, 2004)使用了一个简单的思想，那就是将基于字标注的分词方法与词性标注结合起来，使用复合标注集。例如，对于名词“人民”，它的词性标注是n，而分词的标注序列是“BE”，于是“人”的标注就是“B_n”，民的标注就是“E_n”。这样一个简单的思想会导致解码过程中搜索空间的膨胀，故他们使用了改进的解码算法进行解码，也使得这样一个序列标注问题的时间复杂度下降到$O((4T)^n)$，其中T为词性标注集大小，n为句子长度，4表示使用4-tag标注集分词。</p>
+<p>(Zhang and Clark, 2008)指出，分词和词性标注联合模型遇到的一个问题就是标注空间的急剧膨胀，他们使用了一个新型的multiple-beam search算法，加快了解码速度。他们提出使用词性标注的信息来帮助分词，因此词性标注和分词可以视为一个单独的任务：<strong>对给定分词中文句子，标注器考虑所有可能切分及标注情况，在其中选出最好的输出</strong>。他们不限制分词和词性标注间的相互作用，利用新的multiple-beam search算法解码，同时利用了分词和词性标注的特征。</p>
+<p>(Hatori et al., 2012)提出了一个高效的、基于字标注的解码方法，可以结合目前state-of-the-art分词、词性标注及句法分析工作的特征。他们指出，一个句子的句法信息对于分词、词性标注是有着很大的影响的，特别是处理中文未登录词时，句法信息能在一定程度上纠正分词和词性标注的错误。因此，他们开发了一个能够同时处理分词、词性标注和句法分析的模型，试图捕捉三个任务间的相互作用。</p>
+<p>[未完待续]</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>以下参考文献按照我阅读的顺序排序，与上一节<strong> <em>simultaneous方法</em> </strong>中的顺序可能不同。</p>
+<ol>
+<li>Hwee Tou Ng and Jin Kiat Low. 2004. Chinese part-of-speech tagging: One-at-a-time or all-at-once? Word-based or character-based? In Proceedings of the EMNLP Conference, pages 277–284, Barcelona, Spain.</li>
+<li>Yue Zhang, Stephen Clark. Joint Word Segmentation and POS Tagging Using a Single Perceptron[C].ACL. 2008: 888-896.</li>
+<li>Jun Hatori, Takuya Matsuzaki, Yusuke Miyao, Jun’ichi Tsujii. Incremental joint approach to word segmentation, pos tagging, and dependency parsing in chinese[C].Proceedings of the 50th Annual Meeting of the Association for Computational Linguistics: Long Papers-Volume 1. Association for Computational Linguistics, 2012: 1045-1053.</li>
+<li>Xian Qian, Yang Liu. Joint Chinese word segmentation, POS tagging and parsing[C].Proceedings of the 2012 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning. Association for Computational Linguistics, 2012: 501-511.</li>
+<li>Yue Zhang, Stephen Clark. A fast decoder for joint word segmentation and POS-tagging using a single discriminative model[C].Proceedings of the 2010 Conference on Empirical Methods in Natural Language Processing. Association for Computational Linguistics, 2010: 843-852.</li>
+<li>Canasai Kruengkrai, Kiyotaka Uchimoto, Jun’ichi Kazama, et al. An error-driven word-character hybrid model for joint Chinese word segmentation and POS tagging[C].Proceedings of the Joint Conference of the 47th Annual Meeting of the ACL and the 4th International Joint Conference on Natural Language Processing of the AFNLP: Volume 1-Volume 1. Association for Computational Linguistics, 2009: 513-521.</li>
+</ol>
+<h1 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h1><h2 id="参考学习资料"><a href="#参考学习资料" class="headerlink" title="参考学习资料"></a>参考学习资料</h2><ol>
+<li>我爱自然语言处理上的：<a href="http://www.52nlp.cn/hmm-application-in-natural-language-processing-one-part-of-speech-tagging-1" target="_blank" rel="external">HMM在自然语言处理中的应用一：词性标注1</a></li>
+<li>PDF: <a href="http://www.phontron.com/slides/nlp-programming-en-04-hmm.pdf" target="_blank" rel="external">Part-of-Speech Tagging with HMM</a></li>
+<li>一个基于HMM的词性标注算法：<a href="http://www.hankcs.com/nlp/part-of-speech-tagging.html" target="_blank" rel="external">HanLP词性标注方法</a></li>
+</ol>
+<h2 id="参考工具"><a href="#参考工具" class="headerlink" title="参考工具"></a>参考工具</h2><ol>
+<li><a href="http://nlp.stanford.edu/software/tagger.shtml" target="_blank" rel="external">Stanford Log-linear Part-of-Speech Tagger</a></li>
+</ol>
+<h2 id="语料库资源汇总"><a href="#语料库资源汇总" class="headerlink" title="语料库资源汇总"></a>语料库资源汇总</h2><ol>
+<li>豆瓣：<a href="https://www.douban.com/note/269081724/" target="_blank" rel="external">【汇总】语料库资源</a></li>
+</ol>
+<h2 id="北大计算所词性标注集简表"><a href="#北大计算所词性标注集简表" class="headerlink" title="北大计算所词性标注集简表"></a>北大计算所词性标注集简表</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">序号</th>
+<th style="text-align:left">代码</th>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">帮助记忆的诠释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">Ag</td>
+<td style="text-align:left">形语素</td>
+<td style="text-align:left">形容词性语素。形容词代码为a，语素代码ｇ前面置以A。</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">a</td>
+<td style="text-align:left">形容词</td>
+<td style="text-align:left">取英语形容词adjective的第1个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">ad</td>
+<td style="text-align:left">副形词</td>
+<td style="text-align:left">直接作状语的形容词。形容词代码a和副词代码d并在一起。</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">an</td>
+<td style="text-align:left">名形词</td>
+<td style="text-align:left">具有名词功能的形容词。形容词代码a和名词代码n并在一起。</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">b</td>
+<td style="text-align:left">区别词</td>
+<td style="text-align:left">取汉字“别”的声母。</td>
+</tr>
+<tr>
+<td style="text-align:left">6</td>
+<td style="text-align:left">c</td>
+<td style="text-align:left">连词</td>
+<td style="text-align:left">取英语连词conjunction的第1个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">7</td>
+<td style="text-align:left">Dg</td>
+<td style="text-align:left">副语素</td>
+<td style="text-align:left">副词性语素。副词代码为d，语素代码ｇ前面置以D。</td>
+</tr>
+<tr>
+<td style="text-align:left">8</td>
+<td style="text-align:left">d</td>
+<td style="text-align:left">副词</td>
+<td style="text-align:left">取adverb的第2个字母，因其第1个字母已用于形容词。</td>
+</tr>
+<tr>
+<td style="text-align:left">9</td>
+<td style="text-align:left">e</td>
+<td style="text-align:left">叹词</td>
+<td style="text-align:left">取英语叹词exclamation的第1个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">10</td>
+<td style="text-align:left">f</td>
+<td style="text-align:left">方位词</td>
+<td style="text-align:left">取汉字“方” 的声母。</td>
+</tr>
+<tr>
+<td style="text-align:left">11</td>
+<td style="text-align:left">g</td>
+<td style="text-align:left">语素</td>
+<td style="text-align:left">绝大多数语素都能作为合成词的“词根”，取汉字“根”的声母。</td>
+</tr>
+<tr>
+<td style="text-align:left">12</td>
+<td style="text-align:left">h</td>
+<td style="text-align:left">前接成分</td>
+<td style="text-align:left">取英语head的第1个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">13</td>
+<td style="text-align:left">i</td>
+<td style="text-align:left">成语</td>
+<td style="text-align:left">取英语成语idiom的第1个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">14</td>
+<td style="text-align:left">j</td>
+<td style="text-align:left">简称略语</td>
+<td style="text-align:left">取汉字“简”的声母。</td>
+</tr>
+<tr>
+<td style="text-align:left">15</td>
+<td style="text-align:left">k</td>
+<td style="text-align:left">后接成分</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">16</td>
+<td style="text-align:left">l</td>
+<td style="text-align:left">习用语</td>
+<td style="text-align:left">习用语尚未成为成语，有点“临时性”，取“临”的声母。</td>
+</tr>
+<tr>
+<td style="text-align:left">17</td>
+<td style="text-align:left">m</td>
+<td style="text-align:left">数词</td>
+<td style="text-align:left">取英语numeral的第3个字母，n，u已有他用。</td>
+</tr>
+<tr>
+<td style="text-align:left">18</td>
+<td style="text-align:left">Ng</td>
+<td style="text-align:left">名语素</td>
+<td style="text-align:left">名词性语素。名词代码为n，语素代码ｇ前面置以N。</td>
+</tr>
+<tr>
+<td style="text-align:left">19</td>
+<td style="text-align:left">n</td>
+<td style="text-align:left">名词</td>
+<td style="text-align:left">取英语名词noun的第1个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">20</td>
+<td style="text-align:left">nr</td>
+<td style="text-align:left">人名</td>
+<td style="text-align:left">名词代码n和“人(ren)”的声母并在一起。</td>
+</tr>
+<tr>
+<td style="text-align:left">21</td>
+<td style="text-align:left">ns</td>
+<td style="text-align:left">地名</td>
+<td style="text-align:left">名词代码n和处所词代码s并在一起。</td>
+</tr>
+<tr>
+<td style="text-align:left">22</td>
+<td style="text-align:left">nt</td>
+<td style="text-align:left">机构团体</td>
+<td style="text-align:left">“团”的声母为t，名词代码n和t并在一起。</td>
+</tr>
+<tr>
+<td style="text-align:left">23</td>
+<td style="text-align:left">nz</td>
+<td style="text-align:left">其他专名</td>
+<td style="text-align:left">“专”的声母的第1个字母为z，名词代码n和z并在一起。</td>
+</tr>
+<tr>
+<td style="text-align:left">24</td>
+<td style="text-align:left">o</td>
+<td style="text-align:left">拟声词</td>
+<td style="text-align:left">取英语拟声词onomatopoeia的第1个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">25</td>
+<td style="text-align:left">p</td>
+<td style="text-align:left">介词</td>
+<td style="text-align:left">取英语介词prepositional的第1个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">26</td>
+<td style="text-align:left">q</td>
+<td style="text-align:left">量词</td>
+<td style="text-align:left">取英语quantity的第1个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">27</td>
+<td style="text-align:left">r</td>
+<td style="text-align:left">代词</td>
+<td style="text-align:left">取英语代词pronoun的第2个字母,因p已用于介词。</td>
+</tr>
+<tr>
+<td style="text-align:left">28</td>
+<td style="text-align:left">s</td>
+<td style="text-align:left">处所词</td>
+<td style="text-align:left">取英语space的第1个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">29</td>
+<td style="text-align:left">Tg</td>
+<td style="text-align:left">时语素</td>
+<td style="text-align:left">时间词性语素。时间词代码为t,在语素的代码g前面置以T。</td>
+</tr>
+<tr>
+<td style="text-align:left">30</td>
+<td style="text-align:left">t</td>
+<td style="text-align:left">时间词</td>
+<td style="text-align:left">取英语time的第1个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">31</td>
+<td style="text-align:left">u</td>
+<td style="text-align:left">助词</td>
+<td style="text-align:left">取英语助词auxiliary 的第2个字母,因a已用于形容词。</td>
+</tr>
+<tr>
+<td style="text-align:left">32</td>
+<td style="text-align:left">Vg</td>
+<td style="text-align:left">动语素</td>
+<td style="text-align:left">动词性语素。动词代码为v。在语素的代码g前面置以V。</td>
+</tr>
+<tr>
+<td style="text-align:left">33</td>
+<td style="text-align:left">v</td>
+<td style="text-align:left">动词</td>
+<td style="text-align:left">取英语动词verb的第一个字母。</td>
+</tr>
+<tr>
+<td style="text-align:left">34</td>
+<td style="text-align:left">vd</td>
+<td style="text-align:left">副动词</td>
+<td style="text-align:left">直接作状语的动词。动词和副词的代码并在一起。</td>
+</tr>
+<tr>
+<td style="text-align:left">35</td>
+<td style="text-align:left">vn</td>
+<td style="text-align:left">名动词</td>
+<td style="text-align:left">指具有名词功能的动词。动词和名词的代码并在一起。</td>
+</tr>
+<tr>
+<td style="text-align:left">36</td>
+<td style="text-align:left">w</td>
+<td style="text-align:left">标点符号</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">37</td>
+<td style="text-align:left">x</td>
+<td style="text-align:left">非语素字</td>
+<td style="text-align:left">非语素字只是一个符号，字母x通常用于代表未知数、符号。</td>
+</tr>
+<tr>
+<td style="text-align:left">38</td>
+<td style="text-align:left">y</td>
+<td style="text-align:left">语气词</td>
+<td style="text-align:left">取汉字“语”的声母。</td>
+</tr>
+<tr>
+<td style="text-align:left">39</td>
+<td style="text-align:left">z</td>
+<td style="text-align:left">状态词</td>
+<td style="text-align:left">取汉字“状”的声母的前一个字母。</td>
+</tr>
+</tbody>
+</table>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/POS-tagging-词性标注/" rel="tag">#POS tagging, 词性标注</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/02/Makefile学习/" rel="next" title="Makefile学习">
+                <i class="fa fa-chevron-left"></i> Makefile学习
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/23/词性标注调研/"
+           data-title="词性标注调研" data-url="http://yoursite.com/2016/03/23/词性标注调研/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/IMG_2258.JPG" alt="Heshenghuan" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Heshenghuan</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">嗯，这是一个博客</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heshenghuan" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/he-sheng-huan" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#定义"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主要方法"><span class="nav-number">2.</span> <span class="nav-text">主要方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Individual-Model"><span class="nav-number">2.1.</span> <span class="nav-text">Individual Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Joint-Model"><span class="nav-number">2.2.</span> <span class="nav-text">Joint Model</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline方法"><span class="nav-number">2.2.1.</span> <span class="nav-text">pipeline方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#simultaneous方法"><span class="nav-number">2.2.2.</span> <span class="nav-text">simultaneous方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">2.2.3.</span> <span class="nav-text">Reference</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关资料"><span class="nav-number">3.</span> <span class="nav-text">相关资料</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考学习资料"><span class="nav-number">3.1.</span> <span class="nav-text">参考学习资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考工具"><span class="nav-number">3.2.</span> <span class="nav-text">参考工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语料库资源汇总"><span class="nav-number">3.3.</span> <span class="nav-text">语料库资源汇总</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#北大计算所词性标注集简表"><span class="nav-number">3.4.</span> <span class="nav-text">北大计算所词性标注集简表</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Heshenghuan</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hshgithubio"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+
+  
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  
+
+</body>
+</html>

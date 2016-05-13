@@ -1,0 +1,779 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="AdaBoost," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。
+关键字：多个基本分类器线性组合
+
+提升方法常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。
+这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AdaBoost笔记">
+<meta property="og:url" content="http://yoursite.com/2016/01/17/AdaBoost笔记/index.html">
+<meta property="og:site_name" content="何声欢的博客">
+<meta property="og:description" content="以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。
+关键字：多个基本分类器线性组合
+
+提升方法常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。
+这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/alpha_m.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/Z_m.png">
+<meta property="og:updated_time" content="2016-05-13T05:34:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AdaBoost笔记">
+<meta name="twitter:description" content="以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。
+关键字：多个基本分类器线性组合
+
+提升方法常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。
+这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适">
+<meta name="twitter:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/alpha_m.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: '',
+    sidebar: 'post',
+    motion: true
+  };
+</script>
+
+  <title> AdaBoost笔记 | 何声欢的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">何声欢的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">这是一个博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                AdaBoost笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2016-01-17T20:23:50+08:00" content="2016-01-17">
+              2016-01-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; In
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/01/17/AdaBoost笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/17/AdaBoost笔记/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><blockquote>
+<p>以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。</p>
+<p>关键字：多个基本分类器线性组合</p>
+</blockquote>
+<h2 id="提升方法"><a href="#提升方法" class="headerlink" title="提升方法"></a>提升方法</h2><p>常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。</p>
+<p>这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适当的综合所得出的判断，要比其中任何一个专家单独做出的判断好。实际上，就是俗话所说的“三个臭皮匠顶个诸葛亮”的道理。</p>
+<h2 id="AdaBoost算法"><a href="#AdaBoost算法" class="headerlink" title="AdaBoost算法"></a>AdaBoost算法</h2><h3 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h3><p>Kearns和Valiant提出了“强可学习（strongly learnable）”和“弱可学习（weakly learnable）”的概念。指出：在概率近似正确（probably approximately correct, PAC）学习的框架中，</p>
+<ul>
+<li>一个概念（一个类）如果存在一个多项式的学习算法能够学习它，并且正确率很高，那么就称这个概念是强可学习的；</li>
+<li>一个概念，如果存在一个多项式的学习算法能够学习它，学习的正确率仅比随机猜测略高，那么就称这个概念是弱可学习的。</li>
+</ul>
+<p>有趣的是，Schapire后来证明强可学习与弱可学习是等价，他使用构造的方法证明：<strong>一个概念弱可学习的充要条件是这个概念强可学习</strong>。这个结论的证明我之后会学习，补上这里的空缺。</p>
+<p>既然强可学习与弱可学习是等价的，那么在实际问题中如果已经发现了“弱学习算法”，那么将它<strong>提升(boost)为“强学习算法”</strong>将是可行的。并且，发现弱学习算法通常要比发现强学习算法容易得多。这么一种看似偷懒的思路，却收获了相当不错的效果。基于这一思路，AdaBoost算法（Adaptive Boosting）是可行算法中的一个代表。</p>
+<p>对于提升方法，有两个问题需要回答：（1）每一轮如何改变训练数据的权值或概率分布；（2）如何将弱分类器组合成一个强分类器。</p>
+<p>问题（1），AdaBoost的做法是，提高被前一轮错分类的样本的权值，而降低那些被正确分类的样本的权值。对于问题（2），即弱分类器的组合，Adaboost采取的是加权线性组合的方式。</p>
+<h3 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h3><p>假定给定一个二类分类的训练数据集</p>
+<p>$$ T=\lbrace (x_1,y_1),(x_2,y_2),…,(x_N,y_N) \rbrace $$</p>
+<p>其中，每个样本点由实例与标记组成。实例$ x_i \in X \subseteq R^n $，$X$是实例空间，标记$y_i \in \lbrace -1, +1\rbrace$。AdaBoost利用以下算法，从训练数据中学习一系列弱分类器或基本分类器，并将这些弱分类器线性组合成一个强分类器。</p>
+<h4 id="AdaBoost算法-1"><a href="#AdaBoost算法-1" class="headerlink" title="AdaBoost算法"></a>AdaBoost算法</h4><p>输入：训练数据集T，弱学习算法；<br>输出：最终分类器$G(x)$<br><strong>(1)初始化权值分布</strong><br>$$D_1=(w_{11},…,w_{1i},…,w_{1N}),w_{1i}=\frac{1}{N}, i=1,2,…,N$$<br><strong>(2)迭代，对m=1,2,…,M</strong><br>    (a)使用具有权值分布$D_m$的训练数据集学习，得到基本分类器<br>    $$G_m(x):X \to \lbrace -1,+1 \rbrace$$<br>    (b)计算$G_m$在训练数据集上的分类误差率<br>    $$e_m=P(G_m(x_i) \ne y_i) = \sum_{i=1}^{N}{w_{mi}I(G_m(x_i) \ne y_i)}$$<br>    (c)计算$G_m(x)$的系数<br>    $$\alpha_m = \frac{1}{2} log \frac{1-e_m}{e_m}$$<br>    这里的对数是自然对数。<br>    (d)更新训练数据集的权值分布<br>    $$D_{m+1}=(w_{m+1,1},…,w_{m+1,i},…,w_{m+1,1N})$$<br>    $$w_{m+1,i} = \frac{w_{m,i}}{Z_m}exp(-\alpha_m y_i G_m(x_i))$$<br>    这里的$Z_m$是规范化因子：<br>    $$Z_m = \sum_{i=1}^{N}w_{m,i}exp( -\alpha_m y_i G_m(x_i) )$$<br>    它使$D_{m+1}$成为一个概率分布。<br><strong>(3)构建基本分类器的线性组合</strong><br>$$f(x)=\sum_{m=1}^{M}\alpha_mG_m(x)$$<br>得到最终分类器：<br>$$G(x) = sign(f(x)) = sign(\sum_{m=1}^{M}\alpha_mG_m(x))$$</p>
+<h4 id="AdaBoost算法分析"><a href="#AdaBoost算法分析" class="headerlink" title="AdaBoost算法分析"></a>AdaBoost算法分析</h4><p>AdaBoost是一个迭代算法。</p>
+<p>(1)在最初假设中，每个训练数据集的样本具有相同的权重$w_{1i}=\frac{1}{N}$。以此为基础，算法在第一轮是在原始数据上学习基本分类器$G_1(x)$。</p>
+<p>(2)AdaBoost算法的迭代过程，对m=1,2,…,M：<br><br>(a)使用当前$D_m$学习基本分类器$G_m(x)$<br><br>(b)需要注意的是，<strong>分类误差率</strong>$e_m$是一个十分重要的指标，因为学习基本分类器的优化准则是<strong>最小化当前的$e_m$</strong>。而分类误差率和当前的权值分布有关<br>$$e_m = P(G_m(x_i) \ne y_i) = \sum_{G_m(x_i) \ne y_i} w_{m,i}$$<br>因为每一轮迭代中，(d)会更新权值分布，<strong>这保证了每一轮迭代中学习的基本分类器$G_m$与上一轮的分类器$G_{m-1}$是不同的。</strong><br><br>(c)这一步计算的系数$\alpha_m$是基本分类器$G_m(x)$在最终分类器$G(x)$中的权重：<br><strong>$\alpha_m$趋势图</strong><br><img src="http://7xnh8y.com1.z0.glb.clouddn.com/alpha_m.png" alt="alpha_m"></p>
+<p>上图是$\alpha_m = \frac{1}{2} log \frac{1-e_m}{e_m}$的函数图像，横轴是$e_m$，纵轴是$\alpha_m$。可以看到看到，当分类误差率越小时函数值越大，也即表示分类误差率小的基本分类器在最终分类器中的权重越大。</p>
+<p>(d)依据现有组合分类器的分类结果，更新训练数据集的权值分布，<strong>这与(c)一起保证了每次迭代得到与上一轮不一样的分类器</strong>。<br>更新权值的公式也可以写成：</p>
+<ul>
+<li>如果$G_m(x_i) = y_i$，$w_{m+1,i}=\frac{w_{m,i}}{Z_m}e^{-\alpha_m}$</li>
+<li>如果$G_m(x_i) \ne y_i$，$w_{m+1,i}=\frac{w_{m,i}}{Z_m}e^{\alpha_m}$</li>
+</ul>
+<p>简便的计算规范化因子的方法：<br>$$Z_m = 2 \sqrt{e_m(1-e_m)}$$</p>
+<h2 id="AdaBoost算法的训练误差分析"><a href="#AdaBoost算法的训练误差分析" class="headerlink" title="AdaBoost算法的训练误差分析"></a>AdaBoost算法的训练误差分析</h2><p>先上结论，书中<strong>定理8.1</strong>给出：AdaBoost算法最终分类器的训练误差上界为</p>
+<p>$$\frac{1}{N}\sum_{i=1}^{N} I(G(x_i)\ne y_i)\le \frac{1}{N}\sum_i exp(-y_if(x_i))=\prod_m Z_m$$</p>
+<p>这个不等式的证明过程也十分明了，主要的难点在于后半部分的推导。需要使用到$Z_m$的定义式及变形：</p>
+<ol>
+<li>$w_{m,i}exp(-\alpha_m y_i G_m(x_i))=Z_m w_{m+1,i}$</li>
+<li>$Z_m = \sum_i w_{m,i} exp(-\alpha_m y_i G_m(x_i))$</li>
+</ol>
+<p>推导过程如下：</p>
+<p>$\frac{1}{N}\sum_i exp(-y_if(x_i)) = \frac{1}{N}\sum_i exp ( -\sum_{m=1}^M\alpha_m y_i G_m(x_i) )$<em># 利用$\frac{1}{N}=w_{1,i}$</em><br>$=\sum_iw_{1,i}\prod_{m=1}^M exp(-\alpha_m y_i G_m(x_i))$<br>$=Z_1\sum_iw_{2,i}\prod_{m=2}^M exp(-\alpha_m y_i G_m(x_i))$<em># 利用1式</em><br>$= …$<br>$=Z_1Z_2…Z_{M-1}\sum_iw_{M,i}exp(-\alpha_M y_i G_M(x_i))$<em># $Z_M$是利用2式得到的</em><br>$=\prod_{m=1}^MZ_m$</p>
+<p>利用这个上界，我们可以得到一个性质：<strong>不断增加弱分类器，AdaBoost的训练误差上界会不断降低</strong>。下图是$Z_m$的图像，横轴为分类误差率$e_m$，纵轴是规范化因子$Z_m$</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/Z_m.png" alt="Z_m"></p>
+<p>如图，可以看到$Z_m$的图像是一个开口朝下的抛物线，且在$e_m=0.5$处取得最大值1，故可得$0&lt;Z_m\le1.0$。由此易得：<br>$$\prod_{m=1}^{M+1}Z_m = Z_{M+1}\prod_{m=1}^MZ_m\le \prod_{m=1}^MZ_m$$</p>
+<p>也即AdaBoost的训练误差界会随着m的增加而不断降低。</p>
+<p>第二部分，<strong>定理8.2</strong>部分，目前还没有太深入的理解，只是知道了一个非常好用的计算规范化因子的简便公式：$Z_m = 2\sqrt{e_m(1-e_m)}$。</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/AdaBoost/" rel="tag">#AdaBoost</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/06/新年不敏感/" rel="next" title="新年不敏感">
+                <i class="fa fa-chevron-left"></i> 新年不敏感
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/29/回家/" rel="prev" title="回家">
+                回家 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/01/17/AdaBoost笔记/"
+           data-title="AdaBoost笔记" data-url="http://yoursite.com/2016/01/17/AdaBoost笔记/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/IMG_2258.JPG" alt="Heshenghuan" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Heshenghuan</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">嗯，这是一个博客</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heshenghuan" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/he-sheng-huan" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#提升方法"><span class="nav-number">1.</span> <span class="nav-text">提升方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AdaBoost算法"><span class="nav-number">2.</span> <span class="nav-text">AdaBoost算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本思路"><span class="nav-number">2.1.</span> <span class="nav-text">基本思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法原理"><span class="nav-number">2.2.</span> <span class="nav-text">算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AdaBoost算法-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">AdaBoost算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AdaBoost算法分析"><span class="nav-number">2.2.2.</span> <span class="nav-text">AdaBoost算法分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AdaBoost算法的训练误差分析"><span class="nav-number">3.</span> <span class="nav-text">AdaBoost算法的训练误差分析</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Heshenghuan</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hshgithubio"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+
+  
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  
+
+</body>
+</html>
