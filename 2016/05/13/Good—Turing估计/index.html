@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="命名实体识别," />
+  <meta name="keywords" content="数据平滑," />
 
 
 
@@ -51,19 +51,25 @@
 
 
 
-<meta name="description" content="个人的理解基于统计的命名实体识别与基于字标注的中文分词在方法思想上是有很大相似之处的，都是给token不同的角色标注，统计相关的初始概率、转移概率和发射概率，最后利用Viterbi算法进行解码，求得最优标注序列。
-不同之处在于，命名实体识别的角色标注是高度定制的。首先就根据人名、地名、机构名分为了三类标注集合，然后再根据是否有嵌套，并结合专家知识进行设计。而基于字标注的中文分词方法一般使用的是4-">
+<meta name="description" content="使用HMM的中文词性标注程序这两天做了一个使用隐马尔可夫模型（HMM）的中文词性标注的简单程序，虽说是一个试水性质的探索，但这其中的某些小细节仍值得研究。
+有关HMM的模型介绍不再赘述，对于中文词性标注，我们做出的假设是：文本中的句子是观测状态序列，句子中的每一个词是一个观测状态，其词性标注就是隐含状态。那么要得到这个模型的具体信息，我们需要得到$(\pi, A, B)$这三个模型参数。
+参数计算">
 <meta property="og:type" content="article">
-<meta property="og:title" content="有关命名实体识别技术的调研">
-<meta property="og:url" content="http://yoursite.com/2015/12/18/ner调研/index.html">
+<meta property="og:title" content="Good—Turing估计">
+<meta property="og:url" content="http://yoursite.com/2016/05/13/Good—Turing估计/index.html">
 <meta property="og:site_name" content="何声欢的博客">
-<meta property="og:description" content="个人的理解基于统计的命名实体识别与基于字标注的中文分词在方法思想上是有很大相似之处的，都是给token不同的角色标注，统计相关的初始概率、转移概率和发射概率，最后利用Viterbi算法进行解码，求得最优标注序列。
-不同之处在于，命名实体识别的角色标注是高度定制的。首先就根据人名、地名、机构名分为了三类标注集合，然后再根据是否有嵌套，并结合专家知识进行设计。而基于字标注的中文分词方法一般使用的是4-">
-<meta property="og:updated_time" content="2016-05-13T05:30:25.000Z">
+<meta property="og:description" content="使用HMM的中文词性标注程序这两天做了一个使用隐马尔可夫模型（HMM）的中文词性标注的简单程序，虽说是一个试水性质的探索，但这其中的某些小细节仍值得研究。
+有关HMM的模型介绍不再赘述，对于中文词性标注，我们做出的假设是：文本中的句子是观测状态序列，句子中的每一个词是一个观测状态，其词性标注就是隐含状态。那么要得到这个模型的具体信息，我们需要得到$(\pi, A, B)$这三个模型参数。
+参数计算">
+<meta property="og:image" content="http://images.cnitblog.com/blog/408927/201412/202122413296010.png">
+<meta property="og:image" content="http://images.cnitblog.com/blog/408927/201412/202211207981424.png">
+<meta property="og:updated_time" content="2016-05-13T07:47:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="有关命名实体识别技术的调研">
-<meta name="twitter:description" content="个人的理解基于统计的命名实体识别与基于字标注的中文分词在方法思想上是有很大相似之处的，都是给token不同的角色标注，统计相关的初始概率、转移概率和发射概率，最后利用Viterbi算法进行解码，求得最优标注序列。
-不同之处在于，命名实体识别的角色标注是高度定制的。首先就根据人名、地名、机构名分为了三类标注集合，然后再根据是否有嵌套，并结合专家知识进行设计。而基于字标注的中文分词方法一般使用的是4-">
+<meta name="twitter:title" content="Good—Turing估计">
+<meta name="twitter:description" content="使用HMM的中文词性标注程序这两天做了一个使用隐马尔可夫模型（HMM）的中文词性标注的简单程序，虽说是一个试水性质的探索，但这其中的某些小细节仍值得研究。
+有关HMM的模型介绍不再赘述，对于中文词性标注，我们做出的假设是：文本中的句子是观测状态序列，句子中的每一个词是一个观测状态，其词性标注就是隐含状态。那么要得到这个模型的具体信息，我们需要得到$(\pi, A, B)$这三个模型参数。
+参数计算">
+<meta name="twitter:image" content="http://images.cnitblog.com/blog/408927/201412/202122413296010.png">
 
 
 
@@ -75,7 +81,7 @@
   };
 </script>
 
-  <title> 有关命名实体识别技术的调研 | 何声欢的博客 </title>
+  <title> Good—Turing估计 | 何声欢的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="default">
@@ -215,7 +221,7 @@
             
             
               
-                有关命名实体识别技术的调研
+                Good—Turing估计
               
             
           </h1>
@@ -224,8 +230,8 @@
         <div class="post-meta">
           <span class="post-time">
             Posted on
-            <time itemprop="dateCreated" datetime="2015-12-18T17:58:48+08:00" content="2015-12-18">
-              2015-12-18
+            <time itemprop="dateCreated" datetime="2016-05-13T14:04:57+08:00" content="2016-05-13">
+              2016-05-13
             </time>
           </span>
 
@@ -250,8 +256,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2015/12/18/ner调研/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/18/ner调研/" itemprop="commentsCount"></span>
+                <a href="/2016/05/13/Good—Turing估计/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/13/Good—Turing估计/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -270,164 +276,33 @@
       
 
       
-        <span itemprop="articleBody"><h3 id="个人的理解"><a href="#个人的理解" class="headerlink" title="个人的理解"></a>个人的理解</h3><p>基于统计的命名实体识别与基于字标注的中文分词在方法思想上是有很大相似之处的，都是给token不同的角色标注，统计相关的初始概率、转移概率和发射概率，最后利用<strong>Viterbi</strong>算法进行解码，求得最优标注序列。</p>
-<p><strong>不同之处</strong>在于，命名实体识别的角色标注是高度定制的。首先就根据人名、地名、机构名分为了三类标注集合，然后再根据是否有嵌套，并结合专家知识进行设计。而基于字标注的中文分词方法一般使用的是<em>4-tag</em>标注系统（B, M, E, S）。</p>
-<p>角色标注的增多，很大程度上是与中文命名实体数量众多且构成规律复杂有关的。 </p>
-<h3 id="中文命名实体的特点"><a href="#中文命名实体的特点" class="headerlink" title="中文命名实体的特点"></a>中文命名实体的特点</h3><p>中文命名实体大多数具有以下的特点：<br></p>
-<ul>
-<li><p><strong>各类命名实体的数量众多</strong>：根据对人民日报1998年1月的语料库（共计2,305,896字）进行的统计，共有人名19,965个，而这些人名大多属于未登录词。</p>
-</li>
-<li><p><strong>命名实体的构成规律复杂</strong>：例如由于人名的构成规则各异，中文人名识别又可以细分为中国人名识别、日本人名识别和音译人名识别等；此外机构名的组成方式也最为复杂，机构名的种类繁多，各有独特的命名方式，用词也相当广泛，只有结尾用词相对集中。</p>
-</li>
-<li><p><strong>嵌套情况复杂</strong>：一个命名实体经常和一些词组合成一个嵌套的命名实体，人名中嵌套着地名，地名中也经常嵌套着人名。嵌套的现象在机构名中最为明显，机构名不仅嵌套了大量的地名，而且还嵌套了相当数量的机构名。互相嵌套的现象大大制约了复杂命名实体的识别，也注定了各类命名实体的识别并不是孤立的，而是互相交织在一起的。</p>
-</li>
-<li><p><strong>长度不确定</strong>：与其他类型的命名实体相比，长度和边界难以确定使得机构名更难识别。中国人名一般二至三字，最多不过四字，常用地名也多为二至四字。但是机构名长度变化范围极大，少到只有两个字的简称，多达几十字的全称。在实际语料中，由十个以上词构成的机构名占了相当一部分比例。</p>
-</li>
-</ul>
-<h3 id="中文命名实体识别的方法"><a href="#中文命名实体识别的方法" class="headerlink" title="中文命名实体识别的方法"></a>中文命名实体识别的方法</h3><p>目前汉语命名实体识别的方法主要有两种，基于规则的方法和基于统计的方法。</p>
-<ul>
-<li><p><strong>基于规则</strong>的方法一般采用特征字（词）触发的方式来进行命名实体识别，比如用中国人名的姓氏用字来触发中国人名的识别，或利用机构名的结尾关键词相对集中的特点来触发机构名的识别。</p>
-</li>
-<li><p><strong>基于统计</strong>的方法主要是通过对大规模语料库内的命名实体以及上下文进行统计分析，构建统计模型来进行命名实体的识别，解决方案有隐马尔可夫模型、最大熵模型、基于Agent的方法和基于类的三元语言模型等。</p>
-</li>
-</ul>
-<h3 id="基于角色标注的命名实体识别"><a href="#基于角色标注的命名实体识别" class="headerlink" title="基于角色标注的命名实体识别"></a>基于角色标注的命名实体识别</h3><p>前面说过，基于统计的命名实体识别与基于字标注的中文分词方法很相似，这里所使用的方法就是基于角色标注的命名实体识别方法。</p>
-<p>基于角色标注的命名实体识别的基本思想是，根据各类命名实体的构成和用词特点各自制定一套角色标记集，采取<strong>Viterbi</strong>算法对切分结果进行角色标注（类似于一个简单的词性标注过程），在角色序列的基础上进行简单的模式识别，最终实现中文命名实体的自动识别。</p>
-<p>识别过程中，只需要某个词作为特定角色的概率以及角色之间的转移概率。该方法的实用性还在于，这些角色信息只要对真实语料库稍加改动，就可以得到。<strong>各类命名实体角色标记集的选取不仅需要根据其自身特点，结合专家知识科学地设定，而且还要通过不断地实验，对角色集进行调整。</strong></p>
-<p>总的来说，就是对于不用类型的命名实体，如人名、地名和机构名，都需要高度定制的角色集，不同类型命名实体之间的角色集通用性较差。下面给出几个角色集的示例。</p>
-<p><strong>表1    人名识别角色简表</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">角色</th>
-<th style="text-align:left">意义</th>
-<th style="text-align:left">示例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">A</td>
-<td style="text-align:left">人名的上文</td>
-<td style="text-align:left">又/<strong>来到</strong>/于/洪洋/的/家</td>
-</tr>
-<tr>
-<td style="text-align:left">B</td>
-<td style="text-align:left">人名的下文</td>
-<td style="text-align:left">新华社/记者/黄/文/<strong>摄</strong></td>
-</tr>
-<tr>
-<td style="text-align:left">C</td>
-<td style="text-align:left">中国人名的姓</td>
-<td style="text-align:left"><strong>张</strong>/华/平/先生：<strong>欧阳</strong>/修</td>
-</tr>
-<tr>
-<td style="text-align:left">D</td>
-<td style="text-align:left">双名的首字</td>
-<td style="text-align:left">张/<strong>华</strong>/平/先生</td>
-</tr>
-<tr>
-<td style="text-align:left">E</td>
-<td style="text-align:left">双名的末字</td>
-<td style="text-align:left">张/华/<strong>平</strong>/先生</td>
-</tr>
-<tr>
-<td style="text-align:left">F</td>
-<td style="text-align:left">单名</td>
-<td style="text-align:left">张/<strong>浩</strong></td>
-</tr>
-<tr>
-<td style="text-align:left">I</td>
-<td style="text-align:left">姓与双名的首字成词</td>
-<td style="text-align:left">记者/<strong>盛世</strong>/良</td>
-</tr>
-<tr>
-<td style="text-align:left">J</td>
-<td style="text-align:left">姓与单名成词</td>
-<td style="text-align:left">著名/学者/<strong>何方</strong>/同志</td>
-</tr>
-<tr>
-<td style="text-align:left">K</td>
-<td style="text-align:left">双名本身成词</td>
-<td style="text-align:left">新华社/记者/兰/<strong>红光</strong>/摄</td>
-</tr>
-<tr>
-<td style="text-align:left">X</td>
-<td style="text-align:left">连接词</td>
-<td style="text-align:left">邵/均/林/<strong>和</strong>/稽/道/青</td>
-</tr>
-<tr>
-<td style="text-align:left">Z</td>
-<td style="text-align:left">其它非人名成分</td>
-</tr>
-</tbody>
-</table>
-<p><strong>表2    地名识别角色简表</strong></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">角色</th>
-<th style="text-align:left">意义</th>
-<th style="text-align:left">示例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">A</td>
-<td style="text-align:left">地名的上文</td>
-<td style="text-align:left">我/<strong>来到</strong>/中/关/园</td>
-</tr>
-<tr>
-<td style="text-align:left">B</td>
-<td style="text-align:left">地名的下文</td>
-<td style="text-align:left">刘家村/和/下岸村/<strong>相邻</strong></td>
-</tr>
-<tr>
-<td style="text-align:left">C</td>
-<td style="text-align:left">中国地名的首部</td>
-<td style="text-align:left"><strong>石</strong>/河/子/乡</td>
-</tr>
-<tr>
-<td style="text-align:left">D</td>
-<td style="text-align:left">中国地名的中部</td>
-<td style="text-align:left">石/<strong>河</strong>/子/乡</td>
-</tr>
-<tr>
-<td style="text-align:left">F</td>
-<td style="text-align:left">中国地名的末部</td>
-<td style="text-align:left">石/河/<strong>子</strong>/乡</td>
-</tr>
-<tr>
-<td style="text-align:left">G</td>
-<td style="text-align:left">中国地名的后缀</td>
-<td style="text-align:left">海/淀<strong>区</strong></td>
-</tr>
-<tr>
-<td style="text-align:left">X</td>
-<td style="text-align:left">连接词</td>
-<td style="text-align:left">刘家村/<strong>和</strong>/下岸村/相邻</td>
-</tr>
-<tr>
-<td style="text-align:left">Z</td>
-<td style="text-align:left">其它非地名成分</td>
-</tr>
-</tbody>
-</table>
-<h3 id="基于层叠隐马尔可夫模型的命名实体识别方法"><a href="#基于层叠隐马尔可夫模型的命名实体识别方法" class="headerlink" title="基于层叠隐马尔可夫模型的命名实体识别方法"></a>基于层叠隐马尔可夫模型的命名实体识别方法</h3><p><strong>核心思想</strong>：多层HMM，前一层的输出作为后一层的输入。</p>
-<p>整个命名实体识别的层叠隐马尔可夫模型由三级互相联系的隐马尔可夫模型构成，自底向上分别为人名识别HMM、地名识别HMM和机构名识别HMM。层级越高，命名实体的识别难度越大。</p>
-<p>第一层的人名识别HMM负责将粗分词文本中人名识别出来；第二层的地名识别HMM将第一层处理过后的结果当做输入，识别出其中的地名；最后，机构名识别HMM以第二层的结果作为输入，识别出其中的机构名。</p>
-<p>为什么采用这样的层叠方式呢？因为人名的识别较为简单，规律较为可循，嵌套的情况也较少，因此第一层识别人名，之后识别地名。另外，由于机构名最为复杂，嵌套情况最多，实际情况中很可能出现人名地名嵌套在其中的情况，故最后识别机构名。</p>
-<p>这三层HMM以如下两种方式相互关联，形成一种紧密的耦合关系：<br></p>
-<ol>
-<li>每一层HMM都采用N-Best策略，将产生的最好的若干个结果送到词图中供高层模型使用；</li>
-<li>低层的HMM通过词语的生成式模型为高层HMM的参数估计提供支持。</li>
-</ol>
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ol>
-<li>孙镇, 王惠临. 命名实体识别研究进展综述[J]. 现代图书情报技术, 2010(06):42-47.<a href="http://epub.cnki.net/grid2008/docdown/docdownload.aspx?filename=XDTQ201006010&amp;dbcode=CJFD&amp;year=2010&amp;dflag=pdfdown" target="_blank" rel="external">PDF</a></li>
-<li>俞鸿魁, 张华平, 刘群,等. 基于层叠隐马尔可夫模型的中文命名实体识别[J]. 通信学报, 2006, 27(02):87-94.<a href="http://read.pudn.com/downloads132/doc/fileformat/561577/CHMM/%E5%9F%BA%E4%BA%8E%E5%B1%82%E5%8F%A0%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%B8%AD%E6%96%87%E5%91%BD%E5%90%8D%E5%AE%9E%E4%BD%93%E8%AF%86%E5%88%AB.pdf" target="_blank" rel="external">PDF</a></li>
-<li><a href="http://www.hankcs.com/nlp/chinese-name-recognition-in-actual-hmm-viterbi-role-labeling.html" target="_blank" rel="external">实战HMM-Viterbi角色标注中国人名识别</a></li>
-<li><a href="http://www.hankcs.com/nlp/ner/place-names-to-identify-actual-hmm-viterbi-role-labeling.html" target="_blank" rel="external">实战HMM-Viterbi角色标注地名识别</a> </li>
-<li><a href="http://www.hankcs.com/nlp/ner/place-name-recognition-model-of-the-stacked-hmm-viterbi-role-labeling.html" target="_blank" rel="external">层叠HMM-Viterbi角色标注模型下的机构名识别</a></li>
-</ol>
+        <span itemprop="articleBody"><h2 id="使用HMM的中文词性标注程序"><a href="#使用HMM的中文词性标注程序" class="headerlink" title="使用HMM的中文词性标注程序"></a>使用HMM的中文词性标注程序</h2><p>这两天做了一个使用隐马尔可夫模型（HMM）的中文词性标注的简单程序，虽说是一个试水性质的探索，但这其中的某些小细节仍值得研究。</p>
+<p>有关HMM的模型介绍不再赘述，对于中文词性标注，我们做出的假设是：文本中的句子是观测状态序列，句子中的每一个词是一个观测状态，其词性标注就是隐含状态。那么要得到这个模型的具体信息，我们需要得到$(\pi, A, B)$这三个模型参数。</p>
+<h3 id="参数计算"><a href="#参数计算" class="headerlink" title="参数计算"></a>参数计算</h3><p>设隐含状态空间为$S$，$\pi$是HMM的初始概率矩阵。$\pi_i$为隐含状态$i$在0时刻（即初始时刻）时出现的概率，可以使用如下公式进行计算：</p>
+<p>$$ \pi_i = \frac{\sharp ( s_t=i|t=0 ) } {\sum_{j\in S} \sharp (s_t=j|t=0)} $$</p>
+<p>其中$\sharp(s_t=i|t=0)$表示t=0时刻，状态$i$出现的次数。</p>
+<p>$A$是HMM的转移概率矩阵，$A_{ij}$表示从隐含状态$i$到$j$的转移概率，使用如下公式计算：</p>
+<p>$$A_{ij} = P(s_t=j | s_{t-1} = i) = \frac{\sharp (s_t=j , s_{t-1} = i ) }{\sharp (s_{t-1} = i ) }$$</p>
+<p>$B$是HMM的发射概率矩阵，设词空间为$W$，第i个词为$c_i$，则有：</p>
+<p>$$ B_{ij} = P (c_i | s=j ) = \frac{\sharp ( c_i, s=j )}{\sharp (s=j)}$$</p>
+<p>表示词$c_i$在状态$s=j$的情况下的发射概率。</p>
+<h3 id="数据稀疏问题"><a href="#数据稀疏问题" class="headerlink" title="数据稀疏问题"></a>数据稀疏问题</h3><p>按照1.1节中的计算方法，从语料中统计各个标注与词的共现情况，可以很容易的得到大部分概率。因为语料库大小、语法规则等原因，会出现很明显的数据稀疏问题。例如，中文词语的词性大多只有一个，那么某个词的发射概率在不是该标注的情况下就会为零，但也不能说它就不可能被标注为其他词性，因为语言是存在有限的变化的；此外，因为语料库大小的原因，不可能包含所有可能的语法现象，这也使得某些特定的情况没有记录，从而导致其相关概率为零。</p>
+<p><strong>没有见过不代表不存在</strong>，因此这些数据稀疏问题需要使用特殊方法去解决，而不是简单粗暴地认为其不可能发生。这时，就需要使用数据平滑方法来解决稀疏问题。常见的平滑方法有：拉普拉斯平滑（加1平滑）和古德图灵平滑。</p>
+<p>因为实验中发现，拉普拉斯平滑的效果不如古德图灵平滑，本文主要讲述古德图灵平滑。</p>
+<h2 id="古德图灵估计"><a href="#古德图灵估计" class="headerlink" title="古德图灵估计"></a>古德图灵估计</h2><p>古德-图灵（Good-Turing）估计法是很多平滑技术的核心，于1953年有古德（I.J.Good）引用图灵（Turing）的方法而提出来的。其基本思想是：对于没有看见的事件，我们不能认为它发生的概率就是零，因此我们从概率的总量（Probability Mass）中，分配一个很小的比例给这些没有看见的事件（如下图）。这样一来看的见概率总和就要小于1了，因此，需要将所有看见的事件概率调小一点。至于小多少，要根据“越是不可信的统计折扣越多”的方法进行。</p>
+<p><img src="http://images.cnitblog.com/blog/408927/201412/202122413296010.png" alt="分配"></p>
+<p>以统计词典中的每个词的概率为例，假设语料库中出现r次的词有$N_r$个，特别地，未出现的词数量为$N_0$。语料库的大小为$N$。那么很显然：</p>
+<p>$$N = \sum_{r=1}^{\infty}{rN_r}$$</p>
+<p>出现r次的词在整个语料库上的相对频度（Relative Frequency）则是r/N，如果不做任何处理，就以这个相对频度作为这些词的概率估计。</p>
+<p>现在假设当r比较小时，它的估计可能不可靠，因此在计算出现r次的词的概率时，要使用一个更小的系数$d_r$（而不是直接使用r），古德图灵估计按照下面的公式计算$d_r$:</p>
+<p>$$d_r = (r+1) \frac{N_{r+1}}{N_r}$$</p>
+<p>显然有，</p>
+<p>$$\sum_r d_r N_r = N$$</p>
+<p>一般来说，出现一次的词的数量比出现两次的多，出现两次的比三次的多。这种规律称为Zipf定律（Zipf’s Law）。下图是一个小语料上出现r次的词的数量$N_r$和r的关系。</p>
+<p><img src="http://images.cnitblog.com/blog/408927/201412/202211207981424.png" alt="Zipf&#39;s Law"></p>
+<p>可以看出r越大，词的数量$N_r$越小，即$N_{r+1} &lt; N_r$。因此，一般情况下$d_r &lt; r$，而$d_0 &gt; 0$。这样就给为出现的词赋予了一个很小的非零值，从而解决了零概率的问题。同时下调了出现概率很低的词的概率。</p>
+<p>当然，在实际的自然语言处理中，一般会设置一个阈值T，仅对出现次数小于T的词做上述调整。并且，因为实际语料的统计情况使得$N_{r+1} &lt; N_r$不一定成立，$N_r = 0$情况也可能出现，所以需要使用曲线拟合的方式替换掉原有的$N_r$，并使用如下Kartz退避公式计算$d_r$:</p>
+<p>$$d_r = \frac{(r+1)\frac{N_{r+1}}{N_r}-r\frac{(k+1)N_{k+1}}{N_1}}{1-\frac{(k+1)N_{k+1}}{N_1}}, 1 \le r \le k$$</p>
 </span>
       
     </div>
@@ -436,7 +311,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/命名实体识别/" rel="tag">#命名实体识别</a>
+            <a href="/tags/数据平滑/" rel="tag">#数据平滑</a>
           
         </div>
       
@@ -445,13 +320,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2016/03/23/词性标注调研/" rel="next" title="词性标注调研">
+                <i class="fa fa-chevron-left"></i> 词性标注调研
+              </a>
+            
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/12/21/基于感知器的中文分词算法/" rel="prev" title="基于感知器的中文分词算法">
-                基于感知器的中文分词算法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -478,8 +353,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/12/18/ner调研/"
-           data-title="有关命名实体识别技术的调研" data-url="http://yoursite.com/2015/12/18/ner调研/">
+      <div class="ds-thread" data-thread-key="2016/05/13/Good—Turing估计/"
+           data-title="Good—Turing估计" data-url="http://yoursite.com/2016/05/13/Good—Turing估计/">
       </div>
     
   </div>
@@ -587,7 +462,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#个人的理解"><span class="nav-number">1.</span> <span class="nav-text">个人的理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中文命名实体的特点"><span class="nav-number">2.</span> <span class="nav-text">中文命名实体的特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中文命名实体识别的方法"><span class="nav-number">3.</span> <span class="nav-text">中文命名实体识别的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于角色标注的命名实体识别"><span class="nav-number">4.</span> <span class="nav-text">基于角色标注的命名实体识别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于层叠隐马尔可夫模型的命名实体识别方法"><span class="nav-number">5.</span> <span class="nav-text">基于层叠隐马尔可夫模型的命名实体识别方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用HMM的中文词性标注程序"><span class="nav-number">1.</span> <span class="nav-text">使用HMM的中文词性标注程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数计算"><span class="nav-number">1.1.</span> <span class="nav-text">参数计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据稀疏问题"><span class="nav-number">1.2.</span> <span class="nav-text">数据稀疏问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#古德图灵估计"><span class="nav-number">2.</span> <span class="nav-text">古德图灵估计</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
