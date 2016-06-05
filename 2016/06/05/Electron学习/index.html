@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="AdaBoost," />
+  <meta name="keywords" content="Electron," />
 
 
 
@@ -51,31 +51,21 @@
 
 
 
-<meta name="description" content="以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。
-关键字：多个基本分类器线性组合
-
-提升方法常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。
-这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适">
+<meta name="description" content="什么是Electron
+If you can build a website, you can build a desktop app. Electron is a framework for creating native applications with web technologies like JavaScript, HTML, and CSS. It takes care of the">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AdaBoost笔记">
-<meta property="og:url" content="http://yoursite.com/2016/01/17/AdaBoost笔记/index.html">
+<meta property="og:title" content="Electron学习">
+<meta property="og:url" content="http://yoursite.com/2016/06/05/Electron学习/index.html">
 <meta property="og:site_name" content="何声欢的博客">
-<meta property="og:description" content="以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。
-关键字：多个基本分类器线性组合
-
-提升方法常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。
-这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适">
-<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/alpha_m.png">
-<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/Z_m.png">
-<meta property="og:updated_time" content="2016-05-13T05:34:08.000Z">
+<meta property="og:description" content="什么是Electron
+If you can build a website, you can build a desktop app. Electron is a framework for creating native applications with web technologies like JavaScript, HTML, and CSS. It takes care of the">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/node-v.png">
+<meta property="og:updated_time" content="2016-06-05T09:03:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AdaBoost笔记">
-<meta name="twitter:description" content="以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。
-关键字：多个基本分类器线性组合
-
-提升方法常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。
-这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适">
-<meta name="twitter:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/alpha_m.png">
+<meta name="twitter:title" content="Electron学习">
+<meta name="twitter:description" content="什么是Electron
+If you can build a website, you can build a desktop app. Electron is a framework for creating native applications with web technologies like JavaScript, HTML, and CSS. It takes care of the">
+<meta name="twitter:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/node-v.png">
 
 
 
@@ -87,7 +77,7 @@
   };
 </script>
 
-  <title> AdaBoost笔记 | 何声欢的博客 </title>
+  <title> Electron学习 | 何声欢的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="default">
@@ -227,7 +217,7 @@
             
             
               
-                AdaBoost笔记
+                Electron学习
               
             
           </h1>
@@ -236,8 +226,8 @@
         <div class="post-meta">
           <span class="post-time">
             Posted on
-            <time itemprop="dateCreated" datetime="2016-01-17T20:23:50+08:00" content="2016-01-17">
-              2016-01-17
+            <time itemprop="dateCreated" datetime="2016-06-05T16:24:16+08:00" content="2016-06-05">
+              2016-06-05
             </time>
           </span>
 
@@ -246,8 +236,8 @@
               &nbsp; | &nbsp; In
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/学习/" itemprop="url" rel="index">
-                    <span itemprop="name">学习</span>
+                  <a href="/categories/兴趣/" itemprop="url" rel="index">
+                    <span itemprop="name">兴趣</span>
                   </a>
                 </span>
 
@@ -262,8 +252,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/17/AdaBoost笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/17/AdaBoost笔记/" itemprop="commentsCount"></span>
+                <a href="/2016/06/05/Electron学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/05/Electron学习/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -282,49 +272,33 @@
       
 
       
-        <span itemprop="articleBody"><blockquote>
-<p>以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。</p>
-<p>关键字：多个基本分类器线性组合</p>
+        <span itemprop="articleBody"><h1 id="什么是Electron"><a href="#什么是Electron" class="headerlink" title="什么是Electron"></a>什么是Electron</h1><blockquote>
+<p>If you can build a website, you can build a desktop app. Electron is a framework for creating native applications with web technologies like JavaScript, HTML, and CSS. It takes care of the hard parts so you can focus on the core of your application.</p>
 </blockquote>
-<h2 id="提升方法"><a href="#提升方法" class="headerlink" title="提升方法"></a>提升方法</h2><p>常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。</p>
-<p>这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适当的综合所得出的判断，要比其中任何一个专家单独做出的判断好。实际上，就是俗话所说的“三个臭皮匠顶个诸葛亮”的道理。</p>
-<h2 id="AdaBoost算法"><a href="#AdaBoost算法" class="headerlink" title="AdaBoost算法"></a>AdaBoost算法</h2><h3 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h3><p>Kearns和Valiant提出了“强可学习（strongly learnable）”和“弱可学习（weakly learnable）”的概念。指出：在概率近似正确（probably approximately correct, PAC）学习的框架中，</p>
-<ul>
-<li>一个概念（一个类）如果存在一个多项式的学习算法能够学习它，并且正确率很高，那么就称这个概念是强可学习的；</li>
-<li>一个概念，如果存在一个多项式的学习算法能够学习它，学习的正确率仅比随机猜测略高，那么就称这个概念是弱可学习的。</li>
-</ul>
-<p>有趣的是，Schapire后来证明强可学习与弱可学习是等价，他使用构造的方法证明：<strong>一个概念弱可学习的充要条件是这个概念强可学习</strong>。这个结论的证明我之后会学习，补上这里的空缺。</p>
-<p>既然强可学习与弱可学习是等价的，那么在实际问题中如果已经发现了“弱学习算法”，那么将它<strong>提升(boost)为“强学习算法”</strong>将是可行的。并且，发现弱学习算法通常要比发现强学习算法容易得多。这么一种看似偷懒的思路，却收获了相当不错的效果。基于这一思路，AdaBoost算法（Adaptive Boosting）是可行算法中的一个代表。</p>
-<p>对于提升方法，有两个问题需要回答：（1）每一轮如何改变训练数据的权值或概率分布；（2）如何将弱分类器组合成一个强分类器。</p>
-<p>问题（1），AdaBoost的做法是，提高被前一轮错分类的样本的权值，而降低那些被正确分类的样本的权值。对于问题（2），即弱分类器的组合，Adaboost采取的是加权线性组合的方式。</p>
-<h3 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h3><p>假定给定一个二类分类的训练数据集</p>
-<p>$$ T=\lbrace (x_1,y_1),(x_2,y_2),…,(x_N,y_N) \rbrace $$</p>
-<p>其中，每个样本点由实例与标记组成。实例$ x_i \in X \subseteq R^n $，$X$是实例空间，标记$y_i \in \lbrace -1, +1\rbrace$。AdaBoost利用以下算法，从训练数据中学习一系列弱分类器或基本分类器，并将这些弱分类器线性组合成一个强分类器。</p>
-<h4 id="AdaBoost算法-1"><a href="#AdaBoost算法-1" class="headerlink" title="AdaBoost算法"></a>AdaBoost算法</h4><p>输入：训练数据集T，弱学习算法；<br>输出：最终分类器$G(x)$<br><strong>(1)初始化权值分布</strong><br>$$D_1=(w_{11},…,w_{1i},…,w_{1N}),w_{1i}=\frac{1}{N}, i=1,2,…,N$$<br><strong>(2)迭代，对m=1,2,…,M</strong><br>    (a)使用具有权值分布$D_m$的训练数据集学习，得到基本分类器<br>    $$G_m(x):X \to \lbrace -1,+1 \rbrace$$<br>    (b)计算$G_m$在训练数据集上的分类误差率<br>    $$e_m=P(G_m(x_i) \ne y_i) = \sum_{i=1}^{N}{w_{mi}I(G_m(x_i) \ne y_i)}$$<br>    (c)计算$G_m(x)$的系数<br>    $$\alpha_m = \frac{1}{2} log \frac{1-e_m}{e_m}$$<br>    这里的对数是自然对数。<br>    (d)更新训练数据集的权值分布<br>    $$D_{m+1}=(w_{m+1,1},…,w_{m+1,i},…,w_{m+1,1N})$$<br>    $$w_{m+1,i} = \frac{w_{m,i}}{Z_m}exp(-\alpha_m y_i G_m(x_i))$$<br>    这里的$Z_m$是规范化因子：<br>    $$Z_m = \sum_{i=1}^{N}w_{m,i}exp( -\alpha_m y_i G_m(x_i) )$$<br>    它使$D_{m+1}$成为一个概率分布。<br><strong>(3)构建基本分类器的线性组合</strong><br>$$f(x)=\sum_{m=1}^{M}\alpha_mG_m(x)$$<br>得到最终分类器：<br>$$G(x) = sign(f(x)) = sign(\sum_{m=1}^{M}\alpha_mG_m(x))$$</p>
-<h4 id="AdaBoost算法分析"><a href="#AdaBoost算法分析" class="headerlink" title="AdaBoost算法分析"></a>AdaBoost算法分析</h4><p>AdaBoost是一个迭代算法。</p>
-<p>(1)在最初假设中，每个训练数据集的样本具有相同的权重$w_{1i}=\frac{1}{N}$。以此为基础，算法在第一轮是在原始数据上学习基本分类器$G_1(x)$。</p>
-<p>(2)AdaBoost算法的迭代过程，对m=1,2,…,M：<br><br>(a)使用当前$D_m$学习基本分类器$G_m(x)$<br><br>(b)需要注意的是，<strong>分类误差率</strong>$e_m$是一个十分重要的指标，因为学习基本分类器的优化准则是<strong>最小化当前的$e_m$</strong>。而分类误差率和当前的权值分布有关<br>$$e_m = P(G_m(x_i) \ne y_i) = \sum_{G_m(x_i) \ne y_i} w_{m,i}$$<br>因为每一轮迭代中，(d)会更新权值分布，<strong>这保证了每一轮迭代中学习的基本分类器$G_m$与上一轮的分类器$G_{m-1}$是不同的。</strong><br><br>(c)这一步计算的系数$\alpha_m$是基本分类器$G_m(x)$在最终分类器$G(x)$中的权重：<br><strong>$\alpha_m$趋势图</strong><br><img src="http://7xnh8y.com1.z0.glb.clouddn.com/alpha_m.png" alt="alpha_m"></p>
-<p>上图是$\alpha_m = \frac{1}{2} log \frac{1-e_m}{e_m}$的函数图像，横轴是$e_m$，纵轴是$\alpha_m$。可以看到看到，当分类误差率越小时函数值越大，也即表示分类误差率小的基本分类器在最终分类器中的权重越大。</p>
-<p>(d)依据现有组合分类器的分类结果，更新训练数据集的权值分布，<strong>这与(c)一起保证了每次迭代得到与上一轮不一样的分类器</strong>。<br>更新权值的公式也可以写成：</p>
-<ul>
-<li>如果$G_m(x_i) = y_i$，$w_{m+1,i}=\frac{w_{m,i}}{Z_m}e^{-\alpha_m}$</li>
-<li>如果$G_m(x_i) \ne y_i$，$w_{m+1,i}=\frac{w_{m,i}}{Z_m}e^{\alpha_m}$</li>
-</ul>
-<p>简便的计算规范化因子的方法：<br>$$Z_m = 2 \sqrt{e_m(1-e_m)}$$</p>
-<h2 id="AdaBoost算法的训练误差分析"><a href="#AdaBoost算法的训练误差分析" class="headerlink" title="AdaBoost算法的训练误差分析"></a>AdaBoost算法的训练误差分析</h2><p>先上结论，书中<strong>定理8.1</strong>给出：AdaBoost算法最终分类器的训练误差上界为</p>
-<p>$$\frac{1}{N}\sum_{i=1}^{N} I(G(x_i)\ne y_i)\le \frac{1}{N}\sum_i exp(-y_if(x_i))=\prod_m Z_m$$</p>
-<p>这个不等式的证明过程也十分明了，主要的难点在于后半部分的推导。需要使用到$Z_m$的定义式及变形：</p>
-<ol>
-<li>$w_{m,i}exp(-\alpha_m y_i G_m(x_i))=Z_m w_{m+1,i}$</li>
-<li>$Z_m = \sum_i w_{m,i} exp(-\alpha_m y_i G_m(x_i))$</li>
-</ol>
-<p>推导过程如下：</p>
-<p>$\frac{1}{N}\sum_i exp(-y_if(x_i)) = \frac{1}{N}\sum_i exp ( -\sum_{m=1}^M\alpha_m y_i G_m(x_i) )$<em># 利用$\frac{1}{N}=w_{1,i}$</em><br>$=\sum_iw_{1,i}\prod_{m=1}^M exp(-\alpha_m y_i G_m(x_i))$<br>$=Z_1\sum_iw_{2,i}\prod_{m=2}^M exp(-\alpha_m y_i G_m(x_i))$<em># 利用1式</em><br>$= …$<br>$=Z_1Z_2…Z_{M-1}\sum_iw_{M,i}exp(-\alpha_M y_i G_M(x_i))$<em># $Z_M$是利用2式得到的</em><br>$=\prod_{m=1}^MZ_m$</p>
-<p>利用这个上界，我们可以得到一个性质：<strong>不断增加弱分类器，AdaBoost的训练误差上界会不断降低</strong>。下图是$Z_m$的图像，横轴为分类误差率$e_m$，纵轴是规范化因子$Z_m$</p>
-<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/Z_m.png" alt="Z_m"></p>
-<p>如图，可以看到$Z_m$的图像是一个开口朝下的抛物线，且在$e_m=0.5$处取得最大值1，故可得$0&lt;Z_m\le1.0$。由此易得：<br>$$\prod_{m=1}^{M+1}Z_m = Z_{M+1}\prod_{m=1}^MZ_m\le \prod_{m=1}^MZ_m$$</p>
-<p>也即AdaBoost的训练误差界会随着m的增加而不断降低。</p>
-<p>第二部分，<strong>定理8.2</strong>部分，目前还没有太深入的理解，只是知道了一个非常好用的计算规范化因子的简便公式：$Z_m = 2\sqrt{e_m(1-e_m)}$。</p>
+<p>这是<a href="http://electron.atom.io/" target="_blank" rel="external">Electron</a>官网上的一段话，从中可以看出它是一款利用Web技术开发跨平台桌面应用的框架，其前身为Atom Shell。Electron的诞生离不开Github开源编辑器<a href="https://atom.io/" target="_blank" rel="external">Atom</a>的发布。</p>
+<p>最初知道Atom是因为参与了微软<a href="https://github.com/jeasonstudio/CN-VScode-Docs" target="_blank" rel="external">Visual Studio Code文档翻译</a>的开源项目，在前期阅读相关资料的时候看到了Atom的一个插件<a href="https://github.com/JJack27/activate-power-mode" target="_blank" rel="external">active-power-mode</a>（看了之后觉得，要说会玩，还得是程序员）。之后了解到它使用的Electron技术，可以使用Javascript、HTML、CSS等Web开发语言开发桌面应用。</p>
+<p>我一直对Javascript等Web技术很感兴趣，所以就决定在学习Web技术的同时，学习一下Electron的使用。</p>
+<blockquote>
+<p>顺便安利一个Mac上很好用的<a href="https://github.com/geeeeeeeeek/electronic-wechat" target="_blank" rel="external">electronic-wechat</a>客户端，它就是使用Electron技术开发的开源软件。比万年不更新不修复bug的TX官方客户端好用多了。</p>
+</blockquote>
+<h1 id="安装部署Electron开发环境"><a href="#安装部署Electron开发环境" class="headerlink" title="安装部署Electron开发环境"></a>安装部署Electron开发环境</h1><p>既然决定学习了，那第一步就是搭建开发环境了。</p>
+<h2 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h2><p>Electron开发环境依赖于Node.js，所以首先需要安装Node.js。因为使用hexo搭建博客的时候，已经安装过Node.js了，这里不再赘述安装过程。<a href="https://docs.npmjs.com/getting-started/installing-node" target="_blank" rel="external">这里</a>有一篇指导文章可以帮助你在不同平台下安装Node.js已经npm包管理器。</p>
+<p>Node.js安装完毕之后运行<code>node -v</code>命令查看是否安装成功：</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/node-v.png" alt="node-v"></p>
+<p>如果安装成功，将会看到node的版本号，如图，我的Node.js版本为v5.3.0。</p>
+<blockquote>
+<p>如果你的网络环境比较复杂，无法正常使用npm包管理器（大陆的网络环境通常都比较复杂），可以使用淘宝提供的<a href="http://npm.taobao.org/" target="_blank" rel="external">npm镜像</a>，之后将所有<code>npm</code>指令都替换为<code>cnpm</code>指令即可。</p>
+</blockquote>
+<h2 id="安装Electron"><a href="#安装Electron" class="headerlink" title="安装Electron"></a>安装Electron</h2><p>安装好node和npm之后就是安装Electron了，它的安装很简单，直接输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install electron-prebuilt -g</span><br></pre></td></tr></table></figure>
+<p>这里的<code>-g</code>代表全局安装，如果出现权限问题，可以输入运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install electron-prebuilt -g</span><br></pre></td></tr></table></figure>
+<p>或者去掉<code>-g</code>命令试试。</p>
+<p>安装完毕后，同样使用<code>-v</code>命令检查是否安装成功：</p>
+<p><img src="" alt="electron-v"></p>
+<h1 id="运行Electron-Quick-Start"><a href="#运行Electron-Quick-Start" class="headerlink" title="运行Electron Quick Start"></a>运行Electron Quick Start</h1><p>Electron官方给出了一个简单的示例程序，可以通过其发布在GitHub上的<a href="https://github.com/atom/electron-quick-start" target="_blank" rel="external">Repo</a>获取，对于没有安装Git的用户，可以直接点击Download ZIP获取文件，解压缩后，在终端中（Windows的命令行）进入到文件目录，然后运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">electron .</span><br></pre></td></tr></table></figure>
+<p>如果一切顺利，所有相关程序安装完成切正常，就可以看到应用窗口了（注意上面的命令后有一个“.”）。</p>
 </span>
       
     </div>
@@ -333,7 +307,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/AdaBoost/" rel="tag">#AdaBoost</a>
+            <a href="/tags/Electron/" rel="tag">#Electron</a>
           
         </div>
       
@@ -342,17 +316,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/06/新年不敏感/" rel="next" title="新年不敏感">
-                <i class="fa fa-chevron-left"></i> 新年不敏感
+              <a href="/2016/05/13/Good-Turing估计/" rel="next" title="Good-Turing估计">
+                <i class="fa fa-chevron-left"></i> Good-Turing估计
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/29/回家/" rel="prev" title="回家">
-                回家 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -379,8 +349,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/17/AdaBoost笔记/"
-           data-title="AdaBoost笔记" data-url="http://yoursite.com/2016/01/17/AdaBoost笔记/">
+      <div class="ds-thread" data-thread-key="2016/06/05/Electron学习/"
+           data-title="Electron学习" data-url="http://yoursite.com/2016/06/05/Electron学习/">
       </div>
     
   </div>
@@ -488,7 +458,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#提升方法"><span class="nav-number">1.</span> <span class="nav-text">提升方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AdaBoost算法"><span class="nav-number">2.</span> <span class="nav-text">AdaBoost算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本思路"><span class="nav-number">2.1.</span> <span class="nav-text">基本思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法原理"><span class="nav-number">2.2.</span> <span class="nav-text">算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AdaBoost算法-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">AdaBoost算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AdaBoost算法分析"><span class="nav-number">2.2.2.</span> <span class="nav-text">AdaBoost算法分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AdaBoost算法的训练误差分析"><span class="nav-number">3.</span> <span class="nav-text">AdaBoost算法的训练误差分析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是Electron"><span class="nav-number">1.</span> <span class="nav-text">什么是Electron</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装部署Electron开发环境"><span class="nav-number">2.</span> <span class="nav-text">安装部署Electron开发环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Node-js"><span class="nav-number">2.1.</span> <span class="nav-text">安装Node.js</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Electron"><span class="nav-number">2.2.</span> <span class="nav-text">安装Electron</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行Electron-Quick-Start"><span class="nav-number">3.</span> <span class="nav-text">运行Electron Quick Start</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
