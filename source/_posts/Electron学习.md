@@ -71,3 +71,5 @@ electron .
 如果一切顺利，所有相关程序安装完成切正常，就可以看到应用窗口了（注意上面的命令后有一个“.”）。
 
 ![electron-quick-start](http://7xnh8y.com1.z0.glb.clouddn.com/electron-quick-start.jpg)
+
+未完待续。
