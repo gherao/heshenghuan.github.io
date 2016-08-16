@@ -54,7 +54,7 @@
 <meta name="description" content="嗯，这是一个博客">
 <meta property="og:type" content="website">
 <meta property="og:title" content="何声欢的博客">
-<meta property="og:url" content="http://yoursite.com/archives/2015/index.html">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="何声欢的博客">
 <meta property="og:description" content="嗯，这是一个博客">
 <meta name="twitter:card" content="summary">
@@ -71,7 +71,7 @@
   };
 </script>
 
-  <title> Archive | 何声欢的博客 </title>
+  <title> 何声欢的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="default">
@@ -92,7 +92,9 @@
 
 
 
-  <div class="container one-column  page-archive ">
+  <div class="container one-column 
+   page-home 
+">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -189,96 +191,120 @@
       <div class="main-inner">
         <div id="content" class="content">
           
-
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      Um..! 11 posts in total. Keep on posting.
-    </span>
+  <section id="posts" class="posts-expand">
 
     
 
-      
-      
+    
+    
+
+    
       
 
-      
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2015">2015</h2>
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/12/18/ner调研/" itemprop="url">
+                  有关命名实体识别技术的调研
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2015-12-18T17:58:48+08:00" content="2015-12-18">
+              2015-12-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; In
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/12/18/ner调研/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/12/18/ner调研/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
         </div>
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2015/12/21/基于感知器的中文分词算法/" itemprop="url">
-              
-                <span itemprop="name">基于感知器的中文分词算法</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2015-12-21T16:17:41+08:00"
-              content="2015-12-21" >
-          12-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
+      </header>
     
 
-      
-      
-      
+
+    <div class="post-body">
 
       
       
 
       
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2015/12/18/ner调研/" itemprop="url">
-              
-                <span itemprop="name">有关命名实体识别技术的调研</span>
-              
+          <span itemprop="articleBody">
+            
+            个人的理解基于统计的命名实体识别与基于字标注的中文分词在方法思想上是有很大相似之处的，都是给token不同的角色标注，统计相关的初始概率、转移概率和发射概率，最后利用Viterbi算法进行解码，求得最优标注序列。
+不同之处在于，命名实体识别的角色标注是高度定制的。首先就根据人名、地名、机构名分为了三类标注集合，然后再根据是否有嵌套，并结合专家知识进行设计。而基于字标注的中文分词方法一般使用的是4-tag标注系统（B, M, E, S）。
+角色标注的增多，很大程度上是与中文命名实体数量众多且构成规
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/12/18/ner调研/#more" rel="contents">
+              Read more &raquo;
             </a>
+          </div>
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2015-12-18T17:58:48+08:00"
-              content="2015-12-18" >
-          12-18
-        </time>
-      </div>
+    <footer class="post-footer">
+      
 
-    </header>
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
-
 
 
     
@@ -286,6 +312,9 @@
   </section>
 
   
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
 
 
 
@@ -423,12 +452,6 @@
 
   
   
-  
-    <script type="text/javascript">
-      postMotionOptions = {stagger: 100, drag: true};
-    </script>
-  
-
 
   
     
@@ -472,12 +495,6 @@
   <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
-
 
   <script type="text/javascript" src="/js/bootstrap.js"></script>
 
