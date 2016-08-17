@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="AdaBoost," />
+  <meta name="keywords" content="刷题," />
 
 
 
@@ -51,31 +51,30 @@
 
 
 
-<meta name="description" content="以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。
-关键字：多个基本分类器线性组合
-
-提升方法常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。
-这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适">
+<meta name="description" content="LeetCode 146. LRU Cache
+链接：https://leetcode.com/problems/lru-cache/
+难度：Hard
+标签：Design
+描述：Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following oper">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AdaBoost笔记">
-<meta property="og:url" content="http://yoursite.com/2016/01/17/AdaBoost笔记/index.html">
+<meta property="og:title" content="LeetCode_146_LRU_Cache">
+<meta property="og:url" content="http://yoursite.com/2016/08/17/LeetCode-146-LRU-Cache/index.html">
 <meta property="og:site_name" content="何声欢的博客">
-<meta property="og:description" content="以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。
-关键字：多个基本分类器线性组合
-
-提升方法常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。
-这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适">
-<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/alpha_m.png">
-<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/Z_m.png">
-<meta property="og:updated_time" content="2016-05-13T05:34:08.000Z">
+<meta property="og:description" content="LeetCode 146. LRU Cache
+链接：https://leetcode.com/problems/lru-cache/
+难度：Hard
+标签：Design
+描述：Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following oper">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LRU.png">
+<meta property="og:updated_time" content="2016-08-17T13:38:56.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="AdaBoost笔记">
-<meta name="twitter:description" content="以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。
-关键字：多个基本分类器线性组合
-
-提升方法常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。
-这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适">
-<meta name="twitter:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/alpha_m.png">
+<meta name="twitter:title" content="LeetCode_146_LRU_Cache">
+<meta name="twitter:description" content="LeetCode 146. LRU Cache
+链接：https://leetcode.com/problems/lru-cache/
+难度：Hard
+标签：Design
+描述：Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following oper">
+<meta name="twitter:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LRU.png">
 
 
 
@@ -87,7 +86,7 @@
   };
 </script>
 
-  <title> AdaBoost笔记 | 何声欢的博客 </title>
+  <title> LeetCode_146_LRU_Cache | 何声欢的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="default">
@@ -227,7 +226,7 @@
             
             
               
-                AdaBoost笔记
+                LeetCode_146_LRU_Cache
               
             
           </h1>
@@ -236,8 +235,8 @@
         <div class="post-meta">
           <span class="post-time">
             Posted on
-            <time itemprop="dateCreated" datetime="2016-01-17T20:23:50+08:00" content="2016-01-17">
-              2016-01-17
+            <time itemprop="dateCreated" datetime="2016-08-17T20:48:17+08:00" content="2016-08-17">
+              2016-08-17
             </time>
           </span>
 
@@ -262,8 +261,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/01/17/AdaBoost笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/17/AdaBoost笔记/" itemprop="commentsCount"></span>
+                <a href="/2016/08/17/LeetCode-146-LRU-Cache/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/17/LeetCode-146-LRU-Cache/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -282,49 +281,25 @@
       
 
       
-        <span itemprop="articleBody"><blockquote>
-<p>以下的内容是我在根据《统计学习方法》一书第8章所撰写的总结笔记。原书中提到的公式大多在此推导了一遍，以便日后温习所需。</p>
-<p>关键字：多个基本分类器线性组合</p>
+        <span itemprop="articleBody"><h1 id="LeetCode-146-LRU-Cache"><a href="#LeetCode-146-LRU-Cache" class="headerlink" title="LeetCode 146. LRU Cache"></a>LeetCode 146. LRU Cache</h1><blockquote>
+<p>链接：<a href="https://leetcode.com/problems/lru-cache/" target="_blank" rel="external">https://leetcode.com/problems/lru-cache/</a></p>
+<p>难度：Hard</p>
+<p>标签：Design</p>
+<p>描述：Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: <code>get</code> and <code>set</code>.</p>
+<p><code>get(key)</code> - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.<br><code>set(key, value)</code> - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.</p>
 </blockquote>
-<h2 id="提升方法"><a href="#提升方法" class="headerlink" title="提升方法"></a>提升方法</h2><p>常用的统计学习方法中有一种叫做提升（boosting）方法，应用十分广泛。在分类问题中，提升方法利用样本学习出多个分类器，并将这些分类器进行线性组合，提高分类性能。</p>
-<p>这其实是基于这样一种思想：对于一个复杂任务来说，讲多个专家的判断进行适当的综合所得出的判断，要比其中任何一个专家单独做出的判断好。实际上，就是俗话所说的“三个臭皮匠顶个诸葛亮”的道理。</p>
-<h2 id="AdaBoost算法"><a href="#AdaBoost算法" class="headerlink" title="AdaBoost算法"></a>AdaBoost算法</h2><h3 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h3><p>Kearns和Valiant提出了“强可学习（strongly learnable）”和“弱可学习（weakly learnable）”的概念。指出：在概率近似正确（probably approximately correct, PAC）学习的框架中，</p>
-<ul>
-<li>一个概念（一个类）如果存在一个多项式的学习算法能够学习它，并且正确率很高，那么就称这个概念是强可学习的；</li>
-<li>一个概念，如果存在一个多项式的学习算法能够学习它，学习的正确率仅比随机猜测略高，那么就称这个概念是弱可学习的。</li>
-</ul>
-<p>有趣的是，Schapire后来证明强可学习与弱可学习是等价，他使用构造的方法证明：<strong>一个概念弱可学习的充要条件是这个概念强可学习</strong>。这个结论的证明我之后会学习，补上这里的空缺。</p>
-<p>既然强可学习与弱可学习是等价的，那么在实际问题中如果已经发现了“弱学习算法”，那么将它<strong>提升(boost)为“强学习算法”</strong>将是可行的。并且，发现弱学习算法通常要比发现强学习算法容易得多。这么一种看似偷懒的思路，却收获了相当不错的效果。基于这一思路，AdaBoost算法（Adaptive Boosting）是可行算法中的一个代表。</p>
-<p>对于提升方法，有两个问题需要回答：（1）每一轮如何改变训练数据的权值或概率分布；（2）如何将弱分类器组合成一个强分类器。</p>
-<p>问题（1），AdaBoost的做法是，提高被前一轮错分类的样本的权值，而降低那些被正确分类的样本的权值。对于问题（2），即弱分类器的组合，Adaboost采取的是加权线性组合的方式。</p>
-<h3 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h3><p>假定给定一个二类分类的训练数据集</p>
-<p>$$ T=\lbrace (x_1,y_1),(x_2,y_2),…,(x_N,y_N) \rbrace $$</p>
-<p>其中，每个样本点由实例与标记组成。实例$ x_i \in X \subseteq R^n $，$X$是实例空间，标记$y_i \in \lbrace -1, +1\rbrace$。AdaBoost利用以下算法，从训练数据中学习一系列弱分类器或基本分类器，并将这些弱分类器线性组合成一个强分类器。</p>
-<h4 id="AdaBoost算法-1"><a href="#AdaBoost算法-1" class="headerlink" title="AdaBoost算法"></a>AdaBoost算法</h4><p>输入：训练数据集T，弱学习算法；<br>输出：最终分类器$G(x)$<br><strong>(1)初始化权值分布</strong><br>$$D_1=(w_{11},…,w_{1i},…,w_{1N}),w_{1i}=\frac{1}{N}, i=1,2,…,N$$<br><strong>(2)迭代，对m=1,2,…,M</strong><br>    (a)使用具有权值分布$D_m$的训练数据集学习，得到基本分类器<br>    $$G_m(x):X \to \lbrace -1,+1 \rbrace$$<br>    (b)计算$G_m$在训练数据集上的分类误差率<br>    $$e_m=P(G_m(x_i) \ne y_i) = \sum_{i=1}^{N}{w_{mi}I(G_m(x_i) \ne y_i)}$$<br>    (c)计算$G_m(x)$的系数<br>    $$\alpha_m = \frac{1}{2} log \frac{1-e_m}{e_m}$$<br>    这里的对数是自然对数。<br>    (d)更新训练数据集的权值分布<br>    $$D_{m+1}=(w_{m+1,1},…,w_{m+1,i},…,w_{m+1,1N})$$<br>    $$w_{m+1,i} = \frac{w_{m,i}}{Z_m}exp(-\alpha_m y_i G_m(x_i))$$<br>    这里的$Z_m$是规范化因子：<br>    $$Z_m = \sum_{i=1}^{N}w_{m,i}exp( -\alpha_m y_i G_m(x_i) )$$<br>    它使$D_{m+1}$成为一个概率分布。<br><strong>(3)构建基本分类器的线性组合</strong><br>$$f(x)=\sum_{m=1}^{M}\alpha_mG_m(x)$$<br>得到最终分类器：<br>$$G(x) = sign(f(x)) = sign(\sum_{m=1}^{M}\alpha_mG_m(x))$$</p>
-<h4 id="AdaBoost算法分析"><a href="#AdaBoost算法分析" class="headerlink" title="AdaBoost算法分析"></a>AdaBoost算法分析</h4><p>AdaBoost是一个迭代算法。</p>
-<p>(1)在最初假设中，每个训练数据集的样本具有相同的权重$w_{1i}=\frac{1}{N}$。以此为基础，算法在第一轮是在原始数据上学习基本分类器$G_1(x)$。</p>
-<p>(2)AdaBoost算法的迭代过程，对m=1,2,…,M：<br><br>(a)使用当前$D_m$学习基本分类器$G_m(x)$<br><br>(b)需要注意的是，<strong>分类误差率</strong>$e_m$是一个十分重要的指标，因为学习基本分类器的优化准则是<strong>最小化当前的$e_m$</strong>。而分类误差率和当前的权值分布有关<br>$$e_m = P(G_m(x_i) \ne y_i) = \sum_{G_m(x_i) \ne y_i} w_{m,i}$$<br>因为每一轮迭代中，(d)会更新权值分布，<strong>这保证了每一轮迭代中学习的基本分类器$G_m$与上一轮的分类器$G_{m-1}$是不同的。</strong><br><br>(c)这一步计算的系数$\alpha_m$是基本分类器$G_m(x)$在最终分类器$G(x)$中的权重：<br><strong>$\alpha_m$趋势图</strong><br><img src="http://7xnh8y.com1.z0.glb.clouddn.com/alpha_m.png" alt="alpha_m"></p>
-<p>上图是$\alpha_m = \frac{1}{2} log \frac{1-e_m}{e_m}$的函数图像，横轴是$e_m$，纵轴是$\alpha_m$。可以看到看到，当分类误差率越小时函数值越大，也即表示分类误差率小的基本分类器在最终分类器中的权重越大。</p>
-<p>(d)依据现有组合分类器的分类结果，更新训练数据集的权值分布，<strong>这与(c)一起保证了每次迭代得到与上一轮不一样的分类器</strong>。<br>更新权值的公式也可以写成：</p>
-<ul>
-<li>如果$G_m(x_i) = y_i$，$w_{m+1,i}=\frac{w_{m,i}}{Z_m}e^{-\alpha_m}$</li>
-<li>如果$G_m(x_i) \ne y_i$，$w_{m+1,i}=\frac{w_{m,i}}{Z_m}e^{\alpha_m}$</li>
-</ul>
-<p>简便的计算规范化因子的方法：<br>$$Z_m = 2 \sqrt{e_m(1-e_m)}$$</p>
-<h2 id="AdaBoost算法的训练误差分析"><a href="#AdaBoost算法的训练误差分析" class="headerlink" title="AdaBoost算法的训练误差分析"></a>AdaBoost算法的训练误差分析</h2><p>先上结论，书中<strong>定理8.1</strong>给出：AdaBoost算法最终分类器的训练误差上界为</p>
-<p>$$\frac{1}{N}\sum_{i=1}^{N} I(G(x_i)\ne y_i)\le \frac{1}{N}\sum_i exp(-y_if(x_i))=\prod_m Z_m$$</p>
-<p>这个不等式的证明过程也十分明了，主要的难点在于后半部分的推导。需要使用到$Z_m$的定义式及变形：</p>
+<p>设计并实现一个用于LRU cache的数据结构，支持<code>get</code>和<code>set</code>操作。</p>
+<h2 id="LRU-算法"><a href="#LRU-算法" class="headerlink" title="LRU 算法"></a>LRU 算法</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>LRU（<strong>Least Recently Used</strong>，最近最少使用）算法根据数据的历史访问情况淘汰cache中的数据，其核心思想是：如果数据最近被访问过，那么将来被访问的几率也更高。</p>
+<p>最常见的实现方法是使用一个链表来保存缓存数据，详细过程如下：</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LRU.png" alt="LRUcache"></p>
 <ol>
-<li>$w_{m,i}exp(-\alpha_m y_i G_m(x_i))=Z_m w_{m+1,i}$</li>
-<li>$Z_m = \sum_i w_{m,i} exp(-\alpha_m y_i G_m(x_i))$</li>
+<li>每当有新数据到来时，将其放置在链表头部；</li>
+<li>每当链表中的数据命中时，将其移至链表头部；</li>
+<li>当链表满时，丢弃链表末尾的数据。</li>
 </ol>
-<p>推导过程如下：</p>
-<p>$\frac{1}{N}\sum_i exp(-y_if(x_i)) = \frac{1}{N}\sum_i exp ( -\sum_{m=1}^M\alpha_m y_i G_m(x_i) )$<em># 利用$\frac{1}{N}=w_{1,i}$</em><br>$=\sum_iw_{1,i}\prod_{m=1}^M exp(-\alpha_m y_i G_m(x_i))$<br>$=Z_1\sum_iw_{2,i}\prod_{m=2}^M exp(-\alpha_m y_i G_m(x_i))$<em># 利用1式</em><br>$= …$<br>$=Z_1Z_2…Z_{M-1}\sum_iw_{M,i}exp(-\alpha_M y_i G_M(x_i))$<em># $Z_M$是利用2式得到的</em><br>$=\prod_{m=1}^MZ_m$</p>
-<p>利用这个上界，我们可以得到一个性质：<strong>不断增加弱分类器，AdaBoost的训练误差上界会不断降低</strong>。下图是$Z_m$的图像，横轴为分类误差率$e_m$，纵轴是规范化因子$Z_m$</p>
-<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/Z_m.png" alt="Z_m"></p>
-<p>如图，可以看到$Z_m$的图像是一个开口朝下的抛物线，且在$e_m=0.5$处取得最大值1，故可得$0&lt;Z_m\le1.0$。由此易得：<br>$$\prod_{m=1}^{M+1}Z_m = Z_{M+1}\prod_{m=1}^MZ_m\le \prod_{m=1}^MZ_m$$</p>
-<p>也即AdaBoost的训练误差界会随着m的增加而不断降低。</p>
-<p>第二部分，<strong>定理8.2</strong>部分，目前还没有太深入的理解，只是知道了一个非常好用的计算规范化因子的简便公式：$Z_m = 2\sqrt{e_m(1-e_m)}$。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>题目描述中，有两个操作需要能够实现，考虑使用双向链表+STL的map实现。这么做的原因是，使用双向链表可以很好地维护链表的形状，查询命中后可以很方便地将其提前而保持其他结点位置关系不变；至于使用map是为了提高查询效率，否则每次查询就需要遍历链表才行了。</p>
+<p>为了省事，双向链表就用STL里的list实现啦。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> cacheNode&#123;</span><br><span class="line">    <span class="keyword">int</span> key;</span><br><span class="line">    <span class="keyword">int</span> value;</span><br><span class="line">    cacheNode(<span class="keyword">int</span> k, <span class="keyword">int</span> v) : key(k), value(v) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> LRUCache&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    LRUCache(<span class="keyword">int</span> capacity) &#123;</span><br><span class="line">        size = capacity;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> key)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(cacheMap.find(key) != cacheMap.end()) &#123;</span><br><span class="line">            <span class="keyword">auto</span> it = cacheMap[key];</span><br><span class="line">            <span class="comment">// 查询命中，更新位置</span></span><br><span class="line">            cacheMem.splice(cacheMem.begin(), cacheMem, it);</span><br><span class="line">            cacheMap[key] = cacheMem.begin();</span><br><span class="line">            return cacheMem.begin()-&gt;value;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> return <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(cacheMap.find(key) == cacheMap.end())&#123;</span><br><span class="line">            <span class="comment">// 新数据需要插入</span></span><br><span class="line">            <span class="keyword">if</span>(cacheMem.size() == size) &#123;</span><br><span class="line">                <span class="comment">// cache已满，需要清楚尾端数据</span></span><br><span class="line">                cacheMap.erase(cacheMem.back().key);</span><br><span class="line">                cacheMem.pop_back();</span><br><span class="line">            &#125;</span><br><span class="line">            cacheMem.push_front(cacheNode(key, value));</span><br><span class="line">            cacheMap[key] = cacheMem.begin();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// key已经在cache中</span></span><br><span class="line">            <span class="comment">// 但仍需更新其在cache中的value和位置</span></span><br><span class="line">            <span class="keyword">auto</span> it = cacheMap[key];</span><br><span class="line">            cacheMem.splice(cacheMem.begin(), cacheMem, it);</span><br><span class="line">            cacheMap[key] = cacheMem.begin();</span><br><span class="line">            cacheMem.begin()-&gt;value = value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line">    <span class="built_in">list</span>&lt;cacheNode&gt; cacheMem;</span><br><span class="line">    <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="built_in">list</span>&lt;cacheNode&gt;::iterator &gt; cacheMap;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 </span>
       
     </div>
@@ -333,7 +308,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/AdaBoost/" rel="tag">#AdaBoost</a>
+            <a href="/tags/刷题/" rel="tag">#刷题</a>
           
         </div>
       
@@ -342,17 +317,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/06/新年不敏感/" rel="next" title="新年不敏感">
-                <i class="fa fa-chevron-left"></i> 新年不敏感
+              <a href="/2016/08/16/Leetcode刷题记录/" rel="next" title="Leetcode刷题记录">
+                <i class="fa fa-chevron-left"></i> Leetcode刷题记录
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/01/29/回家/" rel="prev" title="回家">
-                回家 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -379,8 +350,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/01/17/AdaBoost笔记/"
-           data-title="AdaBoost笔记" data-url="http://yoursite.com/2016/01/17/AdaBoost笔记/">
+      <div class="ds-thread" data-thread-key="2016/08/17/LeetCode-146-LRU-Cache/"
+           data-title="LeetCode_146_LRU_Cache" data-url="http://yoursite.com/2016/08/17/LeetCode-146-LRU-Cache/">
       </div>
     
   </div>
@@ -488,7 +459,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#提升方法"><span class="nav-number">1.</span> <span class="nav-text">提升方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AdaBoost算法"><span class="nav-number">2.</span> <span class="nav-text">AdaBoost算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本思路"><span class="nav-number">2.1.</span> <span class="nav-text">基本思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#算法原理"><span class="nav-number">2.2.</span> <span class="nav-text">算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AdaBoost算法-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">AdaBoost算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AdaBoost算法分析"><span class="nav-number">2.2.2.</span> <span class="nav-text">AdaBoost算法分析</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AdaBoost算法的训练误差分析"><span class="nav-number">3.</span> <span class="nav-text">AdaBoost算法的训练误差分析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LeetCode-146-LRU-Cache"><span class="nav-number">1.</span> <span class="nav-text">LeetCode 146. LRU Cache</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LRU-算法"><span class="nav-number">1.1.</span> <span class="nav-text">LRU 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">1.1.1.</span> <span class="nav-text">原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">1.2.</span> <span class="nav-text">实现</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
