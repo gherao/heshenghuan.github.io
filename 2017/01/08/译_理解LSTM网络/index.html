@@ -1,0 +1,809 @@
+<!doctype html>
+<html class="theme-next   use-motion ">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="LSTM," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.4.5.2" />
+
+
+
+
+
+
+<meta name="description" content="理解LSTM网络
+本文译自：colah’s blog: Understanding LSTM Networks Posted on August 27, 2015.
+
+循环神经网络(Recurrent Neural Networks)人类并不是每时每刻从空白处开始思考的。在阅读这篇文章时，你如何理解每个词都基于你对其之前的词的理解。你并不会将所有的思想丢弃而开始重新思考。人类的思想是具有持续性的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="翻译理解LSTM网络">
+<meta property="og:url" content="http://yoursite.com/2017/01/08/译_理解LSTM网络/index.html">
+<meta property="og:site_name" content="何声欢的博客">
+<meta property="og:description" content="理解LSTM网络
+本文译自：colah’s blog: Understanding LSTM Networks Posted on August 27, 2015.
+
+循环神经网络(Recurrent Neural Networks)人类并不是每时每刻从空白处开始思考的。在阅读这篇文章时，你如何理解每个词都基于你对其之前的词的理解。你并不会将所有的思想丢弃而开始重新思考。人类的思想是具有持续性的。">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/RNN have loops.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/RNN-unrolled.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/RNN-shorttermdepdencies.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/RNN-longtermdependencies.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-SimpleRNN.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-chain.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM2-notation.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-C-line.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-gate.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-focus-f.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-focus-i.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-focus-C.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-focus-o.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-var-peepholes.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-var-tied.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-var-GRU.png">
+<meta property="og:updated_time" content="2017-01-08T13:33:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="翻译理解LSTM网络">
+<meta name="twitter:description" content="理解LSTM网络
+本文译自：colah’s blog: Understanding LSTM Networks Posted on August 27, 2015.
+
+循环神经网络(Recurrent Neural Networks)人类并不是每时每刻从空白处开始思考的。在阅读这篇文章时，你如何理解每个词都基于你对其之前的词的理解。你并不会将所有的思想丢弃而开始重新思考。人类的思想是具有持续性的。">
+<meta name="twitter:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/RNN have loops.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: 'always',
+    motion: true
+  };
+</script>
+
+  <title> 翻译理解LSTM网络 | 何声欢的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+  
+
+
+
+
+
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">何声欢的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">这是一个博客</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-heartbeat fa-fw"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                翻译理解LSTM网络
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2017-01-08T21:29:03+08:00" content="2017-01-08">
+              2017-01-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; In
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/08/译_理解LSTM网络/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/08/译_理解LSTM网络/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <span itemprop="articleBody"><h1 id="理解LSTM网络"><a href="#理解LSTM网络" class="headerlink" title="理解LSTM网络"></a>理解LSTM网络</h1><blockquote>
+<p>本文译自：<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="external">colah’s blog: Understanding LSTM Networks</a> Posted on August 27, 2015.</p>
+</blockquote>
+<h2 id="循环神经网络-Recurrent-Neural-Networks"><a href="#循环神经网络-Recurrent-Neural-Networks" class="headerlink" title="循环神经网络(Recurrent Neural Networks)"></a>循环神经网络(Recurrent Neural Networks)</h2><p>人类并不是每时每刻从空白处开始思考的。在阅读这篇文章时，你如何理解每个词都基于你对其之前的词的理解。你并不会将所有的思想丢弃而开始重新思考。人类的思想是具有持续性的。</p>
+<p>传统的神经网络模型不能以这样的方式运作，这似乎是一个巨大的弊端。例如，想象你试图区分电影中每个时间点发生的事件的类别。传统的神经网络应该很难用于处理这个问题——使用电影中先前的事件推断后续的事件。</p>
+<p>循环神经网络（Recurrent Neural Networks，以下简称为RNN）解决了这个问题。RNN自身包含循环，允许信息持久存在。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/RNN have loops.png" alt="RNN 包含循环"></p>
+<p><strong>图1 RNN 包含循环</strong></p>
+<p>如上图所示是一个神经网络的模块，A读入某个输入$x_t$，并输出一个值$h_t$。A上的循环可以使得信息从当前时刻传递到下一时刻。</p>
+<p>这些循环使得循环神经网络看起来有些神秘。但只要你进一步思考就会发现它与普通的神经网络没有那么大的却别。一个循环神经网络可以看作是多个相同网络结点的复制，其中每一个网络结点会将信息传递给其后继网络结点。考虑展开一个循环神经网络：</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/RNN-unrolled.png" alt="展开循环神经网络"></p>
+<p><strong>图2 展开循环神经网络</strong></p>
+<p>链式的结构特征揭示了 RNN 本质上是与序列和列表相关的。对于这类数据，它们是最自然的神经网络架构。</p>
+<p>并且RNN也确实被这样使用了！在过去的几年中，RNN在应用于各类问题中取得了不可思议的成功：语音识别、语言建模、机器翻译和图像描述等等。这份列表还在不断增长中。我建议大家参考Andrej Karpathy的博文——<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://karpathy.github.io/2015/05/21/rnn-effectiveness/" target="_blank" rel="external">The Unreasonable Effectiveness of Recurrent Neural Networks</a>，领略RNN丰富有趣的特征。</p>
+<p>这些成功的关键之处就是LSTM的应用，这是一种特殊的RNN，比标准的RNN模型在很多任务上都有更好的表现。几乎所有基于RNN取得的令人激动的成果都是通过LSTM达到的。这篇文章将会介绍LSTM。</p>
+<h2 id="长期依赖问题-The-Problem-of-Long-Term-Dependencies"><a href="#长期依赖问题-The-Problem-of-Long-Term-Dependencies" class="headerlink" title="长期依赖问题(The Problem of Long-Term Dependencies)"></a>长期依赖问题(The Problem of Long-Term Dependencies)</h2><p>RNN似乎有能力可以将先前的信息连接到当前的任务上，例如使用过去的视频画面来推测对当前画面的理解。如果RNN可以做到，那么它们将变得非常有用。但它们真的可以吗？这还有许多依赖因素。</p>
+<p>有时候，我们只需要知道先前的信息来完成当前的任务。例如，考虑我们有一个基于当前词预测下一个词的语言模型。如果我们试着预测句子“the cloud are in the <em>sky</em>,”中的最后一个词，我们并不需要更多的上下文——显然下一个词应该是<em>sky</em>。在类似的例子中，相关信息和预测词的位置之间的间隔非常小，RNN可以学会使用过去的信息。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/RNN-shorttermdepdencies.png" alt="RNN短期依赖"></p>
+<p>但在一些更加复杂的情况下，我们可能需要更多的上下文信息。假设我们试图预测一段文本“I grew up in France… I speak fluent <em>French</em>.”中的最后一个词<em>French</em>。最近的信息建议下一个词可能是一种语言的名字，但是要弄清楚具体是那种语言时，我们就需要离当前位置很远的上下文信息“France”。这说明相关信息和预测位置之间的距离可能会非常大。</p>
+<p>不幸的是，当这个距离不断增大到一定程度时，RNN将不能够学习如何连接使用这些信息。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/RNN-longtermdependencies.png" alt="RNN Long-Term依赖"></p>
+<p>从理论上说，RNN绝对有能力处理类似的“长期依赖（Long-Term Dependencies）”问题。人们可以小心仔细地挑选参数来解决这类问题的最初级形式。但在实践中，RNN不太可能有能力学习到这些知识。<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://people.idsia.ch/~juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf" target="_blank" rel="external">Hochreiter (1991)</a>和<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://www-dsi.ing.unifi.it/~paolo/ps/tnn-94-gradient.pdf" target="_blank" rel="external">Bengio, <em>et al</em>. (1994)</a>等人对这个问题进行了深入的研究，他们发现一些导致RNN很难学习到长期依赖的相当基本的原因。</p>
+<p>谢天谢地，LSTM并没有这个问题！</p>
+<h2 id="LSTM网络-LSTM-Networks"><a href="#LSTM网络-LSTM-Networks" class="headerlink" title="LSTM网络(LSTM Networks)"></a>LSTM网络(LSTM Networks)</h2><p>长短期记忆网络（Long Short Term Memory Networks），通常被简称为LSTM，是一种特殊的循环神经网络，可以学习长期依赖。LSTM 由<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://deeplearning.cs.cmu.edu/pdfs/Hochreiter97_lstm.pdf" target="_blank" rel="external">Hochreiter &amp; Schmidhuber (1997)</a>提出，并在近期被<a href="http://7xnh8y.com1.z0.glb.clouddn.com/https://scholar.google.com/citations?user=DaFHynwAAAAJ&amp;hl=en" target="_blank" rel="external">Alex Graves</a>进行了改良和推广。在很多问题，LSTM 都取得相当巨大的成功，并得到了广泛的使用。</p>
+<p>LSTM是被刻意设计成可以避免长期依赖问题的。记忆长期的信息是LSTM的默认行为，而非需要努力学习才能获得的能力。</p>
+<p> 所有的RNN都有一个重复网络模块的链状结构的形式。在标准RNN中，这个重复的模块只有一个非常简单的结构，比如仅一个tanh layer：</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-SimpleRNN.png" alt="标准RNN中包含单个层结构的重复模块"></p>
+<p>LSTM也有类似的链结构，只是重复模块有不同的内部构造。不是只有单个神经网络层，而是四个，它们以一种非常特殊的方式进行交互。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-chain.png" alt="LSTM中包含四个交互层的重复模块"></p>
+<p>不必担心之后会提到的各种细节，接下来我们将会一步一步地解释剖析LSTM的结构原理。现在我们先来熟悉一下图中使用标记的含义：</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM2-notation.png" alt="LSTM图标记含义"></p>
+<p>在上图中，每一条黑线携带了一个向量，从一个结点的输出到其他结点的输入。粉色的圆圈代表元素级的操作，如向量加和，而黄色的矩阵表示网络层。合并的黑线表示向量的拼接，分开的黑线表示向量的复制，并被送入不同的位置。</p>
+<h2 id="LSTM的核心思想-The-Core-Idea-Behind-LSTMs"><a href="#LSTM的核心思想-The-Core-Idea-Behind-LSTMs" class="headerlink" title="LSTM的核心思想(The Core Idea Behind LSTMs)"></a>LSTM的核心思想(The Core Idea Behind LSTMs)</h2><p>LSTM的核心就是cell的状态，如下图，水平线在图上方穿行而过。</p>
+<p>cell的状态类似于一条传送带，从左至右在整条模块链上运行，只有一些少量的线性交互。这很容易使得信息在其上流传并保持不变。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-C-line.png" alt="Cell line"></p>
+<p>通过一种被称为门（gates）的结构，LSTM有能力向cell的状态中移除或添加信息。</p>
+<p>门是一种让信息选择式通过的方法，包含一个sigmoid层和元素级乘法操作。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-gate.png" alt="gates"></p>
+<p>sigmoid层输出0到1之间的数值，描述了每个部分可以通过的量的多少。0表示不允许通过，1表示允许全部通过。</p>
+<p><strong>LSTM拥有三个门，用来保护和控制cell的状态。</strong></p>
+<h2 id="逐步理解LSTM-Step-by-Step-LSTM-Walk-Through"><a href="#逐步理解LSTM-Step-by-Step-LSTM-Walk-Through" class="headerlink" title="逐步理解LSTM(Step-by-Step LSTM Walk Through)"></a>逐步理解LSTM(Step-by-Step LSTM Walk Through)</h2><p>LSTM中的第一步就是我们将会决定把什么信息从cell的状态中丢弃。这个决定是由一个被称为<strong>遗忘门（forget gate layer）</strong>的sigmoid层做出的。遗忘门会读取$h_{t-1}$和$x<em>t$，并输出一个0到1之间的数值给cell状态$C</em>{t-1}$中的每一个数字。1表示“完全保留”，0表示“完全舍弃”。</p>
+<p>让我们回到语言模型的例子中，基于前面的词来预测下一个词。在这个问题中，cell的状态可能包含了当前<strong>主语</strong>的性别，因此正确的<strong>代词</strong>可以被预测出来。当我们看到一个新的主语，我们想要忘记<strong>旧的主语</strong>。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-focus-f.png" alt="遗忘门"></p>
+<p>经过遗忘门后，下一步就是确定我们要保留什么信息在cell状态中。这一步包含两个部分：第一，一个称作“<strong>输入门（input gate layer）</strong>”的sigmoid层决定了什么值将会被更新；第二，一个tanh层产生一个新的候选向量$\widetilde{C}_t$，这个向量将会被加到（be added to）cell状态中。之后，我们将会结合这两个向量来更新cell状态。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-focus-i.png" alt="输入门"></p>
+<p>现在是时候对旧的cell状态进行更新了，即$C_{t-1}$到$C_t$的过程。之前两步已经决定了要做什么，接下来我们就去完成它。</p>
+<p>我们将旧状态$C_{t-1}$与遗忘门$f_t$相乘，忘记我们确定要丢掉的信息。然后，加上$i_t * \widetilde{C}_t$，即新的候选值，根据之前的输入门决定了我们如何更新每个值的程度。</p>
+<p>在语言模型的例子中，这就是我们如何根据往时信息决定丢弃旧主语性别并添加新信息的地方。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-focus-C.png" alt="更新cell状态"></p>
+<p>最终，我们需要决定输出什么。这个输出将会基于我们的cell状态，但确实一个过滤后的值。首先，我们使用一个sigmoid层来决定cell状态的什么部分可以输出。然后，我们使用一个tanh层（得到-1到1之间的值）处理cell状态，并将其与之前sigmoid门的输出相乘，这样我们可以只输出我们确定的部分。</p>
+<p>回到语言模型的例子，因为刚刚看到了一个<strong>主语</strong>，它接下来可能想要输出的信息是与<strong>动词</strong>有关的。例如，它可能想要输出主语是单数还是负数，这样如果是动词的话，我们也知道动词需要进行的词形变化。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-focus-o.png" alt="输出门"></p>
+<h2 id="LSTM的变体-Variants-on-Long-Short-Term-Memory"><a href="#LSTM的变体-Variants-on-Long-Short-Term-Memory" class="headerlink" title="LSTM的变体(Variants on Long Short Term Memory)"></a>LSTM的变体(Variants on Long Short Term Memory)</h2><p>在此之前，我们已经讨论了LSTM的标准形式，但并不是所有的LSTM都和上述的结构一样。事实上，似乎所有使用了LSTM的论文中所使用的LSTM都有结构上的细小区别。尽管这些区别很小，但还是值得我们注意。</p>
+<p><a href="http://7xnh8y.com1.z0.glb.clouddn.com/ftp://ftp.idsia.ch/pub/juergen/TimeCount-IJCNN2000.pdf" target="_blank" rel="external">Gers &amp; Schmidhuber (2000)</a>提出的一种流行的LSTM变种中，引入了一种称为“窥视孔链接”的结构。即令控制门层也受cell状态的影响。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-var-peepholes.png" alt="LSTM3-var-peepholes"></p>
+<p>上图中，在所有门中都加入了窥视孔，但是许多论文中仅会加入部分窥视孔而不是全部。</p>
+<p>另一种变体，使用了耦合的遗忘门和输入门。不再是单独地决定遗忘什么或应该添加什么新的信息，而是同时作出决定。只有当我们要输入某些信息时才会忘记掉一些信息，也只有当我们忘记某些旧的信息时才会输入新的信息。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-var-tied.png" alt="coupled gates"></p>
+<p>还有一种改变较大的变种，门控循环单元（Gated Recurrent Unit，简称GRU），由<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://arxiv.org/pdf/1406.1078v3.pdf" target="_blank" rel="external">Cho, <em>et al</em>. (2014)</a>提出。GRU将遗忘门和输入门合二为一，引入了称为“更新门”（Update Gate）的结构。GRU也将cell状态和隐含层状态合并了，同时做了一些其他改变。这使得GRU比标准的LSTM模型更加简单，并且越来越受到欢迎。</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/LSTM3-var-GRU.png" alt="LSTM3-var-GRU"></p>
+<p>这里只介绍了几种流行的LSTM变体。还有许多其他变体，例如<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://arxiv.org/pdf/1508.03790v2.pdf" target="_blank" rel="external">Yao, <em>et al</em>. (2015)</a>提出的Depth Gated RNN。还有用一些采用完全不同方法来解决长期依赖的问题的例子，如<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://arxiv.org/pdf/1402.3511v1.pdf" target="_blank" rel="external">Koutnik, <em>et al</em>. (2014)</a> 提出的 Clockwork RNN。</p>
+<p>要问哪个变体是最好的？其中的差异性真的重要吗？<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://arxiv.org/pdf/1503.04069.pdf" target="_blank" rel="external">Greff, <em>et al</em>. (2015)</a> 给出了流行变体的比较，结论是他们基本上是一样的。<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://jmlr.org/proceedings/papers/v37/jozefowicz15.pdf" target="_blank" rel="external">Jozefowicz, <em>et al</em>. (2015)</a> 则在超过 1 万种 RNN 架构上进行了测试，发现一些架构在某些任务上也取得了比 LSTM 更好的结果。</p>
+<h2 id="结论-Conclusion"><a href="#结论-Conclusion" class="headerlink" title="结论(Conclusion)"></a>结论(Conclusion)</h2><p>刚开始，我提到了人们通过 RNN 取得的重要成果。本质上这些都可以使用LSTM及其变种完成。对于大多数任务而言，LSTM确实有更好的性能。</p>
+<p>写下了这么些公式，LSTM看起来令人望而怯步。但希望经过我一步一步的讲解之后，它可以变得易于理解一些。</p>
+<p>LSTM 是我们在 RNN 中获得的重要成功。很自然地，我们也会考虑：接下来哪里会有更加重大的突破呢？在研究人员间普遍的观点是：“对！下一步已经有了——那就是注意力机制！” 这个想法是让 RNN 的每一步都从更加大的信息集中挑选信息。例如，如果你使用 RNN 来产生一个图片的描述，可能会选择图片的一个部分，根据这部分信息来产生输出的词。实际上，<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://arxiv.org/pdf/1502.03044v2.pdf" target="_blank" rel="external">Xu, <em>*et al</em>.* (2015)</a>已经这么做了——如果你希望深入探索注意力可能这就是一个有趣的起点！还有一些使用注意力的相当振奋人心的研究成果，看起来有更多的东西亟待探索……</p>
+<p>注意力也不是 RNN 研究领域中唯一的发展方向。例如，<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://arxiv.org/pdf/1507.01526v1.pdf" target="_blank" rel="external">Kalchbrenner, <em>et al.</em> (2015)</a>提出的 Grid LSTM 看起来也是很有前途。使用生成模型的 RNN，诸如<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://arxiv.org/pdf/1502.04623.pdf" target="_blank" rel="external">Gregor, <em>et al</em>.(2015)</a>， <a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://arxiv.org/pdf/1506.02216v3.pdf" target="_blank" rel="external">Chung, <em>et al.</em> (2015)</a>和<a href="http://7xnh8y.com1.z0.glb.clouddn.com/http://arxiv.org/pdf/1411.7610v3.pdf" target="_blank" rel="external">Bayer &amp; Osendorfer (2015)</a>提出的模型同样很有趣。在过去几年中，RNN的研究已经相当火热，而研究成果当然也会更加丰富！</p>
+</span>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LSTM/" rel="tag">#LSTM</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/26/MacOS安装tensorflow/" rel="next" title="MacOS安装tensorflow">
+                <i class="fa fa-chevron-left"></i> MacOS安装tensorflow
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+        </div>
+
+        
+
+
+        
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/08/译_理解LSTM网络/"
+           data-title="翻译理解LSTM网络" data-url="http://yoursite.com/2017/01/08/译_理解LSTM网络/">
+      </div>
+    
+  </div>
+
+
+      </div>
+
+      
+        
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" src="/images/IMG_2258.JPG" alt="Heshenghuan" itemprop="image"/>
+          <p class="site-author-name" itemprop="name">Heshenghuan</p>
+        </div>
+        <p class="site-description motion-element" itemprop="description">嗯，这是一个博客</p>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/heshenghuan" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> github
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/he-sheng-huan" target="_blank">
+                  
+                    <i class="fa fa-globe"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#理解LSTM网络"><span class="nav-number">1.</span> <span class="nav-text">理解LSTM网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#循环神经网络-Recurrent-Neural-Networks"><span class="nav-number">1.1.</span> <span class="nav-text">循环神经网络(Recurrent Neural Networks)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#长期依赖问题-The-Problem-of-Long-Term-Dependencies"><span class="nav-number">1.2.</span> <span class="nav-text">长期依赖问题(The Problem of Long-Term Dependencies)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSTM网络-LSTM-Networks"><span class="nav-number">1.3.</span> <span class="nav-text">LSTM网络(LSTM Networks)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSTM的核心思想-The-Core-Idea-Behind-LSTMs"><span class="nav-number">1.4.</span> <span class="nav-text">LSTM的核心思想(The Core Idea Behind LSTMs)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逐步理解LSTM-Step-by-Step-LSTM-Walk-Through"><span class="nav-number">1.5.</span> <span class="nav-text">逐步理解LSTM(Step-by-Step LSTM Walk Through)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSTM的变体-Variants-on-Long-Short-Term-Memory"><span class="nav-number">1.6.</span> <span class="nav-text">LSTM的变体(Variants on Long Short Term Memory)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论-Conclusion"><span class="nav-number">1.7.</span> <span class="nav-text">结论(Conclusion)</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+      
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Heshenghuan</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+    
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hshgithubio"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+    
+     
+
+
+    
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.5.2"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.5.2"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+<script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+<script type="text/javascript" src="/js/motion.js?v=0.4.5.2" id="motion.global"></script>
+
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.5.2" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    motionMiddleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  <script type="text/javascript" src="/js/bootstrap.js"></script>
+
+  
+  
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+  </script>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+    });
+  </script>
+
+  
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  
+
+</body>
+</html>
