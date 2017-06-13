@@ -67,7 +67,10 @@
 表示对给定观测序列x，相应的标记序列y的条件概率。引进特殊">
 <meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/%E7%8A%B6%E6%80%81%E8%B7%AF%E5%BE%84.png">
 <meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/m_matrix_crf.png">
-<meta property="og:updated_time" content="2017-06-13T12:59:57.000Z">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/final_m_matrix_crf.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/forward_vec_crf.png">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/backward_vec_crf.png">
+<meta property="og:updated_time" content="2017-06-13T13:02:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CRF学习笔记">
 <meta name="twitter:description" content="CRF的学习笔记
@@ -299,7 +302,7 @@
 <p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/m_matrix_crf.png" alt="m_matrices_crf"></p>
 <p>试求状态序列y以start为起点到stop为终点的所有路径的非规范化概率及规范化因子。</p>
 <p>解：这部分其实非常好求，直接利用给定的公式得到</p>
-<p>$$\begin{align<em>}M(x) &amp;= M_1(x)\cdot M_2(x) \cdot M_3(x) \cdot M_4(x)\  &amp;= \begin{bmatrix}0 &amp; 0 &amp; 0 &amp; Z(x)\ 0 &amp; 0 &amp; 0 &amp; 0\ 0 &amp; 0 &amp; 0 &amp; 0\ 0 &amp; 0 &amp; 0 &amp; 0\end{bmatrix}\end{align</em>}$$</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/final_m_matrix_crf.png" alt="final_m_matrix"></p>
 <p>其中</p>
 <p>$$Z_(x) =a_{01}b_{11}c_{11}+a_{01}b_{11}c_{12}+a_{01}b_{12}c_{21}+a_{01}b_{12}c_{22} + a_{02}b_{21}c_{11}+a_{02}b_{21}c_{12}+a_{02}b_{22}c_{21}+a_{02}b_{22}c_{22}$$</p>
 <p>即所以路径非规范化概率和。</p>
@@ -308,14 +311,14 @@
 <p><strong>注意：不是求一条解码序列的概率。</strong></p>
 </blockquote>
 <h4 id="前向向量"><a href="#前向向量" class="headerlink" title="前向向量"></a>前向向量</h4><p>对每个位置$i=0,1,\cdots ,n+1$，定义前向向量$\alpha_i(x)$(行向量):</p>
-<p>$$\alpha_0(y|x)=\left{\begin{matrix}1 &amp; y=start\ 0 &amp; \text{otherwise}\end{matrix}\right.$$</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/forward_vec_crf.png" alt="fw_vec_define"></p>
 <p>递推公式为</p>
 <p>$$\alpha_i(y_i|x)=\alpha_{i-1}(y_{i-1}|x)M_i(y_{i-1},y_i|x) \text{, }(i=1,2,\cdots,n+1)$$</p>
 <p>又可以表示为：</p>
 <p>$$\alpha_i(x)=\alpha_{i-1}(x)M_i(x)$$</p>
 <p>$\alpha_i(y_i|x)$表示在位置i的标记是$y_i$并且到位置i的前部分标记序列的非规范化概率，$y_i$可取的值有m个。</p>
 <h4 id="后向向量"><a href="#后向向量" class="headerlink" title="后向向量"></a>后向向量</h4><p>同样，对每个位置$i=0,1,\cdots ,n+1$，定义后向向量$\beta_i(x)$(列向量):</p>
-<p>$$\beta_{n+1}(y_{i+1}|x)=\left{\begin{matrix}1 &amp; y_{i+1}=stop\ 0 &amp; \text{otherwise}\end{matrix}\right.$$</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/backward_vec_crf.png" alt="bw_vec_define"></p>
 <p>递推公式为</p>
 <p>$$\beta_i(y_i|x)=M_{i+1}(y_i,y_{i+1}|x)\beta_{i+1}(y_{i+1}|x) \text{, }(i=0,1,\cdots,n)$$</p>
 <p>又可以表示为：</p>
