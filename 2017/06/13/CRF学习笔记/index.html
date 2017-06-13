@@ -70,7 +70,7 @@
 <meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/final_m_matrix_crf.png">
 <meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/forward_vec_crf.png">
 <meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/backward_vec_crf.png">
-<meta property="og:updated_time" content="2017-06-13T13:04:08.000Z">
+<meta property="og:updated_time" content="2017-06-13T13:04:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CRF学习笔记">
 <meta name="twitter:description" content="CRF的学习笔记
@@ -355,8 +355,7 @@
 <p>分子也即所有位置i=1上y为1的路径的非规范概率和。</p>
 <p>（2）求条件概率$P(y_1=1,y_2=2|x)=\frac{\alpha_1(y_1=1|x)M_2(y_1=1,y_2=2|x)\beta_2(y_2=2|x)}{Z(x)}$</p>
 <p>已知:$\alpha_1(y_1=1|x)=a_{01}$, $M_2(y_1=1,y_2=2|x)=b_{12}$, $\beta_2(y_2=2|x)=c_{21}+c_{22}$</p>
-<p>所以</p>
-<p>$$P(y_1=1,y_2=2|x)=\frac{a_{01}<em>b_{12}</em>(c_{21}+c_{22})}{Z(x)}$$</p>
+<p>所以$P(y_1=1,y_2=2|x)=\frac{a_{01}<em>b_{12}</em>(c_{21}+c_{22})}{Z(x)}$</p>
 </span>
       
     </div>
