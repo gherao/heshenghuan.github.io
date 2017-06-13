@@ -70,7 +70,7 @@
 <meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/final_m_matrix_crf.png">
 <meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/forward_vec_crf.png">
 <meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/backward_vec_crf.png">
-<meta property="og:updated_time" content="2017-06-13T13:02:03.000Z">
+<meta property="og:updated_time" content="2017-06-13T13:04:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CRF学习笔记">
 <meta name="twitter:description" content="CRF的学习笔记
@@ -346,7 +346,9 @@
 <p>$$P(Y_{i-1}=y_{i-1}, Y_i=y_i|x)=\frac{\alpha_{i-1}(y_{i-1}|x)M_i(y_{i-1},y_i|x)\beta_i(y_i|x)}{Z(x)}$$</p>
 <p>【例3】计算【例1】中条件随机场的条件概率$P(y_1=1|x)$和$P(y_1=1,y_2=2|x)$：</p>
 <p>解：（1）求条件概率$P(y_1=1|x)=\frac{\alpha_1(y_1=1|x) \beta_1(y_1=1|x)}{Z(x)}$</p>
-<p>已知$\alpha_1(x) =[0,a_{01},a_{02}, 0]$，$\beta_1(x)=M_2(x)\beta_2(x)=[0,b_{11}(c_{11}+c_{12})+b_{12}(c_{21}+c_{22}),b_{21}(c_{11}+c_{12})+b_{22}(c_{21}+c_{22}),0]^T$则有：</p>
+<p>已知:</p>
+<p>$\alpha_1(x) =[0,a_{01},a_{02}, 0]$，</p>
+<p>$\beta_1(x)=M_2(x)\beta_2(x)=[0,b_{11}(c_{11}+c_{12})+b_{12}(c_{21}+c_{22}),b_{21}(c_{11}+c_{12})+b_{22}(c_{21}+c_{22}),0]^T$则有：</p>
 <p>$\alpha_1(y_1=1|x)=a_{01}$</p>
 <p>$\beta_1(y_1=1|x)=b_{11}(c_{11}+c_{12})+b_{12}(c_{21}+c_{22})=b_{11}c_{11}+b_{11}c_{12}+b_{12}c_{21}+b_{12}c_{22}$</p>
 <p>所以<br>$$P(y_1=1|x)=\frac{a_{01}(b_{11}c_{11}+b_{11}c_{12}+b_{12}c_{21}+b_{12}c_{22})}{Z(x)}$$</p>
