@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="最大熵模型," />
+  <meta name="keywords" content="CRF, linear-chain_CRF," />
 
 
 
@@ -51,24 +51,30 @@
 
 
 
-<meta name="description" content="最大熵模型的原理用通俗的话解释很好理解，但是对于模型的数学定义却不是那么容易理解。其实，网上有大量的论文、笔记、幻灯片介绍最大熵模型，这篇文章主要是我对该模型的一些笔记和推导。
+<meta name="description" content="CRF的学习笔记
+本文是针对《统计学习方法》第11章相关部分的纠错和更为详细的说明。
 
-最大熵模型的原理最大熵原理是统计学习的一般原理，将它应用到分类问题时得到最大熵模型。在实际处理分类问题时，我们常常将数据看成是有对应关系的实例。实例称为Event，每个Event包含一个上下文环境Context和对应类">
+条件随机场的矩阵形式假设现有一个线性链条件随机场$Pw(y|x)=\frac{1}{Z(x)}\exp\sum{k=1}^K w_k f_k(y,x)$，其中$Z(x)=\sumy \exp \sum{k=1}^K w_k f_k(y,x)$。
+表示对给定观测序列x，相应的标记序列y的条件概率。引进特殊的起点和">
 <meta property="og:type" content="article">
-<meta property="og:title" content="最大熵模型学习">
-<meta property="og:url" content="http://yoursite.com/2016/02/26/最大熵模型学习/index.html">
+<meta property="og:title" content="CRF学习笔记">
+<meta property="og:url" content="http://yoursite.com/2017/06/13/CRF学习笔记/index.html">
 <meta property="og:site_name" content="何声欢的博客">
-<meta property="og:description" content="最大熵模型的原理用通俗的话解释很好理解，但是对于模型的数学定义却不是那么容易理解。其实，网上有大量的论文、笔记、幻灯片介绍最大熵模型，这篇文章主要是我对该模型的一些笔记和推导。
+<meta property="og:description" content="CRF的学习笔记
+本文是针对《统计学习方法》第11章相关部分的纠错和更为详细的说明。
 
-最大熵模型的原理最大熵原理是统计学习的一般原理，将它应用到分类问题时得到最大熵模型。在实际处理分类问题时，我们常常将数据看成是有对应关系的实例。实例称为Event，每个Event包含一个上下文环境Context和对应类">
-<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/featurefunction.gif">
-<meta property="og:updated_time" content="2016-05-13T05:36:28.000Z">
+条件随机场的矩阵形式假设现有一个线性链条件随机场$Pw(y|x)=\frac{1}{Z(x)}\exp\sum{k=1}^K w_k f_k(y,x)$，其中$Z(x)=\sumy \exp \sum{k=1}^K w_k f_k(y,x)$。
+表示对给定观测序列x，相应的标记序列y的条件概率。引进特殊的起点和">
+<meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/%E7%8A%B6%E6%80%81%E8%B7%AF%E5%BE%84.png">
+<meta property="og:updated_time" content="2017-06-13T12:46:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="最大熵模型学习">
-<meta name="twitter:description" content="最大熵模型的原理用通俗的话解释很好理解，但是对于模型的数学定义却不是那么容易理解。其实，网上有大量的论文、笔记、幻灯片介绍最大熵模型，这篇文章主要是我对该模型的一些笔记和推导。
+<meta name="twitter:title" content="CRF学习笔记">
+<meta name="twitter:description" content="CRF的学习笔记
+本文是针对《统计学习方法》第11章相关部分的纠错和更为详细的说明。
 
-最大熵模型的原理最大熵原理是统计学习的一般原理，将它应用到分类问题时得到最大熵模型。在实际处理分类问题时，我们常常将数据看成是有对应关系的实例。实例称为Event，每个Event包含一个上下文环境Context和对应类">
-<meta name="twitter:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/featurefunction.gif">
+条件随机场的矩阵形式假设现有一个线性链条件随机场$Pw(y|x)=\frac{1}{Z(x)}\exp\sum{k=1}^K w_k f_k(y,x)$，其中$Z(x)=\sumy \exp \sum{k=1}^K w_k f_k(y,x)$。
+表示对给定观测序列x，相应的标记序列y的条件概率。引进特殊的起点和">
+<meta name="twitter:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/%E7%8A%B6%E6%80%81%E8%B7%AF%E5%BE%84.png">
 
 
 
@@ -80,7 +86,7 @@
   };
 </script>
 
-  <title> 最大熵模型学习 | 何声欢的博客 </title>
+  <title> CRF学习笔记 | 何声欢的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="default">
@@ -220,7 +226,7 @@
             
             
               
-                最大熵模型学习
+                CRF学习笔记
               
             
           </h1>
@@ -229,8 +235,8 @@
         <div class="post-meta">
           <span class="post-time">
             Posted on
-            <time itemprop="dateCreated" datetime="2016-02-26T11:11:32+08:00" content="2016-02-26">
-              2016-02-26
+            <time itemprop="dateCreated" datetime="2017-06-13T20:41:21+08:00" content="2017-06-13">
+              2017-06-13
             </time>
           </span>
 
@@ -255,8 +261,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/02/26/最大熵模型学习/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/26/最大熵模型学习/" itemprop="commentsCount"></span>
+                <a href="/2017/06/13/CRF学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/13/CRF学习笔记/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -275,81 +281,51 @@
       
 
       
-        <span itemprop="articleBody"><blockquote>
-<p>最大熵模型的原理用通俗的话解释很好理解，但是对于模型的数学定义却不是那么容易理解。<br>其实，网上有大量的论文、笔记、幻灯片介绍最大熵模型，这篇文章主要是我对该模型的一些笔记和推导。</p>
+        <span itemprop="articleBody"><h1 id="CRF的学习笔记"><a href="#CRF的学习笔记" class="headerlink" title="CRF的学习笔记"></a>CRF的学习笔记</h1><blockquote>
+<p>本文是针对《统计学习方法》第11章相关部分的纠错和更为详细的说明。</p>
 </blockquote>
-<h3 id="最大熵模型的原理"><a href="#最大熵模型的原理" class="headerlink" title="最大熵模型的原理"></a>最大熵模型的原理</h3><p>最大熵原理是统计学习的一般原理，将它应用到分类问题时得到最大熵模型。在实际处理分类问题时，我们常常将数据看成是有对应关系的实例。实例称为Event，每个Event包含一个上下文环境Context和对应类别Outcome，是一个Context和Outcome的二元组。</p>
-<p>假设分类模型学习的是一个条件概率分布$P(X|Y)$，给定训练集：</p>
-<p>$$T=\lbrace (x_1,y_1),(x_2,y_2)…(x_n,y_n) \rbrace$$</p>
-<p>学习的目标是用最大熵原理选择最好的分类模型。</p>
-<p>给定训练集之后，可以通过统计得到联合分布$P(X,Y)$的经验分布和边缘分布$P(X)$的经验分布，分别以$\tilde{P}(X,Y)$和$\tilde{P}(X)$表示。这里</p>
-<p>$$\tilde{P}(X=x,Y=y)=\frac{v(X=x,Y=y)}{N}$$<br>$$\tilde{P}(X=x)=\frac{v(X=x)}{N}$$</p>
-<p>另外还有用特征函数(feature function)$f(x,y)$描述输入x和输出y之间的函数，特征的全体可以看做是n个特征函数组成的一个集合。每个特征函数可以是从Context到{0，1}的二值函数。比如：</p>
-<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/featurefunction.gif" alt="feature_function"></p>
-<p>一组特征函数就将Context从上下文空间映射到特征空间上了。</p>
-<p>现在，通过我们观察的一组数据，进行简单的统计就可以直到任意一个Context x和Outcome y的组合的联合概率$\tilde{P}(x,y)$，于是可以计算某一特征函数$f_i$关于经验分布$\tilde{P}(x,y)$的期望：</p>
-<p>$$E_{\tilde{P}}(f_i)=\sum_{x,y}\tilde{P}(x,y)f_i(x,y)$$</p>
-<p>从另一个角度考虑，利用贝叶斯公式，特征函数$f_i$关于模型$P(y|x)$与经验分布$\tilde{P}(x)$的期望为：</p>
-<p>$$E_{P}(f_i)=\sum_{x,y}\tilde{P}(x)P(y|x)f_i(x,y)$$</p>
-<p>如果模型能够获取足够的训练集的信息，那么就可以假设这两个期望值是相等的。假设我们有n个特征函数，那么我们就有n组等式$E_{\tilde{P}}(f_i)=E_{P}(f_i)，i=1,2,…,n$，也即n个约束条件。</p>
-<p>假设的模型P有许多，它们组成一个模型空间$\mathcal{P}$，而满足上面一系列特征函数期望构成的等式的概率分布构成了$\mathcal{P}$的一个子集。</p>
-<p>$$\mathcal{C}=\lbrace p \in \mathcal{P} | E_{\tilde{P}}(f_i)=E_{P}(f_i)，i=1,2,…,n\rbrace$$</p>
-<p>熵就是评估该空间中某个模型的指标，定义在条件概率分布$P(Y|X)$上的条件熵为</p>
-<p>$$H(P)=-\sum_{x,y}\tilde{P}(x)P(y|x)logP(y|x)$$</p>
-<p>所以，最大熵模型$p^*$就是<br>$$p^* = arg\max_{p\in\mathcal{C}}H(p)$$</p>
-<h3 id="maxent-toolkit"><a href="#maxent-toolkit" class="headerlink" title="maxent toolkit"></a>maxent toolkit</h3><ol>
-<li><p>下载</p>
-<p>我直接在作者的github上下载的zip压缩文件，下载地址：<a href="https://github.com/lzhang10/maxent" target="_blank" rel="external">maxent</a>。</p>
-</li>
-<li><p>解压缩</p>
-<p><code>shhe@nustm:~$ unzip maxent-master.zip</code></p>
-</li>
-<li><p>编译安装</p>
-<p><code>shhe@nustm:~/maxent-master$ ./configure --prefix=/home/usr/path</code></p>
-<p>因为是在服务器上安装，没有root权限，所以使用‘–prefix’参数将安装目录修改到/home/usr/path下。<br>这里的路径可根据需要自行修改，不过要记住具体的位置，因为之后安装python模块的时候需要泳道这一步产生的文件。这些文件分别在两个目录下，/home/usr/path/include和/home/usr/path/lib。</p>
-<p><code>shhe@nustm:~/maxent-master$ make</code></p>
-<p><code>shhe@nustm:~/maxent-master$ make install</code></p>
-<p>此处本来需要root权限，不过在之前执行configure的时候已经修改了安装路径，所以顺利通过。</p>
-</li>
-<li><p>测试（可选）</p>
-<p>(1) 单元测试<br>​<br><code>shhe@nustm:~/maxent-master$ make unittest</code></p>
-<p>(2) 测试Python接口</p>
-<p><code>shhe@nustm:~/maxent-master$ cd python</code></p>
-<p><code>shhe@nustm:~/maxent-master/python$ python runall.py</code></p>
-</li>
-<li><p>安装Python接口</p>
-<p>这里也是在无root权限下安装，所需要重新定位安装目录。</p>
-<p><code>shhe@nustm:~/maxent-master/python$ vim setup.py</code></p>
-<p>修改setup.py文件，找到之前编译过程产生的相关文件，在setup.py的78~88行：</p>
-<pre><code>include_dirs=[
-   &quot;../lib&quot;,
-     &quot;../src&quot;,
-     &quot;/home/usr/path/include&quot;,
-    ],
-
-    library_dirs=[
-    &quot;../src/opt&quot;,
-    &quot;../src&quot;,
-    &quot;/home/usr/path/lib&quot;,
-    ] + opt_lib_path,
-</code></pre><p>可以看到，此处有两行的路径已被我修改为之前编译时指定的路径。</p>
-<p>运行setup.py:</p>
-<p><code>shhe@nustm:~/maxent-master/python$ python setup.py build</code></p>
-<p><code>shhe@nustm:~/maxent-master/python$ python setup.py install --prefix=~/.local</code></p>
-<p>这时终端会显示输出几行writing开头的文字，复制下其中的./local/lib/python2.7/site-packages部分，这是你用户目录下的Python模块目录，根据版本和计算机的不同会有所区别。</p>
-<p><br></p>
-<p>将指定路径下的lib和bin分别加入环境变量中：</p>
-<p><code>shhe@nustm:~$ echo &quot;PYTHONPATH=$HOME/.local/lib/python2.7/site-packages&quot; &gt;&gt; .bashrc</code></p>
-<p><code>shhe@nustm:~$ echo &quot;export PATH=$HOME/.local/bin:$PATH&quot; &gt;&gt; .bashrc</code></p>
-<p><code>shhe@nustm:~$ source .bashrc</code></p>
-<p>这样，就实现了没有root权限情况下的Python模块安装。</p>
-</li>
-<li><p>使用</p>
-<p>【未完成】</p>
-<p>请参考<a href="http://jorbe.sinaapp.com/2014/01/28/introduction-about-maxent/" target="_blank" rel="external">基于最大熵模型的分词工具maxent</a></p>
-<p>请参考<a href="http://san-yun.iteye.com/blog/1637539" target="_blank" rel="external">Maxent</a></p>
-</li>
-</ol>
+<h2 id="条件随机场的矩阵形式"><a href="#条件随机场的矩阵形式" class="headerlink" title="条件随机场的矩阵形式"></a>条件随机场的矩阵形式</h2><p>假设现有一个线性链条件随机场$P<em>w(y|x)=\frac{1}{Z(x)}\exp\sum</em>{k=1}^K w_k f_k(y,x)$，其中$Z(x)=\sum<em>y \exp \sum</em>{k=1}^K w_k f_k(y,x)$。</p>
+<p>表示对给定观测序列x，相应的标记序列y的条件概率。引进特殊的起点和终点状态标记$y<em>0=start, y</em>{n+1}=stop$，这时条件随机场可以通过矩阵形式表示。</p>
+<p>对观测序列x的每一个位置$i=1,2,\cdots ,n+1$上，定义一个m阶矩阵（m是标记y的取值个数，包括start和stop）<br>$$<br>M_i(x)=[M<em>i(y</em>{i-1},y_i|x)] \<br>M<em>i(y</em>{i-1},y_i|x) = \exp(W<em>i(y</em>{i-1},y_i|x)) \<br>W<em>i(y</em>{i-1},y<em>i|x) = \sum</em>{k=1}^K w_k f<em>k(y</em>{i-1},y<em>i,x,i)<br>$$<br>这样，给定观测序列x，标记序列y的非规范化概率可以通过n+1个矩阵的乘积$\prod</em>{i=1}^{n+1}M<em>i(y</em>{i-1},y_i|x)$表示，于是条件概率$P_w(y|x)$是：<br>$$<br>P_w(y|x)=\frac{1}{Z<em>w(x)}\prod</em>{i=1}^{n+1}M<em>i(y</em>{i-1},y_i|x)<br>$$<br>其中，$Z_w(x)$为规范化因子，是n+1个矩阵的乘积的(start, stop)元素：<br>$$<br>Z<em>w(x)=\left( \prod</em>{i=1}^{n+1}M<em>i(x)\right)</em>{start,stop}<br>$$<br>【例1】给定如下图所示的线性链条件随机场，</p>
+<p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/%E7%8A%B6%E6%80%81%E8%B7%AF%E5%BE%84.png" alt="状态路径"></p>
+<p>观测序列x，状态序列y，i=1,2,3，n=3，标记$y_i\in {1,2}$，假设$y_0=start=0, y_4=stop=3$，各个位置的随机矩阵$M_1(x),M_2(x),M_3(x),M_4(x)$分别为是<br>$$<br>M<em>1(x) = \begin{bmatrix}<br>0 &amp; a</em>{01} &amp; a_{02} &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}<br>$$</p>
+<p>$$<br>M<em>2(x) = \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; b</em>{11} &amp; b<em>{12} &amp; 0\<br>0 &amp; b</em>{21} &amp; b_{22} &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}<br>$$</p>
+<p>$$<br>M<em>3(x) = \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; c</em>{11} &amp; c<em>{12} &amp; 0\<br>0 &amp; c</em>{21} &amp; c_{22} &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}<br>$$</p>
+<p>$$<br>M_4(x) = \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 1\<br>0 &amp; 0 &amp; 0 &amp; 1\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}<br>$$</p>
+<p>试求状态序列y以start为起点到stop为终点的所有路径的非规范化概率及规范化因子。</p>
+<p>解：这部分其实非常好求，直接利用给定的公式得到<br>$$<br>\begin{align<em>}<br>M(x) &amp;= M_1(x)\cdot M_2(x) \cdot M_3(x) \cdot M_4(x)\<br> &amp;= \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; Z(x)\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}<br>\end{align</em>}<br>$$<br>其中<br>$$<br>Z<em>(x)  =a</em>{01}b<em>{11}c</em>{11}+a<em>{01}b</em>{11}c<em>{12}+a</em>{01}b<em>{12}c</em>{21}+a<em>{01}b</em>{12}c<em>{22} + a</em>{02}b<em>{21}c</em>{11}+a<em>{02}b</em>{21}c<em>{12}+a</em>{02}b<em>{22}c</em>{21}+a<em>{02}b</em>{22}c_{22}<br>$$<br>即所以路径非规范化概率和。</p>
+<h2 id="条件随机场的概率计算"><a href="#条件随机场的概率计算" class="headerlink" title="条件随机场的概率计算"></a>条件随机场的概率计算</h2><h3 id="前向-后向算法"><a href="#前向-后向算法" class="headerlink" title="前向-后向算法"></a>前向-后向算法</h3><blockquote>
+<p>这里的概率计算是指，对给定观测序列x及标记序列y，可以通过前向后向算法求出任意一个位置上$y_i$是某个标记的条件概$P(y<em>i=u|x)$，或任意连续的两个位置$y</em>{i-1},y<em>i$上的条件概率$P(y</em>{i-1}=u,y_i=v|x)$。</p>
+<p><strong>注意：不是求一条解码序列的概率。</strong></p>
+</blockquote>
+<h4 id="前向向量"><a href="#前向向量" class="headerlink" title="前向向量"></a>前向向量</h4><p>对每个位置$i=0,1,\cdots ,n+1$，定义前向向量$\alpha_i(x)$(行向量):<br>$$<br>\alpha_0(y|x)=\left{\begin{matrix}<br>1 &amp; y=start\<br>0 &amp; \text{其他}<br>\end{matrix}\right.<br>$$<br>递推公式为<br>$$<br>\alpha_i(y<em>i|x)=\alpha</em>{i-1}(y_{i-1}|x)M<em>i(y</em>{i-1},y_i|x) \text{, }(i=1,2,\cdots,n+1)<br>$$<br>又可以表示为：<br>$$<br>\alpha<em>i(x)=\alpha</em>{i-1}(x)M_i(x)<br>$$<br>$\alpha_i(y_i|x)$表示在位置i的标记是$y_i$并且到位置i的前部分标记序列的非规范化概率，$y_i$可取的值有m个。</p>
+<h4 id="后向向量"><a href="#后向向量" class="headerlink" title="后向向量"></a>后向向量</h4><p>同样，对每个位置$i=0,1,\cdots ,n+1$，定义后向向量$\beta<em>i(x)$(列向量):<br>$$<br>\beta</em>{n+1}(y<em>{i+1}|x)=\left{\begin{matrix}<br>1 &amp; y</em>{i+1}=stop\<br>0 &amp; \text{其他}<br>\end{matrix}\right.<br>$$<br>递推公式为<br>$$<br>\beta_i(y<em>i|x)=M</em>{i+1}(y<em>i,y</em>{i+1}|x)\beta<em>{i+1}(y</em>{i+1}|x) \text{, }(i=0,1,\cdots,n)<br>$$<br>又可以表示为：<br>$$<br>\beta<em>i(x)=\beta</em>{i+1}(x)M_{i+1}(x)<br>$$<br>$\beta_i(y_i|x)$表示在位置i的标记是$y_i$并且到$i+1$到n的后部分标记序列的非规范化概率。</p>
+<hr>
+<p>由前向后向向量的定义不难得到：<br>$$<br>Z(x)=\alpha_{n+1}(x)\cdot \mathbf{1}=\mathbf{1}^T \cdot \beta_0(x)<br>$$<br>这里，$\mathbf{1}$是元素均为1的m维列向量。</p>
+<p>【例2】使用【例1】中的条件随机场，计算其前向向量和后向向量。</p>
+<p>答：（1）计算前向向量</p>
+<p>$\alpha_0(x)=[1,0,0,0]$</p>
+<p>$\alpha_1(x) = \alpha_0(x)M<em>1(x)=[0,a</em>{01},a_{02}, 0]$</p>
+<p>$\alpha_2(x) = \alpha_1(x)M<em>2(x)=[0,a</em>{01}b<em>{11}+a</em>{02}b<em>{21},a</em>{01}b<em>{12}+a</em>{02}b_{22}, 0]$</p>
+<p>$\alpha_3(x) = \alpha_2(x)M<em>3(x)=[0,(a</em>{01}b<em>{11}+a</em>{02}b<em>{21})*c</em>{11}+(a<em>{01}b</em>{12}+a<em>{02}b</em>{22})<em>c<em>{21}, (a</em>{01}b<em>{11}+a</em>{02}b_{21})</em>c<em>{12}+(a</em>{01}b<em>{12}+a</em>{02}b<em>{22})*c</em>{22},0]$</p>
+<p>$\alpha_4(x)=[0,0,0,Z(x)]$</p>
+<p>(2)计算后向向量</p>
+<p>$\beta_4(x) = [0,0,0,1]^T$</p>
+<p>$\beta_3(x)=M_4(x)\beta_4(x)=[0,1,1,0]^T$</p>
+<p>$\beta_2(x)=M_3(x)\beta<em>3(x)=[0,c</em>{11}+c<em>{12},c</em>{21}+c_{22},0]^T$</p>
+<p>$\beta_1(x)=M_2(x)\beta<em>2(x)=[0,b</em>{11}(c<em>{11}+c</em>{12})+b<em>{12}(c</em>{21}+c<em>{22}),b</em>{21}(c<em>{11}+c</em>{12})+b<em>{22}(c</em>{21}+c_{22}),0]^T$</p>
+<p>$\beta_0(x)=M_1(x)\beta_1(x)=[Z(x),0,0,0]^T$</p>
+<h3 id="概率计算"><a href="#概率计算" class="headerlink" title="概率计算"></a>概率计算</h3><p>按照前向-后向向量的定义，很容易计算标记序列在位置i是标记$y<em>i$的条件概率和在位置i-1与i是标记$y</em>{i-1}$和$y_i$的条件概率：<br>$$<br>P(Y_i=y_i|x)=\frac{\alpha_i(y_i|x) \beta_i(y_i|x)}{Z(x)}<br>$$</p>
+<p>$$<br>P(Y<em>{i-1}=y</em>{i-1}, Y_i=y<em>i|x)=\frac{\alpha</em>{i-1}(y_{i-1}|x)M<em>i(y</em>{i-1},y_i|x)\beta_i(y_i|x)}{Z(x)}<br>$$</p>
+<p>【例3】计算【例1】中条件随机场的条件概率$P(y_1=1|x)$和$P(y_1=1,y_2=2|x)$：</p>
+<p>解：（1）求条件概率$P(y_1=1|x)=\frac{\alpha_1(y_1=1|x) \beta_1(y_1=1|x)}{Z(x)}$</p>
+<p>已知$\alpha<em>1(x) =[0,a</em>{01},a_{02}, 0]$，$\beta_1(x)=M_2(x)\beta<em>2(x)=[0,b</em>{11}(c<em>{11}+c</em>{12})+b<em>{12}(c</em>{21}+c<em>{22}),b</em>{21}(c<em>{11}+c</em>{12})+b<em>{22}(c</em>{21}+c_{22}),0]^T$则有：</p>
+<p>$\alpha_1(y<em>1=1|x)=a</em>{01}$</p>
+<p>$\beta_1(y<em>1=1|x)=b</em>{11}(c<em>{11}+c</em>{12})+b<em>{12}(c</em>{21}+c<em>{22})=b</em>{11}c<em>{11}+b</em>{11}c<em>{12}+b</em>{12}c<em>{21}+b</em>{12}c_{22}$</p>
+<p>所以<br>$$<br>P(y<em>1=1|x)=\frac{a</em>{01}(b<em>{11}c</em>{11}+b<em>{11}c</em>{12}+b<em>{12}c</em>{21}+b<em>{12}c</em>{22})}{Z(x)}<br>$$<br>分子也即所有位置i=1上y为1的路径的非规范概率和。</p>
+<p>（2）求条件概率$P(y_1=1,y_2=2|x)=\frac{\alpha_1(y_1=1|x)M_2(y_1=1,y_2=2|x)\beta_2(y_2=2|x)}{Z(x)}$</p>
+<p>已知:$\alpha_1(y<em>1=1|x)=a</em>{01}$, $M_2(y_1=1,y<em>2=2|x)=b</em>{12}$, $\beta_2(y<em>2=2|x)=c</em>{21}+c_{22}$</p>
+<p>所以<br>$$<br>P(y_1=1,y<em>2=2|x)=\frac{a</em>{01}<em>b_{12}</em>(c<em>{21}+c</em>{22})}{Z(x)}<br>$$</p>
 </span>
       
     </div>
@@ -358,7 +334,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/最大熵模型/" rel="tag">#最大熵模型</a>
+            <a href="/tags/CRF-linear-chain-CRF/" rel="tag">#CRF, linear-chain_CRF</a>
           
         </div>
       
@@ -367,17 +343,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/01/29/回家/" rel="next" title="回家">
-                <i class="fa fa-chevron-left"></i> 回家
+              <a href="/2017/01/08/译_理解LSTM网络/" rel="next" title="翻译理解LSTM网络">
+                <i class="fa fa-chevron-left"></i> 翻译理解LSTM网络
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/03/02/Makefile学习/" rel="prev" title="Makefile学习">
-                Makefile学习 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -404,8 +376,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/02/26/最大熵模型学习/"
-           data-title="最大熵模型学习" data-url="http://yoursite.com/2016/02/26/最大熵模型学习/">
+      <div class="ds-thread" data-thread-key="2017/06/13/CRF学习笔记/"
+           data-title="CRF学习笔记" data-url="http://yoursite.com/2017/06/13/CRF学习笔记/">
       </div>
     
   </div>
@@ -513,7 +485,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#最大熵模型的原理"><span class="nav-number">1.</span> <span class="nav-text">最大熵模型的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#maxent-toolkit"><span class="nav-number">2.</span> <span class="nav-text">maxent toolkit</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CRF的学习笔记"><span class="nav-number">1.</span> <span class="nav-text">CRF的学习笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#条件随机场的矩阵形式"><span class="nav-number">1.1.</span> <span class="nav-text">条件随机场的矩阵形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件随机场的概率计算"><span class="nav-number">1.2.</span> <span class="nav-text">条件随机场的概率计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前向-后向算法"><span class="nav-number">1.2.1.</span> <span class="nav-text">前向-后向算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#前向向量"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">前向向量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后向向量"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">后向向量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#概率计算"><span class="nav-number">1.2.2.</span> <span class="nav-text">概率计算</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
