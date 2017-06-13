@@ -66,7 +66,7 @@
 条件随机场的矩阵形式假设现有一个线性链条件随机场$P_w(y|x)=\frac{1}{Z(x)}\exp\sum_{k=1}^K w_k f_k(y,x)$，其中$Z(x)=\sum_y \exp \sum_{k=1}^K w_k f_k(y,x)$。
 表示对给定观测序列x，相应的标记序列y的条件概率。引进特殊">
 <meta property="og:image" content="http://7xnh8y.com1.z0.glb.clouddn.com/%E7%8A%B6%E6%80%81%E8%B7%AF%E5%BE%84.png">
-<meta property="og:updated_time" content="2017-06-13T12:47:36.000Z">
+<meta property="og:updated_time" content="2017-06-13T12:52:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CRF学习笔记">
 <meta name="twitter:description" content="CRF的学习笔记
@@ -286,22 +286,47 @@
 </blockquote>
 <h2 id="条件随机场的矩阵形式"><a href="#条件随机场的矩阵形式" class="headerlink" title="条件随机场的矩阵形式"></a>条件随机场的矩阵形式</h2><p>假设现有一个线性链条件随机场$P_w(y|x)=\frac{1}{Z(x)}\exp\sum_{k=1}^K w_k f_k(y,x)$，其中$Z(x)=\sum_y \exp \sum_{k=1}^K w_k f_k(y,x)$。</p>
 <p>表示对给定观测序列x，相应的标记序列y的条件概率。引进特殊的起点和终点状态标记$y_0=start, y_{n+1}=stop$，这时条件随机场可以通过矩阵形式表示。</p>
-<p>对观测序列x的每一个位置$i=1,2,\cdots ,n+1$上，定义一个m阶矩阵（m是标记y的取值个数，包括start和stop）<br>$$<br>M_i(x)=[M_i(y_{i-1},y_i|x)] \<br>M_i(y_{i-1},y_i|x) = \exp(W_i(y_{i-1},y_i|x)) \<br>W_i(y_{i-1},y_i|x) = \sum_{k=1}^K w_k f_k(y_{i-1},y_i,x,i)<br>$$<br>这样，给定观测序列x，标记序列y的非规范化概率可以通过n+1个矩阵的乘积$\prod_{i=1}^{n+1}M_i(y_{i-1},y_i|x)$表示，于是条件概率$P_w(y|x)$是：<br>$$<br>P_w(y|x)=\frac{1}{Z_w(x)}\prod_{i=1}^{n+1}M_i(y_{i-1},y_i|x)<br>$$<br>其中，$Z_w(x)$为规范化因子，是n+1个矩阵的乘积的(start, stop)元素：<br>$$<br>Z_w(x)=\left( \prod_{i=1}^{n+1}M_i(x)\right)_{start,stop}<br>$$<br>【例1】给定如下图所示的线性链条件随机场，</p>
+<p>对观测序列x的每一个位置$i=1,2,\cdots ,n+1$上，定义一个m阶矩阵（m是标记y的取值个数，包括start和stop）</p>
+<p>$$M_i(x)=[M_i(y_{i-1},y_i|x)] \<br>M_i(y_{i-1},y_i|x) = \exp(W_i(y_{i-1},y_i|x)) \<br>W_i(y_{i-1},y_i|x) = \sum_{k=1}^K w_k f_k(y_{i-1},y_i,x,i)$$</p>
+<p>这样，给定观测序列x，标记序列y的非规范化概率可以通过n+1个矩阵的乘积$\prod_{i=1}^{n+1}M_i(y_{i-1},y_i|x)$表示，于是条件概率$P_w(y|x)$是：</p>
+<p>$$P_w(y|x)=\frac{1}{Z_w(x)}\prod_{i=1}^{n+1}M_i(y_{i-1},y_i|x)$$</p>
+<p>其中，$Z_w(x)$为规范化因子，是n+1个矩阵的乘积的(start, stop)元素：</p>
+<p>$$Z_w(x)=\left( \prod_{i=1}^{n+1}M_i(x)\right)_{start,stop}$$</p>
+<p>【例1】给定如下图所示的线性链条件随机场，</p>
 <p><img src="http://7xnh8y.com1.z0.glb.clouddn.com/%E7%8A%B6%E6%80%81%E8%B7%AF%E5%BE%84.png" alt="状态路径"></p>
-<p>观测序列x，状态序列y，i=1,2,3，n=3，标记$y_i\in {1,2}$，假设$y_0=start=0, y_4=stop=3$，各个位置的随机矩阵$M_1(x),M_2(x),M_3(x),M_4(x)$分别为是<br>$$<br>M_1(x) = \begin{bmatrix}<br>0 &amp; a_{01} &amp; a_{02} &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}<br>$$</p>
-<p>$$<br>M_2(x) = \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; b_{11} &amp; b_{12} &amp; 0\<br>0 &amp; b_{21} &amp; b_{22} &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}<br>$$</p>
-<p>$$<br>M_3(x) = \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; c_{11} &amp; c_{12} &amp; 0\<br>0 &amp; c_{21} &amp; c_{22} &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}<br>$$</p>
-<p>$$<br>M_4(x) = \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 1\<br>0 &amp; 0 &amp; 0 &amp; 1\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}<br>$$</p>
+<p>观测序列x，状态序列y，i=1,2,3，n=3，标记$y_i\in {1,2}$，假设$y_0=start=0, y_4=stop=3$，各个位置的随机矩阵$M_1(x),M_2(x),M_3(x),M_4(x)$分别为是</p>
+<p>$$M_1(x) = \begin{bmatrix}<br>0 &amp; a_{01} &amp; a_{02} &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}$$</p>
+<p>$$M_2(x) = \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; b_{11} &amp; b_{12} &amp; 0\<br>0 &amp; b_{21} &amp; b_{22} &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}$$</p>
+<p>$$M_3(x) = \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; c_{11} &amp; c_{12} &amp; 0\<br>0 &amp; c_{21} &amp; c_{22} &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}$$</p>
+<p>$$M_4(x) = \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 1\<br>0 &amp; 0 &amp; 0 &amp; 1\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}$$</p>
 <p>试求状态序列y以start为起点到stop为终点的所有路径的非规范化概率及规范化因子。</p>
-<p>解：这部分其实非常好求，直接利用给定的公式得到<br>$$<br>\begin{align<em>}<br>M(x) &amp;= M_1(x)\cdot M_2(x) \cdot M_3(x) \cdot M_4(x)\<br> &amp;= \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; Z(x)\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}<br>\end{align</em>}<br>$$<br>其中<br>$$<br>Z_(x)  =a_{01}b_{11}c_{11}+a_{01}b_{11}c_{12}+a_{01}b_{12}c_{21}+a_{01}b_{12}c_{22} + a_{02}b_{21}c_{11}+a_{02}b_{21}c_{12}+a_{02}b_{22}c_{21}+a_{02}b_{22}c_{22}<br>$$<br>即所以路径非规范化概率和。</p>
+<p>解：这部分其实非常好求，直接利用给定的公式得到</p>
+<p>$$\begin{align<em>}<br>M(x) &amp;= M_1(x)\cdot M_2(x) \cdot M_3(x) \cdot M_4(x)\<br> &amp;= \begin{bmatrix}<br>0 &amp; 0 &amp; 0 &amp; Z(x)\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0\<br>0 &amp; 0 &amp; 0 &amp; 0<br>\end{bmatrix}<br>\end{align</em>}$$</p>
+<p>其中</p>
+<p>$$Z_(x)  =a_{01}b_{11}c_{11}+a_{01}b_{11}c_{12}+a_{01}b_{12}c_{21}+a_{01}b_{12}c_{22} + a_{02}b_{21}c_{11}+a_{02}b_{21}c_{12}+a_{02}b_{22}c_{21}+a_{02}b_{22}c_{22}$$</p>
+<p>即所以路径非规范化概率和。</p>
 <h2 id="条件随机场的概率计算"><a href="#条件随机场的概率计算" class="headerlink" title="条件随机场的概率计算"></a>条件随机场的概率计算</h2><h3 id="前向-后向算法"><a href="#前向-后向算法" class="headerlink" title="前向-后向算法"></a>前向-后向算法</h3><blockquote>
 <p>这里的概率计算是指，对给定观测序列x及标记序列y，可以通过前向后向算法求出任意一个位置上$y_i$是某个标记的条件概$P(y_i=u|x)$，或任意连续的两个位置$y_{i-1},y_i$上的条件概率$P(y_{i-1}=u,y_i=v|x)$。</p>
 <p><strong>注意：不是求一条解码序列的概率。</strong></p>
 </blockquote>
-<h4 id="前向向量"><a href="#前向向量" class="headerlink" title="前向向量"></a>前向向量</h4><p>对每个位置$i=0,1,\cdots ,n+1$，定义前向向量$\alpha_i(x)$(行向量):<br>$$<br>\alpha_0(y|x)=\left{\begin{matrix}<br>1 &amp; y=start\<br>0 &amp; \text{其他}<br>\end{matrix}\right.<br>$$<br>递推公式为<br>$$<br>\alpha_i(y_i|x)=\alpha_{i-1}(y_{i-1}|x)M_i(y_{i-1},y_i|x) \text{, }(i=1,2,\cdots,n+1)<br>$$<br>又可以表示为：<br>$$<br>\alpha_i(x)=\alpha_{i-1}(x)M_i(x)<br>$$<br>$\alpha_i(y_i|x)$表示在位置i的标记是$y_i$并且到位置i的前部分标记序列的非规范化概率，$y_i$可取的值有m个。</p>
-<h4 id="后向向量"><a href="#后向向量" class="headerlink" title="后向向量"></a>后向向量</h4><p>同样，对每个位置$i=0,1,\cdots ,n+1$，定义后向向量$\beta_i(x)$(列向量):<br>$$<br>\beta_{n+1}(y_{i+1}|x)=\left{\begin{matrix}<br>1 &amp; y_{i+1}=stop\<br>0 &amp; \text{其他}<br>\end{matrix}\right.<br>$$<br>递推公式为<br>$$<br>\beta_i(y_i|x)=M_{i+1}(y_i,y_{i+1}|x)\beta_{i+1}(y_{i+1}|x) \text{, }(i=0,1,\cdots,n)<br>$$<br>又可以表示为：<br>$$<br>\beta_i(x)=\beta_{i+1}(x)M_{i+1}(x)<br>$$<br>$\beta_i(y_i|x)$表示在位置i的标记是$y_i$并且到$i+1$到n的后部分标记序列的非规范化概率。</p>
+<h4 id="前向向量"><a href="#前向向量" class="headerlink" title="前向向量"></a>前向向量</h4><p>对每个位置$i=0,1,\cdots ,n+1$，定义前向向量$\alpha_i(x)$(行向量):</p>
+<p>$$\alpha_0(y|x)=\left{\begin{matrix}<br>1 &amp; y=start\<br>0 &amp; \text{其他}<br>\end{matrix}\right.$$</p>
+<p>递推公式为</p>
+<p>$$\alpha_i(y_i|x)=\alpha_{i-1}(y_{i-1}|x)M_i(y_{i-1},y_i|x) \text{, }(i=1,2,\cdots,n+1)$$</p>
+<p>又可以表示为：</p>
+<p>$$\alpha_i(x)=\alpha_{i-1}(x)M_i(x)$$</p>
+<p>$\alpha_i(y_i|x)$表示在位置i的标记是$y_i$并且到位置i的前部分标记序列的非规范化概率，$y_i$可取的值有m个。</p>
+<h4 id="后向向量"><a href="#后向向量" class="headerlink" title="后向向量"></a>后向向量</h4><p>同样，对每个位置$i=0,1,\cdots ,n+1$，定义后向向量$\beta_i(x)$(列向量):</p>
+<p>$$\beta_{n+1}(y_{i+1}|x)=\left{\begin{matrix}<br>1 &amp; y_{i+1}=stop\<br>0 &amp; \text{其他}<br>\end{matrix}\right.$$</p>
+<p>递推公式为</p>
+<p>$$\beta_i(y_i|x)=M_{i+1}(y_i,y_{i+1}|x)\beta_{i+1}(y_{i+1}|x) \text{, }(i=0,1,\cdots,n)$$</p>
+<p>又可以表示为：</p>
+<p>$$\beta_i(x)=\beta_{i+1}(x)M_{i+1}(x)$$</p>
+<p>$\beta_i(y_i|x)$表示在位置i的标记是$y_i$并且到$i+1$到n的后部分标记序列的非规范化概率。</p>
 <hr>
-<p>由前向后向向量的定义不难得到：<br>$$<br>Z(x)=\alpha_{n+1}(x)\cdot \mathbf{1}=\mathbf{1}^T \cdot \beta_0(x)<br>$$<br>这里，$\mathbf{1}$是元素均为1的m维列向量。</p>
+<p>由前向后向向量的定义不难得到：</p>
+<p>$$Z(x)=\alpha_{n+1}(x)\cdot \mathbf{1}=\mathbf{1}^T \cdot \beta_0(x)$$</p>
+<p>这里，$\mathbf{1}$是元素均为1的m维列向量。</p>
 <p>【例2】使用【例1】中的条件随机场，计算其前向向量和后向向量。</p>
 <p>答：（1）计算前向向量</p>
 <p>$\alpha_0(x)=[1,0,0,0]$</p>
@@ -315,17 +340,20 @@
 <p>$\beta_2(x)=M_3(x)\beta_3(x)=[0,c_{11}+c_{12},c_{21}+c_{22},0]^T$</p>
 <p>$\beta_1(x)=M_2(x)\beta_2(x)=[0,b_{11}(c_{11}+c_{12})+b_{12}(c_{21}+c_{22}),b_{21}(c_{11}+c_{12})+b_{22}(c_{21}+c_{22}),0]^T$</p>
 <p>$\beta_0(x)=M_1(x)\beta_1(x)=[Z(x),0,0,0]^T$</p>
-<h3 id="概率计算"><a href="#概率计算" class="headerlink" title="概率计算"></a>概率计算</h3><p>按照前向-后向向量的定义，很容易计算标记序列在位置i是标记$y_i$的条件概率和在位置i-1与i是标记$y_{i-1}$和$y_i$的条件概率：<br>$$<br>P(Y_i=y_i|x)=\frac{\alpha_i(y_i|x) \beta_i(y_i|x)}{Z(x)}<br>$$</p>
-<p>$$<br>P(Y_{i-1}=y_{i-1}, Y_i=y_i|x)=\frac{\alpha_{i-1}(y_{i-1}|x)M_i(y_{i-1},y_i|x)\beta_i(y_i|x)}{Z(x)}<br>$$</p>
+<h3 id="概率计算"><a href="#概率计算" class="headerlink" title="概率计算"></a>概率计算</h3><p>按照前向-后向向量的定义，很容易计算标记序列在位置i是标记$y_i$的条件概率和在位置i-1与i是标记$y_{i-1}$和$y_i$的条件概率：</p>
+<p>$$P(Y_i=y_i|x)=\frac{\alpha_i(y_i|x) \beta_i(y_i|x)}{Z(x)}$$</p>
+<p>$$P(Y_{i-1}=y_{i-1}, Y_i=y_i|x)=\frac{\alpha_{i-1}(y_{i-1}|x)M_i(y_{i-1},y_i|x)\beta_i(y_i|x)}{Z(x)}$$</p>
 <p>【例3】计算【例1】中条件随机场的条件概率$P(y_1=1|x)$和$P(y_1=1,y_2=2|x)$：</p>
 <p>解：（1）求条件概率$P(y_1=1|x)=\frac{\alpha_1(y_1=1|x) \beta_1(y_1=1|x)}{Z(x)}$</p>
 <p>已知$\alpha_1(x) =[0,a_{01},a_{02}, 0]$，$\beta_1(x)=M_2(x)\beta_2(x)=[0,b_{11}(c_{11}+c_{12})+b_{12}(c_{21}+c_{22}),b_{21}(c_{11}+c_{12})+b_{22}(c_{21}+c_{22}),0]^T$则有：</p>
 <p>$\alpha_1(y_1=1|x)=a_{01}$</p>
 <p>$\beta_1(y_1=1|x)=b_{11}(c_{11}+c_{12})+b_{12}(c_{21}+c_{22})=b_{11}c_{11}+b_{11}c_{12}+b_{12}c_{21}+b_{12}c_{22}$</p>
-<p>所以<br>$$<br>P(y_1=1|x)=\frac{a_{01}(b_{11}c_{11}+b_{11}c_{12}+b_{12}c_{21}+b_{12}c_{22})}{Z(x)}<br>$$<br>分子也即所有位置i=1上y为1的路径的非规范概率和。</p>
+<p>所以<br>$$P(y_1=1|x)=\frac{a_{01}(b_{11}c_{11}+b_{11}c_{12}+b_{12}c_{21}+b_{12}c_{22})}{Z(x)}$$</p>
+<p>分子也即所有位置i=1上y为1的路径的非规范概率和。</p>
 <p>（2）求条件概率$P(y_1=1,y_2=2|x)=\frac{\alpha_1(y_1=1|x)M_2(y_1=1,y_2=2|x)\beta_2(y_2=2|x)}{Z(x)}$</p>
 <p>已知:$\alpha_1(y_1=1|x)=a_{01}$, $M_2(y_1=1,y_2=2|x)=b_{12}$, $\beta_2(y_2=2|x)=c_{21}+c_{22}$</p>
-<p>所以<br>$$<br>P(y_1=1,y_2=2|x)=\frac{a_{01}<em>b_{12}</em>(c_{21}+c_{22})}{Z(x)}<br>$$</p>
+<p>所以</p>
+<p>$$P(y_1=1,y_2=2|x)=\frac{a_{01}<em>b_{12}</em>(c_{21}+c_{22})}{Z(x)}$$</p>
 </span>
       
     </div>
