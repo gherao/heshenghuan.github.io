@@ -53,20 +53,23 @@
 
 <meta name="description" content="最大熵模型与逻辑回归模型等价性证明假设现在有一个二分类问题，即$y\in {0, 1}$，而$x \in \mathcal{R}^N$
 （1）在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：
-$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)} \newline P(y=0|x) = 1 -">
+$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)}$$
+$$ P(y=0|x) = 1 - P(y=">
 <meta property="og:type" content="article">
 <meta property="og:title" content="最大熵模型与逻辑回归模型的等价性证明">
 <meta property="og:url" content="http://yoursite.com/2017/06/24/equivalence-of-LR-ME/index.html">
 <meta property="og:site_name" content="何声欢的博客">
 <meta property="og:description" content="最大熵模型与逻辑回归模型等价性证明假设现在有一个二分类问题，即$y\in {0, 1}$，而$x \in \mathcal{R}^N$
 （1）在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：
-$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)} \newline P(y=0|x) = 1 -">
-<meta property="og:updated_time" content="2017-06-24T09:18:16.000Z">
+$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)}$$
+$$ P(y=0|x) = 1 - P(y=">
+<meta property="og:updated_time" content="2017-06-24T09:20:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="最大熵模型与逻辑回归模型的等价性证明">
 <meta name="twitter:description" content="最大熵模型与逻辑回归模型等价性证明假设现在有一个二分类问题，即$y\in {0, 1}$，而$x \in \mathcal{R}^N$
 （1）在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：
-$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)} \newline P(y=0|x) = 1 -">
+$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)}$$
+$$ P(y=0|x) = 1 - P(y=">
 
 
 
@@ -275,7 +278,8 @@ $$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)} \newline P(y=0|x) = 1 -
       
         <span itemprop="articleBody"><h1 id="最大熵模型与逻辑回归模型等价性证明"><a href="#最大熵模型与逻辑回归模型等价性证明" class="headerlink" title="最大熵模型与逻辑回归模型等价性证明"></a>最大熵模型与逻辑回归模型等价性证明</h1><p>假设现在有一个二分类问题，即$y\in {0, 1}$，而$x \in \mathcal{R}^N$</p>
 <p>（1）在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：</p>
-<p>$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)} \newline P(y=0|x) = 1 - P(y=1|x) =\frac{1}{1 + \exp(\theta^Tx)}$$</p>
+<p>$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)}$$</p>
+<p>$$ P(y=0|x) = 1 - P(y=1|x) =\frac{1}{1 + \exp(\theta^Tx)}$$</p>
 <p>（2）对于ME模型，其定义为：</p>
 <p>$$P(y|x,w)=\frac{1}{Z_w(x)}\cdot \exp(\sum_{i=1}^{n} w_i f_i(x,y))$$</p>
 <p>其中$Z_w(x) = \sum_y \exp(\sum_{i=1}^{n} w_i f_i(x,y))$。</p>
