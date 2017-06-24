@@ -65,7 +65,7 @@ $$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)}$$$$P(y=0|x) = 1 - P(y=1
 在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：
 
 $$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)}$$$$P(y=0|x) = 1 - P(y=1|x">
-<meta property="og:updated_time" content="2017-06-24T09:12:27.000Z">
+<meta property="og:updated_time" content="2017-06-24T09:14:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="最大熵模型与逻辑回归模型的等价性证明">
 <meta name="twitter:description" content="最大熵模型与逻辑回归模型等价性证明假设现在有一个二分类问题，即$y\in {0, 1}$，而$x \in \mathcal{R}^N$
@@ -290,7 +290,7 @@ $$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)}$$$$P(y=0|x) = 1 - P(y=1
 <p>$$P(y|x,w)=\frac{1}{Z_w(x)}\cdot \exp(\sum_{i=1}^{n} w_i f_i(x,y))$$</p>
 <p>其中$Z_w(x) = \sum_y \exp(\sum_{i=1}^{n} w_i f_i(x,y))$。</p>
 <h2 id="证明："><a href="#证明：" class="headerlink" title="证明："></a>证明：</h2><p>令ME模型的特征函数的个数$n=N$，即x的维度，定义任意一个特征函数为：</p>
-<p>$$f_i(x,y)=\left{\begin{matrix}g(x,i) &amp; y=1 \newline 0 &amp; y=0 \end{matrix} \right.$$</p>
+<p>$$f_i(x,y)=\left \{ \begin{matrix}g(x,i) &amp; y=1 \newline 0 &amp; y=0 \end{matrix} \right.$$</p>
 <p>其中函数$g(x,i)=x_i$，也即返回$x$第$i$维上的数值。</p>
 <p>则有：<br>$$P(y=1|x,w) = \frac{\exp(\sum_{i=1}^{n} w_i g_i(x,i))}{\exp(\sum_{i=1}^{n} w_i g_i(x,i))+\exp(\sum_{i=1}^{n} w_i\cdot 0))}=\frac{\exp(w^Tx)}{1+\exp(w^Tx)}$$</p>
 <p>$$P(y=0|x,w) = \frac{\exp(\sum_{i=1}^{n} w_i\cdot 0))}{\exp(\sum_{i=1}^{n} w_i g_i(x,i))+\exp(\sum_{i=1}^{n} w_i\cdot 0))}=\frac{1}{1+\exp(w^Tx)}$$</p>
