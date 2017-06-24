@@ -197,15 +197,121 @@
 
     
     
+
+    
       
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/06/24/equivalence-of-LR-ME/" itemprop="url">
+                  最大熵模型与逻辑回归模型的等价性证明
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            Posted on
+            <time itemprop="dateCreated" datetime="2017-06-24T16:41:05+08:00" content="2017-06-24">
+              2017-06-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp; In
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/06/24/equivalence-of-LR-ME/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/24/equivalence-of-LR-ME/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body">
+
       
-        
-        
-        
       
 
       
-    
+        
+          <span itemprop="articleBody">
+            
+            最大熵模型与逻辑回归模型等价性证明假设现在有一个二分类问题，即$y\in {0, 1}$，而$x \in \mathcal{R}^N$
+
+在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：
+
+$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)} \P(y=0|x) = 1 - P(y=1|x) =\frac{1}{1 + \exp(\theta^Tx)}$$
+
+对于ME模型，其定义为：
+
+$$
+            ...
+          </span>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/06/24/equivalence-of-LR-ME/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1204,117 +1310,6 @@ Makefile关系到了整个工程的编译规则。一个工程中的源文件不
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/02/26/最大熵模型学习/" itemprop="url">
-                  最大熵模型学习
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            Posted on
-            <time itemprop="dateCreated" datetime="2016-02-26T11:11:32+08:00" content="2016-02-26">
-              2016-02-26
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp; In
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/学习/" itemprop="url" rel="index">
-                    <span itemprop="name">学习</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/02/26/最大熵模型学习/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/26/最大熵模型学习/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <span itemprop="articleBody">
-            
-            
-最大熵模型的原理用通俗的话解释很好理解，但是对于模型的数学定义却不是那么容易理解。其实，网上有大量的论文、笔记、幻灯片介绍最大熵模型，这篇文章主要是我对该模型的一些笔记和推导。
-
-最大熵模型的原理最大熵原理是统计学习的一般原理，将它应用到分类问题时得到最大熵模型。在实际处理分类问题时，我们常常将数据看成是有对应关系的实例。实例称为Event，每个Event包含一个上下文环境Context和对应类别Outcome，是一个Context和Outcome的二元组。
-假设分类模型学习的是一个条件概率分
-            ...
-          </span>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/02/26/最大熵模型学习/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1361,7 +1356,7 @@ Makefile关系到了整个工程的编译规则。一个工程中的源文件不
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -1375,7 +1370,7 @@ Makefile关系到了整个工程的编译规则。一个工程中的源文件不
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>

@@ -35,7 +35,7 @@
 <link href="/css/main.css?v=0.4.5.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="刷题," />
+  <meta name="keywords" content="最大熵模型," />
 
 
 
@@ -51,37 +51,28 @@
 
 
 
-<meta name="description" content="LeetCode 刷题记录
-争取每日一题~
+<meta name="description" content="最大熵模型与逻辑回归模型等价性证明假设现在有一个二分类问题，即$y\in {0, 1}$，而$x \in \mathcal{R}^N$
 
-2015.8~2016.8 期间未做笔记的题目共71题，具体可查看github repo: Leetcode-exercise
-2016.8.1610. Regular Expression Matching
-链接：https://leetcode.com/problems/regular-expression-matching/
-难度：Hard
-标签">
+在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：
+
+$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)} \P(y=0|x) = 1 - P(y=1|x)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Leetcode刷题记录">
-<meta property="og:url" content="http://yoursite.com/2016/08/16/Leetcode刷题记录/index.html">
+<meta property="og:title" content="最大熵模型与逻辑回归模型的等价性证明">
+<meta property="og:url" content="http://yoursite.com/2017/06/24/equivalence-of-LR-ME/index.html">
 <meta property="og:site_name" content="何声欢的博客">
-<meta property="og:description" content="LeetCode 刷题记录
-争取每日一题~
+<meta property="og:description" content="最大熵模型与逻辑回归模型等价性证明假设现在有一个二分类问题，即$y\in {0, 1}$，而$x \in \mathcal{R}^N$
 
-2015.8~2016.8 期间未做笔记的题目共71题，具体可查看github repo: Leetcode-exercise
-2016.8.1610. Regular Expression Matching
-链接：https://leetcode.com/problems/regular-expression-matching/
-难度：Hard
-标签">
-<meta property="og:updated_time" content="2016-08-16T08:18:52.000Z">
+在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：
+
+$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)} \P(y=0|x) = 1 - P(y=1|x)">
+<meta property="og:updated_time" content="2017-06-24T08:44:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Leetcode刷题记录">
-<meta name="twitter:description" content="LeetCode 刷题记录
-争取每日一题~
+<meta name="twitter:title" content="最大熵模型与逻辑回归模型的等价性证明">
+<meta name="twitter:description" content="最大熵模型与逻辑回归模型等价性证明假设现在有一个二分类问题，即$y\in {0, 1}$，而$x \in \mathcal{R}^N$
 
-2015.8~2016.8 期间未做笔记的题目共71题，具体可查看github repo: Leetcode-exercise
-2016.8.1610. Regular Expression Matching
-链接：https://leetcode.com/problems/regular-expression-matching/
-难度：Hard
-标签">
+在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：
+
+$$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)} \P(y=0|x) = 1 - P(y=1|x)">
 
 
 
@@ -93,7 +84,7 @@
   };
 </script>
 
-  <title> Leetcode刷题记录 | 何声欢的博客 </title>
+  <title> 最大熵模型与逻辑回归模型的等价性证明 | 何声欢的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="default">
@@ -233,7 +224,7 @@
             
             
               
-                Leetcode刷题记录
+                最大熵模型与逻辑回归模型的等价性证明
               
             
           </h1>
@@ -242,8 +233,8 @@
         <div class="post-meta">
           <span class="post-time">
             Posted on
-            <time itemprop="dateCreated" datetime="2016-08-16T14:43:54+08:00" content="2016-08-16">
-              2016-08-16
+            <time itemprop="dateCreated" datetime="2017-06-24T16:41:05+08:00" content="2017-06-24">
+              2017-06-24
             </time>
           </span>
 
@@ -268,8 +259,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/16/Leetcode刷题记录/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/16/Leetcode刷题记录/" itemprop="commentsCount"></span>
+                <a href="/2017/06/24/equivalence-of-LR-ME/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/24/equivalence-of-LR-ME/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -288,40 +279,20 @@
       
 
       
-        <span itemprop="articleBody"><h1 id="LeetCode-刷题记录"><a href="#LeetCode-刷题记录" class="headerlink" title="LeetCode 刷题记录"></a>LeetCode 刷题记录</h1><blockquote>
-<p>争取每日一题~</p>
-</blockquote>
-<h2 id="2015-8-2016-8-期间未做笔记的题目"><a href="#2015-8-2016-8-期间未做笔记的题目" class="headerlink" title="2015.8~2016.8 期间未做笔记的题目"></a>2015.8~2016.8 期间未做笔记的题目</h2><p>共71题，具体可查看github repo: <a href="https://github.com/heshenghuan/leetcode-exercise" target="_blank" rel="external">Leetcode-exercise</a></p>
-<h2 id="2016-8-16"><a href="#2016-8-16" class="headerlink" title="2016.8.16"></a>2016.8.16</h2><h3 id="10-Regular-Expression-Matching"><a href="#10-Regular-Expression-Matching" class="headerlink" title="10. Regular Expression Matching"></a>10. Regular Expression Matching</h3><blockquote>
-<p>链接：<a href="https://leetcode.com/problems/regular-expression-matching/" target="_blank" rel="external">https://leetcode.com/problems/regular-expression-matching/</a></p>
-<p>难度：Hard</p>
-<p>标签：Dynamic Programming, Backtracking, String</p>
-</blockquote>
-<p>题目的描述很简单，就是匹配目标正则表达式。这里的要求也较为简单，只需“Implement regular expression matching with <code>&#39;.&#39;</code> and <code>&#39;*&#39;</code>. ”，且题目要求中有如下语句：</p>
-<blockquote>
-<p><code>&#39;.&#39;</code> Matches any single character.<br><code>&#39;*&#39;</code> Matches zero or more of the preceding element.</p>
-<p>The matching should cover the <strong>entire</strong> input string (not partial).</p>
-</blockquote>
-<p>说明要求全局匹配。最初看到这个题目时脑海里还是只有自动机一个思路，但发现题目要求的比较简单，使用自动机来解题似乎是小题大做了。之后发现题目标签中给出了动态规划的tag，仔细思考后发现确实是最便捷的方法了。</p>
-<p>来看一下这题的思路:</p>
-<p>令dp[i][j]表示s[0…i-1]与p[0…j-1]​是否匹配，则根据pattern字符串的字符可分为以下两种情况</p>
+        <span itemprop="articleBody"><h1 id="最大熵模型与逻辑回归模型等价性证明"><a href="#最大熵模型与逻辑回归模型等价性证明" class="headerlink" title="最大熵模型与逻辑回归模型等价性证明"></a>最大熵模型与逻辑回归模型等价性证明</h1><p>假设现在有一个二分类问题，即$y\in {0, 1}$，而$x \in \mathcal{R}^N$</p>
 <ol>
-<li><p>if p[j-1] != ‘*’</p>
-<p>dp[i][j] = dp[i-1][j-1] &amp;&amp; (s[i-1] == p[j-1] || ‘.’ == p[j-1])</p>
-</li>
-<li><p>if p[j-1] == ‘*’</p>
-<p>当以下两个条件任一满足时，dp[i][j]为true：</p>
+<li>在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：</li>
+</ol>
+<p>$$<br>P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)} \<br>P(y=0|x) = 1 - P(y=1|x) =\frac{1}{1 + \exp(\theta^Tx)}<br>$$</p>
 <ol>
-<li>“x*”只重复了0次，匹配一个空字符，dp[i][j] = dp[i][j-2]</li>
-<li>“x<em>“至少重复了1次，匹配“x\</em>x”，于是dp[i][j] = (s[i-1] == x) &amp;&amp; dp[i-1][j]</li>
+<li>对于ME模型，其定义为：</li>
 </ol>
-</li>
-<li><p>‘.’匹配任何单个字符</p>
-</li>
-</ol>
-<p>使用dp这个二维数组来记录匹配时的状态，并根据之前的状态做转移。i和j可以想象成指在源串和模式串上的两个指针，当i, j=0时表示空串。</p>
-<p>于是有任何dp[i][0] = false，而dp[0][j]的情况会复杂一点，因为当第一个字符后就有<em>时空串也能匹配，所以dp[0][j] = j&gt;1 &amp;&amp; p[j-1] == ‘\</em>‘ &amp;&amp; dp[0][j-2]（这里的j&gt;1是因为p的第一个字符必不为*）。</p>
-<p>之后的过程就是用一个二重循环进行遍历，更新规则如上即可，最后dp[m][n]的值就是答案。</p>
+<p>$$<br>P(y|x,w)=\frac{1}{Z<em>w(x)}\cdot \exp(\sum</em>{i=1}^{n} w_i f_i(x,y))<br>$$</p>
+<p>其中$Z_w(x) = \sum<em>y \exp(\sum</em>{i=1}^{n} w_i f_i(x,y))$。</p>
+<h2 id="证明："><a href="#证明：" class="headerlink" title="证明："></a>证明：</h2><p>令ME模型的特征函数的个数$n=N$，即x的维度，定义任意一个特征函数为：<br>$$<br>f_i(x,y)=\left{\begin{matrix}<br>g(x,i) &amp; y=1\<br>0 &amp; y=0<br>\end{matrix}\right.<br>$$<br>其中函数$g(x,i)=x_i$，也即返回$x$第$i$维上的数值。</p>
+<p>则有：<br>$$<br>P(y=1|x,w) = \frac{\exp(\sum_{i=1}^{n} w_i g<em>i(x,i))}{\exp(\sum</em>{i=1}^{n} w_i g<em>i(x,i))+\exp(\sum</em>{i=1}^{n} w_i\cdot 0))}=\frac{\exp(w^Tx)}{1+\exp(w^Tx)}<br>$$</p>
+<p>$$<br>P(y=0|x,w) = \frac{\exp(\sum_{i=1}^{n} w<em>i\cdot 0))}{\exp(\sum</em>{i=1}^{n} w_i g<em>i(x,i))+\exp(\sum</em>{i=1}^{n} w_i\cdot 0))}=\frac{1}{1+\exp(w^Tx)}<br>$$</p>
+<p>此时ME模型的形式与LR模型等价。</p>
 </span>
       
     </div>
@@ -330,7 +301,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/刷题/" rel="tag">#刷题</a>
+            <a href="/tags/最大熵模型/" rel="tag">#最大熵模型</a>
           
         </div>
       
@@ -339,17 +310,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/06/05/Electron学习/" rel="next" title="Electron学习">
-                <i class="fa fa-chevron-left"></i> Electron学习
+              <a href="/2017/06/13/CRF学习笔记/" rel="next" title="CRF学习笔记">
+                <i class="fa fa-chevron-left"></i> CRF学习笔记
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/17/LeetCode-146-LRU-Cache/" rel="prev" title="LeetCode_146_LRU_Cache">
-                LeetCode_146_LRU_Cache <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -376,8 +343,8 @@
         
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/08/16/Leetcode刷题记录/"
-           data-title="Leetcode刷题记录" data-url="http://yoursite.com/2016/08/16/Leetcode刷题记录/">
+      <div class="ds-thread" data-thread-key="2017/06/24/equivalence-of-LR-ME/"
+           data-title="最大熵模型与逻辑回归模型的等价性证明" data-url="http://yoursite.com/2017/06/24/equivalence-of-LR-ME/">
       </div>
     
   </div>
@@ -485,7 +452,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LeetCode-刷题记录"><span class="nav-number">1.</span> <span class="nav-text">LeetCode 刷题记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2015-8-2016-8-期间未做笔记的题目"><span class="nav-number">1.1.</span> <span class="nav-text">2015.8~2016.8 期间未做笔记的题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2016-8-16"><span class="nav-number">1.2.</span> <span class="nav-text">2016.8.16</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-Regular-Expression-Matching"><span class="nav-number">1.2.1.</span> <span class="nav-text">10. Regular Expression Matching</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#最大熵模型与逻辑回归模型等价性证明"><span class="nav-number">1.</span> <span class="nav-text">最大熵模型与逻辑回归模型等价性证明</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#证明："><span class="nav-number">1.1.</span> <span class="nav-text">证明：</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
