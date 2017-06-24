@@ -9,12 +9,13 @@ categories: 学习
 
 假设现在有一个二分类问题，即$y\in \{0, 1\}$，而$x \in \mathcal{R}^N$
 
-1. 在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：
+（1）在LR模型中，假设参数为$\theta \in \mathcal{R}^N$，则有模型定义为：
 
 $$P(y=1|x) = \frac{\exp(\theta^Tx)}{1 + \exp(\theta^Tx)}$$
-$$P(y=0|x) = 1 - P(y=1|x) =\frac{1}{1 + \exp(\theta^Tx)}$$
 
-2. 对于ME模型，其定义为：
+$$ P(y=0|x) = 1 - P(y=1|x) =\frac{1}{1 + \exp(\theta^Tx)}$$
+
+（2）对于ME模型，其定义为：
 
 $$P(y|x,w)=\frac{1}{Z\_w(x)}\cdot \exp(\sum\_{i=1}^{n} w\_i f\_i(x,y))$$
 
